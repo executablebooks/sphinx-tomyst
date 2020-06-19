@@ -361,7 +361,7 @@ class MystTranslator(SphinxTranslator):
         self.output.append(self.syntax.visit_literal_block(self.nodelang))
         self.add_newline()
         self.output.append("\n".join(options))
-        self.add_newparagraph()
+        self.add_newline()
 
     def infer_literal_block_attrs(self, node):
         """
@@ -373,24 +373,24 @@ class MystTranslator(SphinxTranslator):
         options = []
         options.append("---")
         if node.hasattr('linenos') and attributes['linenos']:
-            options.append(":linenos:")
+            options.append("linenos:")
         if node.hasattr('highlight_args'):
             if 'linenostart' in attributes['highlight_args']:
-                options.append(":lineno-start: {}".format(attributes['highlight_args']['linenostart']))
+                options.append("lineno-start: {}".format(attributes['highlight_args']['linenostart']))
             if 'hl_lines' in attributes['highlight_args']:
                 vals = str(attributes['highlight_args']['hl_lines']).strip('[]')
-                options.append(":emphasize-lines: {}".format(vals))
+                options.append("emphasize-lines: {}".format(vals))
         if type(node.parent) is nodes.container:
             if node.parent.hasattr('names'):
                 vals = str(node.parent.attributes['names']).strip('[]').strip("'")
-                options.append(":name: {}".format(vals))
+                options.append("name: {}".format(vals))
             # Check children for caption
             for child in node.parent.children:
                 if type(child) is nodes.caption:
                     caption = child.astext()
-                    options.append(":caption: {}".format(caption))
+                    options.append("caption: {}".format(caption))
         if node.hasattr("force") and attributes['force']:
-            options.append(":force:")
+            options.append("force:")
         options.append("---")
         return options
 
