@@ -14,7 +14,6 @@ import time
 from sphinx.util import logging
 from sphinx.util.docutils import SphinxTranslator
 
-from .markdown import MarkdownSyntax
 from .myst import MystSyntax
 from .accumulators import List, TableBuilder
 
@@ -94,7 +93,7 @@ class MystTranslator(SphinxTranslator):
         """
         super().__init__(document, builder)
         #-Syntax-#
-        self.syntax = MarkdownSyntax()
+        self.syntax = MystSyntax()
         # DEBUG
         self.language = "python"
         self.language_synonyms = ["ipython"]
@@ -135,6 +134,9 @@ class MystTranslator(SphinxTranslator):
 
     def visit_caption(self, node):
         self.caption = True
+        if self.literal_block['in']:
+            raise nodes.SkipNode
+
 
     def depart_caption(self, node):
         self.caption = False
@@ -352,44 +354,55 @@ class MystTranslator(SphinxTranslator):
             self.output.append(self.syntax.depart_literal())
 
     def visit_literal_block(self, node):
-        "Parse Literal Blocks (Code Blocks)"
+        "Parse Literal Blocks"
         self.literal_block['in'] = True
+        options = self.infer_literal_block_attrs(node)
+        self.nodelang = node.attributes["language"].strip()
+        self.output.append(self.syntax.visit_literal_block(self.nodelang))
+        self.add_newline()
+        self.output.append("\n".join(options))
+        self.add_newparagraph()
 
-        #Check Code Language
-        if "language" in node.attributes:
-            self.nodelang = node.attributes["language"].strip()
-        else:
-            self.output_type = "markdown"
-        if self.nodelang == 'default':
-            self.nodelang = self.language   #use notebook language
+    def infer_literal_block_attrs(self, node):
+        """
+        :dedent: option cannot be inferred as text is already altered
+        but could be a PR upstream in 
+        sphinx/directives/code.py -> literal['dedent'] = self.options['dedent']
+        """
+        attributes = node.attributes
+        options = []
+        options.append("---")
+        if node.hasattr('linenos') and attributes['linenos']:
+            options.append(":linenos:")
+        if node.hasattr('highlight_args'):
+            if 'linenostart' in attributes['highlight_args']:
+                options.append(":lineno-start: {}".format(attributes['highlight_args']['linenostart']))
+            if 'hl_lines' in attributes['highlight_args']:
+                vals = str(attributes['highlight_args']['hl_lines']).strip('[]')
+                options.append(":emphasize-lines: {}".format(vals))
+        if type(node.parent) is nodes.container:
+            if node.parent.hasattr('names'):
+                vals = str(node.parent.attributes['names']).strip('[]').strip("'")
+                options.append(":name: {}".format(vals))
+            # Check children for caption
+            for child in node.parent.children:
+                if type(child) is nodes.caption:
+                    caption = child.astext()
+                    options.append(":caption: {}".format(caption))
+        if node.hasattr("force") and attributes['force']:
+            options.append(":force:")
+        options.append("---")
+        return options
 
-        #Check for no-execute status
-        if  "classes" in node.attributes and "no-execute" in node.attributes["classes"]:
-            self.literal_block['no-execute'] = True
-        else:
-            self.literal_block['no-execute'] = False
+    def visit_container(self, node):
+        pass
 
-        #Check for hide-output status
-        if  "classes" in node.attributes and "hide-output" in node.attributes["classes"]:
-            self.literal_block['hide-output'] = True
-        else:
-            self.literal_block['hide-output'] = False
-
-        ## Check node language is the same as notebook language else make it markdown
-        if (self.nodelang != self.language and self.nodelang not in self.language_synonyms) or self.literal_block['no-execute']:
-            logger.warning("Found a code-block with different programming \
-                language to the notebook language. Adding as markdown"
-            )
-            self.output.append(self.syntax.visit_literal_block(self.nodelang))
-            self.add_newline()
-            self.cell_type = "markdown"
-
+    def depart_container(self, node):
+        pass
 
     def depart_literal_block(self, node):
-        if (self.nodelang != self.language and self.nodelang not in self.language_synonyms) or self.literal_block['no-execute']:
-            self.output.append(self.syntax.depart_literal_block())
-        if self.cell_type == "code":
-            self.output.append(self.syntax.depart_literal_block())
+        self.output.append(self.syntax.depart_literal_block())
+        self.add_newparagraph()
         self.literal_block['in'] = False
 
     def visit_math(self, node):
@@ -590,6 +603,8 @@ class MystTranslator(SphinxTranslator):
         text = node.astext()
 
         #Escape Special markdown chars except in code block
+        if self.caption:
+            raise nodes.SkipNode
         if self.literal_block['in'] == False:
             text = text.replace("$", "\$")
         #Inline Math
@@ -601,7 +616,7 @@ class MystTranslator(SphinxTranslator):
             self.math_block['math_block_label'] = None
         elif self.math_block['in']:
             text = self.syntax.visit_math_block(text.strip())
-        
+
         self.text = text
 
     def depart_Text(self, node):

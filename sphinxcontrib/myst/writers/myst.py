@@ -5,4 +5,9 @@ Myst Syntax
 from .markdown import MarkdownSyntax
 
 class MystSyntax(MarkdownSyntax):
-    pass
+    
+    def visit_literal_block(self, language=None):
+        if language is None:
+            return "```"
+        else:
+            return "```{{code-block}} {0}".format(language)
