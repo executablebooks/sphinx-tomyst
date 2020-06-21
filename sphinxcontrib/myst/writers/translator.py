@@ -360,8 +360,9 @@ class MystTranslator(SphinxTranslator):
         self.nodelang = node.attributes["language"].strip()
         self.output.append(self.syntax.visit_literal_block(self.nodelang))
         self.add_newline()
-        self.output.append("\n".join(options))
-        self.add_newline()
+        if options != []:
+            self.output.append("\n".join(options))
+            self.add_newline()
 
     def infer_literal_block_attrs(self, node):
         """
@@ -392,6 +393,8 @@ class MystTranslator(SphinxTranslator):
         if node.hasattr("force") and attributes['force']:
             options.append("force:")
         options.append("---")
+        if len(options) == 2:
+            options = []
         return options
 
     def visit_container(self, node):
@@ -616,8 +619,17 @@ class MystTranslator(SphinxTranslator):
             self.math_block['math_block_label'] = None
         elif self.math_block['in']:
             text = self.syntax.visit_math_block(text.strip())
+        #Code Blocks
+        if self.literal_block['in']:
+            text = self.strip_whitespace(text)
 
         self.text = text
+
+    #TODO: move to utilities
+    def strip_whitespace(self, text):
+        text = text.split("\n")
+        text = [item.strip() for item in text]  #strip leading and trailing whitespace
+        return "\n".join(text)
 
     def depart_Text(self, node):
         #Add text to cell        
