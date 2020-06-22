@@ -48,6 +48,8 @@ class MystTranslator(SphinxTranslator):
     footnote_reference['in'] = False
     #Configuration (Image)
     image = dict()
+    #Configuration (Index)
+    index = False
     #Configuration (List)
     List = None
     #Configuration (Literal Block)
@@ -253,10 +255,10 @@ class MystTranslator(SphinxTranslator):
         pass
 
     def visit_index(self, node):
-        pass
+        self.in_index = True
 
     def depart_index(self, node):
-        pass
+        self.in_index=False
 
     def visit_inline(self, node):
         pass
@@ -571,7 +573,8 @@ class MystTranslator(SphinxTranslator):
 
     def visit_target(self, node):
         if "refid" in node.attributes:
-            self.output.append("\n<a id='{}'></a>\n".format(node.attributes["refid"]))
+            self.output.append(self.syntax.visit_target(node.attributes["refid"]))
+            self.add_newline()
 
     def depart_target(self, node):
         pass

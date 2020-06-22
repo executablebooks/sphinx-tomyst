@@ -11,3 +11,6 @@ class MystSyntax(MarkdownSyntax):
             return "```"
         else:
             return "```{{code-block}} {0}".format(language)
+
+    def visit_target(self, target):
+        return "({})=".format(target)
