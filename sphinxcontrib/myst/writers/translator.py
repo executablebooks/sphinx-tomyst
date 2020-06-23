@@ -10,6 +10,7 @@ from shutil import copyfile
 import copy
 import os
 import time
+from collections import OrderedDict
 
 from sphinx.util import logging
 from sphinx.util.docutils import SphinxTranslator
@@ -37,6 +38,8 @@ class MystTranslator(SphinxTranslator):
     #Configuration (Download)
     download_reference = dict()
     download_reference['in'] = False
+    #Configuration (Figure)
+    figure = dict()
     #Configuration (Formatting)
     sep_lines = "  \n"              #TODO: needed?
     sep_paragraph = "\n\n"          #TODO: needed?
@@ -212,10 +215,33 @@ class MystTranslator(SphinxTranslator):
         pass
 
     def visit_figure(self, node):
-        pass
+        """
+        additional options need parsing in image node
+        """
+        self.figure['in'] = True
+        self.figure['figure-options'] = self.infer_figure_attrs(node)
+
+    def infer_figure_attrs(self, node):
+        """
+        https://docutils.sourceforge.io/docs/ref/rst/directives.html#figure
+        :align: -> align
+        :figwidth: -> width
+        :figclass: -> classes
+        """
+        options = {}
+        if node.hasattr("align"):
+            align = node.attributes["align"]
+            if align not in ["default"]:  #if not set may have default value = default
+                options['align'] = align
+        if node.hasattr("width"):
+            options['figwidth'] = node.attributes["width"]
+        if len(node.attributes["classes"]) > 0:
+            classes = str(node.attributes["classes"]).strip('[]').strip("'")
+            options['figclass'] = classes
+        return options
 
     def depart_figure(self, node):
-        self.add_newline()
+        self.figure = {}
 
     def visit_field_body(self, node):
         self.visit_definition(node)
@@ -238,21 +264,46 @@ class MystTranslator(SphinxTranslator):
     def visit_image(self, node):
         """
         Image Directive
-
-        Notes
-        -----
-            1. Should this use .has_attrs()?
-            2. the scale, height and width properties are not combined in this
-            implementation as is done in http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
-            3. HTML images are available in HTMLTranslator (TODO: Should this be an available option here?)
+        2. the scale, height and width properties are not combined in this
+        implementation as is done in http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
+        3. HTML images are available in HTMLTranslator (TODO: Should this be an available option here?)
         """
+        options = self.infer_image_attrs(node)
+        if self.figure['in']:
+            figure_options = self.figure['figure-options']
+            options = {**options, **figure_options} #Figure options take precedence
+        options = self.myst_options(options)
         uri = node.attributes["uri"]
         self.images.append(uri)
-        syntax = self.syntax.visit_image(uri)
+        if self.figure['in']:
+            syntax = self.syntax.visit_figure(uri, options)
+        else:
+            syntax = self.syntax.visit_image(uri, options)
         self.output.append(syntax)
 
+    def infer_image_attrs(self, node):
+        """
+        https://docutils.sourceforge.io/docs/ref/rst/directives.html#image-options
+        :alt: -> alt
+        :height: -> height
+        :width: -> width
+        :scale: -> scale
+        :align: -> align
+        :target: -> node.parent = docutils.nodes.reference
+        """
+        options = {}
+        for option in ['alt', 'height', 'width', 'scale', 'align']:
+            if node.hasattr(option):
+                options[option] = node.attributes[option]
+        if type(node.parent) is nodes.reference:
+            if node.parent.hasattr('refuri'):
+                options['target'] = node.parent.attributes['refuri']
+        return options
+
     def depart_image(self, node):
-        pass
+        self.add_newline()
+        self.output.append(self.syntax.depart_figure())
+        self.add_newparagraph()
 
     def visit_index(self, node):
         self.in_index = True
@@ -689,8 +740,11 @@ class MystTranslator(SphinxTranslator):
 
     def visit_reference(self, node):
         self.in_reference = dict()
-
-        if self.List:
+        
+        if self.figure:
+            #TODO: fix this context for references
+            pass
+        elif self.List:
             self.List.add_item("[")
             self.reference_text_start = len(self.output)
         else:
@@ -700,6 +754,10 @@ class MystTranslator(SphinxTranslator):
     def depart_reference(self, node):
         subdirectory = False
         formatted_text = ""
+
+        if self.figure:
+            #TODO: fix this context for references
+            return
 
         if self.topic:
             # Jupyter Notebook uses the target text as its id
@@ -868,3 +926,16 @@ class MystTranslator(SphinxTranslator):
                 break
 
         return "\n".join(lines)
+
+    # Myst Support
+    @staticmethod
+    def myst_options(options):
+        """ return myst options block """
+        myst_options = []
+        myst_options.append("---")
+        for item in sorted(options.keys()):
+            myst_options.append('{}: {}'.format(item, options[item]))
+        myst_options.append("---")
+        if len(myst_options) == 2:
+            myst_options = []
+        return myst_options
