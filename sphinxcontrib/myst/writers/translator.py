@@ -75,7 +75,7 @@ class MystTranslator(SphinxTranslator, MystSphinx, MystDocutils):
     math_block = dict()
     math_block['in'] = False
     math_block['math_block_label'] = None
-    #Configuration (Note)
+    #Note => MystDocutils
     note = False
     #Configuration (References)
     reference_text_start = 0
@@ -265,13 +265,6 @@ class MystTranslator(SphinxTranslator, MystSphinx, MystDocutils):
 
     def depart_math_block(self, node):
         self.math_block['in'] = False
-
-    def visit_note(self, node):
-        self.note = True
-        self.output.append(self.syntax.visit_note())
-
-    def depart_note(self, node):
-        self.note = False
 
     def visit_only(self, node):
         pass
@@ -683,7 +676,11 @@ class MystTranslator(SphinxTranslator, MystSphinx, MystDocutils):
     # Myst Support
     @staticmethod
     def myst_options(options):
-        """ return myst options block """
+        """ return myst options block
+        
+        #TODO: add support for returning shorthand options syntax
+        # if there are less than or equal to 2 options specified
+        """
         myst_options = []
         myst_options.append("---")
         for item in sorted(options.keys()):

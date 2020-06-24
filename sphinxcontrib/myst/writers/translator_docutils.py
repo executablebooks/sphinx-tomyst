@@ -9,6 +9,8 @@ are provided by docutils. Sphinx Nodes take precedence
 
 from docutils import nodes
 
+from .accumulators import List, TableBuilder
+
 class MystDocutils:
     """
     Myst Translator Methods for Docutils Nodes
@@ -18,6 +20,45 @@ class MystDocutils:
     """
 
     # Docutils Elements
+
+    # Docutils: https://docutils.sourceforge.io/docs/ref/rst/directives.html#admonitions
+
+    # docutils.admonitions [:class:, :name:]
+    # https://docutils.sourceforge.io/docs/ref/rst/directives.html#admonitions
+
+    def visit_attention(self, node):
+        raise NotImplementedError
+
+    def visit_caution(self, node):
+        raise NotImplementedError
+
+    def visit_danger(self, node):
+        raise NotImplementedError
+
+    def visit_error(self, node):
+        raise NotImplementedError
+
+    def visit_hint(self, node):
+        raise NotImplementedError
+
+    def visit_important(self, node):
+        raise NotImplementedError
+
+    def visit_note(self, node):
+        self.note = True
+        self.output.append(self.syntax.visit_note())
+
+    def depart_note(self, node):
+        self.note = False
+
+    def visit_tip(self, node):
+        raise NotImplementedError
+
+    def visit_warning(self, node):
+        raise NotImplementedError
+
+    def visit_admonition(self, node):
+        raise NotImplementedError
 
     # docutils.elements.attribution
     # https://docutils.sourceforge.io/docs/ref/doctree.html#attribution
