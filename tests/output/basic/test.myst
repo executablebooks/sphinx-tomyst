@@ -1,0 +1,46 @@
+# Testing Document
+
+```{figure} _static/lecture_specific/about_py/qs.png
+
+```
+
+```{figure} _static/lecture_specific/about_py/qs.png
+---
+align: left
+figclass: fig-test
+figwidth: 90%
+---
+```
+
+```{figure} _static/lecture_specific/about_py/qs.png
+---
+align: right
+alt: alternate text
+height: 100px
+target: test-fig
+width: 200px
+---
+```
+
+```{figure} _static/lecture_specific/about_py/qs.png
+---
+scale: 50
+---
+```
+
+```{code-block} python3
+---
+linenos:
+lineno-start: 2
+emphasize-lines: 3, 5
+name: this-py
+caption: This is Caption Text
+force:
+---
+rt pandas as pd
+= pd.DataFrame()
+mment here
+= pd.DataFrame()
+merge(df2)
+```
+
