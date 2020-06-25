@@ -40,7 +40,7 @@ import shutil
 import pytest
 from sphinx.testing.path import path
 
-SOURCE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "sourcedirs"))
+SOURCE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "source"))
 
 # TODO autouse not working, may need to be in root conftest
 # (ideally _build folder should be in tempdir)
