@@ -5,6 +5,10 @@ This class is NOT MEANT to operate in ISOLATION.
 It documents nodes for the Myst Translator that
 are provided by docutils. Sphinx Nodes take precedence
 
+References
+
+Doctree: https://docutils.sourceforge.io/docs/ref/doctree.html#term
+
 """
 
 from docutils import nodes

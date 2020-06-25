@@ -5,6 +5,11 @@ This class is NOT MEANT to operate in ISOLATION.
 It documents nodes for the Myst Translator that
 are provided by Sphinx.
 
+References
+
+Sphinx.nodes: https://www.sphinx-doc.org/en/master/extdev/nodes.html
+Sphinx.directives: https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html
+
 """
 
 from docutils import nodes

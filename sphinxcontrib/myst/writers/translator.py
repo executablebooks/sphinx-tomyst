@@ -27,76 +27,74 @@ from .translator_sphinx import MystSphinx
 
 logger = logging.getLogger(__name__)
 
-class MystTranslator(SphinxTranslator, MystSphinx, MystDocutils):
+class MystTranslator(MystSphinx, MystDocutils, SphinxTranslator):
     """ Myst Translator
     MystSphinx -> methods for sphinx provided nodes
     MystDocutils -> methods for docutils provided nodes
     """
 
-    #Attribution => MystDocutils
+    # Attribution => MystDocutils
     attribution = False
-    #Block Quote (epigraph, highlights, pull_quote) => MystDocutils
+    # Block Quote (epigraph, highlights, pull_quote) => MystDocutils
     block_quote = dict()
     block_quote['in'] = False
     block_quote['block_quote_type'] = "block-quote"      #TODO: can this be removed?
-    #docutils.element.caption => MystDocutils
+    # Caption => MystDocutils
     caption = False
-    #Configuration(Citation)
+    # Citation => MystDocutils
     citation = dict()
     citation['in'] = False
-    #Configuration (Download)
+    # Download => MystDocutils
     download_reference = dict()
     download_reference['in'] = False
-    #Figure => MystDocutils
+    # Figure => MystDocutils
     figure = dict()
-    #Configuration (Formatting)
-    sep_lines = "  \n"              #TODO: needed?
-    sep_paragraph = "\n\n"          #TODO: needed?
+    # Section => MystDocutils
     section_level = 0
-    #Footnote => MystDocutils
+    # Footnote => MystDocutils
     footnote = dict()
     footnote['in'] = False
     footnote_reference = dict()
     footnote_reference['in'] = False
-    #Image => MystDocutils
+    # Image => MystDocutils
     image = dict()
-    #Index => MystSphinx
+    # Index => MystSphinx
     index = False
-    #Configuration (List)
+    # List => MystDocutils
     List = None
-    #Configuration (Literal Block)
+    # Literal Block => MystDocutils
     literal_block = dict()
     literal_block['in'] = False
     literal_block['no-execute'] = False
     literal_block['hide-output'] = False
-    #Configuration (Math)
+    # Math => MystDocutils
     math = dict()
     math['in'] = False
     math_block = dict()
     math_block['in'] = False
     math_block['math_block_label'] = None
-    #Note => MystDocutils
+    # Note => MystDocutils
     note = False
-    #Configuration (References)
+    # References => MystDocutils
     reference_text_start = 0
     inpage_reference = False
-    #Rubric => MystDocutils
+    # Rubric => MystDocutils
     rubric = False
-    #Configuration (Static Assets)
-    images = []
-    files = []
-    #Configuration (Tables)
+    # Tables => MystDocutils
     Table = None
-    #Configuration (Text)
+    # Text => MystDocutils
     text = None
-    #Configuration (Titles)
+    # Titles => MystDocutils
     visit_first_title = True
     title = ""
-    #Configuration (Toctree)
+    # Toctree => MystDocutils  #TODO: Should this work be done in MystSphinx?
     toctree = False
-    #Configuration (Topic)
+    # Topic => MystDocutils
     topic = False
 
+    # Static Asset Trackers
+    images = []
+    files = []
     cached_state = dict()   #A dictionary to cache states to support nested blocks
     URI_SPACE_REPLACE_FROM = re.compile(r"\s")
     URI_SPACE_REPLACE_TO = "-"
