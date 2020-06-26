@@ -1,0 +1,27 @@
+<document source="index.rst">
+    <section ids="basic-test" names="basic\ test">
+        <title>
+            Basic Test
+        <compound classes="toctree-wrapper">
+            <toctree caption="Contents:" entries="(None,\ 'test')" glob="False" hidden="False" includefiles="test" includehidden="False" maxdepth="2" numbered="0" parent="index" rawcaption="Contents:" rawentries="" titlesonly="False">
+        <paragraph>
+            This is the index page
+    <section ids="indices-and-tables" names="indices\ and\ tables">
+        <title>
+            Indices and tables
+        <bullet_list bullet="*">
+            <list_item>
+                <paragraph>
+                    <pending_xref refdoc="index" refdomain="std" refexplicit="False" reftarget="genindex" reftype="ref" refwarn="True">
+                        <inline classes="xref std std-ref">
+                            genindex
+            <list_item>
+                <paragraph>
+                    <pending_xref refdoc="index" refdomain="std" refexplicit="False" reftarget="modindex" reftype="ref" refwarn="True">
+                        <inline classes="xref std std-ref">
+                            modindex
+            <list_item>
+                <paragraph>
+                    <pending_xref refdoc="index" refdomain="std" refexplicit="False" reftarget="search" reftype="ref" refwarn="True">
+                        <inline classes="xref std std-ref">
+                            search
