@@ -24,5 +24,5 @@ def test_basic(
 
     #Note: pytest needs to run twice to initialise fixtures
 
-    get_sphinx_app_doctree(app, docname="index", regress=True)
+    get_sphinx_app_doctree(app, docname="test", regress=True)
     get_sphinx_app_output(app, files=["index.myst", "test.myst"], regress=True)
