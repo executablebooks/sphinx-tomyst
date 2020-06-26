@@ -81,10 +81,8 @@ class MystTranslator(SphinxTranslator):
         super().__init__(document, builder)
         self.syntax = MystSyntax()
         self.default_ext = ".myst"
-        # Asset Lists
         self.images = []
         self.section_level = 0
-        self.reference_text_start = 0  #TODO: can we delete this?
 
     #----------#
     #-Document-#
@@ -885,25 +883,15 @@ class MystTranslator(SphinxTranslator):
     #TODO: add syntax too MarkdownSyntax, MystSyntax
 
     def visit_reference(self, node):
-        self.in_reference = dict()
-
-        if self.figure:
-            #TODO: fix this context for references
-            pass
-        elif self.List:
+        self.reference = True
+        if self.List:
             self.List.add_item("[")
-            self.reference_text_start = len(self.output)
         else:
             self.output.append("[")
-            self.reference_text_start = len(self.output)
 
     def depart_reference(self, node):
         subdirectory = False
         formatted_text = ""
-
-        if self.figure:
-            #TODO: fix this context for references
-            return
 
         if self.topic:
             # Jupyter Notebook uses the target text as its id
