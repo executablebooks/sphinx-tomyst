@@ -8,10 +8,3 @@ Basic Test
    test
 
 This is the index page
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

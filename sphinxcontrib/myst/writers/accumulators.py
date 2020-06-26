@@ -25,10 +25,10 @@ class List:
 
         Example
         -------
-        from markdown import List                                                                                                          
-        a = List(level=0)                                                                                                                  
-        a.add_item("first")                                                                                                                
-        a.add_item("second")                                                                                                               
+        from markdown import List
+        a = List(level=0)
+        a.add_item("first")
+        a.add_item("second")
         a.to_markdown()
         """
         self.items = []
@@ -42,7 +42,7 @@ class List:
     def add_item(self, item):
         """
         Add Item to List
-        
+
         Parameters
         ----------
         item : str or List
@@ -88,14 +88,14 @@ class List:
         for item in self.items:
             indent, marker, content = self.build_syntax(item)
             markdown.append("{}{} {}".format(indent, marker, content))
-        
+
         ## need a new line at the end
         markdown.append("\n")
         return "\n".join(markdown)
 
     def to_latex(self):
         """
-        converts the list items to a latex string 
+        converts the list items to a latex string
         """
         latex = []
         for item in self.items:
@@ -104,7 +104,7 @@ class List:
 
         latex.append("\n")
         return "\n".join(latex)
-        
+
     def increment_level(self):
         self.level += 1
 
@@ -133,11 +133,11 @@ class List:
         self.item_no += 1
 
     def itemlist(self):
-        return self.items 
+        return self.items
 
     def getlevel(self):
         return self.level
-    
+
     def get_item_no(self):
         return self.item_no
 
