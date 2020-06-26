@@ -61,18 +61,24 @@ def get_sphinx_app_output(file_regression):
     def read(
         app,
         buildername="myst",
-        filename="index.myst",
+        files=["index.myst"],
         encoding="utf-8",
-        extract_body=False,
-        remove_scripts=False,
-        regress_html=False,
+        regress=False
     ):
+        contents = []
 
-        outpath = path(os.path.join(str(app.srcdir), "_build", buildername, filename))
-        if not outpath.exists():
-            raise IOError("no output file exists: {}".format(outpath))
+        for filename in files:
+            outpath = path(os.path.join(str(app.srcdir), "_build", buildername, filename))
+            if not outpath.exists():
+                raise IOError("no output file exists: {}".format(outpath))
+            header = "-"*len(filename) + "\n"
+            title = header + f"{filename}\n" + header + "\n"
+            doc = title + outpath.read_text(encoding=encoding)
+            contents.append(doc)
 
-        content = outpath.text(encoding=encoding)
+        if regress:
+            content = "\n".join(contents)
+            file_regression.check(content, extension=".myst")
 
         return content
 

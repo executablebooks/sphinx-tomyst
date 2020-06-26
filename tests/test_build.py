@@ -22,6 +22,7 @@ def test_basic(
     warnings = warning.getvalue().strip()
     assert warnings == ""
 
+    #Note: pytest needs to run twice to initialise fixtures
+
     get_sphinx_app_doctree(app, docname="index", regress=True)
-    # get_sphinx_app_doctree(app, docname="index", resolve=True, regress=True)
-    get_sphinx_app_output(app, filename="index.myst")
+    get_sphinx_app_output(app, files=["index.myst", "test.myst"], regress=True)

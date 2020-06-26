@@ -1,21 +1,21 @@
 Testing Document
 ================
 
-.. figure:: _static/lecture_specific/about_py/qs.png
+.. figure:: _static/qs.png
 
-.. figure:: _static/lecture_specific/about_py/qs.png
+.. figure:: _static/qs.png
    :align: left
    :figwidth: 90 %
    :figclass: fig-test
 
-.. figure:: _static/lecture_specific/about_py/qs.png
+.. figure:: _static/qs.png
    :align: right
    :height: 100 px
    :width: 200 px
    :alt: alternate text
    :target: test-fig
 
-.. figure:: _static/lecture_specific/about_py/qs.png
+.. figure:: _static/qs.png
    :scale: 50 %
 
 .. code-block:: python3
