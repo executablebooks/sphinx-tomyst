@@ -26,95 +26,65 @@ logger = logging.getLogger(__name__)
 
 class MystTranslator(SphinxTranslator):
     """ Myst Translator
-    
+
     docutils:
         1. https://docutils.sourceforge.io/docs/ref/doctree.html
         2. https://docutils.sourceforge.io/docs/ref/doctree.html#element-reference
     sphinx:
         1. https://www.sphinx-doc.org/en/master/extdev/nodes.html
-        2. https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html 
+        2. https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html
 
     .. todo::
         1. review NotImplementedError to see if visit methods in base classes
            are suitable
     """
-    # Attribution => MystDocutils
+
+    # Boolean(State Tracking)
     attribution = False
-    # Block Quote (epigraph, highlights, pull_quote) => MystDocutils
-    block_quote = dict()
-    block_quote['in'] = False
-    block_quote['block_quote_type'] = "block-quote"      #TODO: can this be removed?
-    # Caption => MystDocutils
     caption = False
-    # Citation => MystDocutils
-    citation = dict()
-    citation['in'] = False
-    # Download => MystDocutils
-    download_reference = dict()
-    download_reference['in'] = False
-    # Figure => MystDocutils
-    figure = dict()
-    # Section => MystDocutils
-    section_level = 0
-    # Footnote => MystDocutils
-    footnote = dict()
-    footnote['in'] = False
-    footnote_reference = dict()
-    footnote_reference['in'] = False
-    # Image => MystDocutils
-    image = dict()
-    # Index => MystSphinx
-    index = False
-    # List => MystDocutils
-    List = None
-    # Literal Block => MystDocutils
-    literal_block = dict()
-    literal_block['in'] = False
-    literal_block['no-execute'] = False
-    literal_block['hide-output'] = False
-    # Math => MystDocutils
-    math = dict()
-    math['in'] = False
-    math_block = dict()
-    math_block['in'] = False
-    math_block['math_block_label'] = None
-    # Note => MystDocutils
+    citation = False
+    download_reference = False
+    footnote = False
+    literal_block = False
+    math = False
     note = False
-    # References => MystDocutils
-    reference_text_start = 0
     inpage_reference = False
-    # Rubric => MystDocutils
-    rubric = False
-    # Tables => MystDocutils
-    Table = None
-    # Text => MystDocutils
-    text = None
-    # Titles => MystDocutils
-    visit_first_title = True
-    title = ""
-    # Toctree => MystDocutils  #TODO: Should this work be done in MystSphinx?
     toctree = False
-    # Topic => MystDocutils
     topic = False
 
-    # Static Asset Trackers
-    images = []
-    files = []
-    cached_state = dict()   #A dictionary to cache states to support nested blocks
-    URI_SPACE_REPLACE_FROM = re.compile(r"\s")
-    URI_SPACE_REPLACE_TO = "-"
+    # Dict(State Tracking)
+    # Block Quote
+    block_quote = dict()
+    block_quote['in'] = False
+    block_quote['type'] = None
+    # Figure
+    figure = dict()
+    figure['in'] = False
+    figure['figure-options'] = None
+    # Footnote Reference
+    footnote_reference = dict()
+    footnote_reference['in'] = False
+    footnote_reference['link'] = None
+    # Math
+    math_block = dict()
+    math_block['in'] = False
+    math_block['label'] = None
+
+    # Accumulators
+    List = None
+    Table = None
 
     def __init__(self, document, builder):
         """
         A Myst(Markdown) Translator
         """
         super().__init__(document, builder)
-        #-Syntax-#
         self.syntax = MystSyntax()
-        # DEBUG
-        self.language = "python"
-        self.language_synonyms = ["ipython"]
         self.default_ext = ".myst"
+        # Asset Lists
+        self.images = []
+        self.section_level = 0
+        self.reference_text_start = 0  #TODO: can we delete this?
 
     #----------#
     #-Document-#
@@ -144,19 +114,19 @@ class MystTranslator(SphinxTranslator):
         #Escape Special markdown chars except in code block
         if self.caption:
             raise nodes.SkipNode
-        # if self.literal_block['in'] == False:   #TODO python=3.8 considers this invalid
+        # if self.literal_block == False:   #TODO python=3.8 considers this invalid
         #     text = text.replace("$", "\$")
         #Inline Math
-        if self.math['in']:
+        if self.math:
             text = self.syntax.visit_math(text.strip())
         #Math Blocks
-        elif self.math_block['in'] and self.math_block['math_block_label']:
-            text = self.syntax.visit_math_block(text.strip(), self.math_block['math_block_label'])
-            self.math_block['math_block_label'] = None
+        elif self.math_block['in'] and self.math_block['label']:
+            text = self.syntax.visit_math_block(text.strip(), self.math_block['label'])
+            self.math_block['label'] = None
         elif self.math_block['in']:
             text = self.syntax.visit_math_block(text.strip())
         #Code Blocks
-        if self.literal_block['in']:
+        if self.literal_block:
             text = self.strip_whitespace(text)
 
         self.text = text
@@ -170,11 +140,11 @@ class MystTranslator(SphinxTranslator):
         elif self.math_block['in']:
             self.output.append(self.text)
             self.add_newparagraph()
-        elif self.literal_block['in']:
+        elif self.literal_block:
             self.output.append(self.text)
             self.add_newline()
         elif self.block_quote['in'] or self.note:
-            if self.block_quote['block_quote_type'] == "epigraph":
+            if self.block_quote['type'] == "epigraph":
                 self.output.append(self.text.replace("\n", "\n> ")) #Ensure all lines are prepended (TODO: should this be in MarkdownSyntax)
             else:
                 self.output.append(self.text)
@@ -236,7 +206,7 @@ class MystTranslator(SphinxTranslator):
     def visit_block_quote(self, node):
         self.block_quote['in'] = True
         if "epigraph" in node.attributes["classes"]:
-            self.block_quote['block_quote_type'] = "epigraph"
+            self.block_quote['type'] = "epigraph"
         if self.List:
             self.add_newline()
             return
@@ -244,7 +214,7 @@ class MystTranslator(SphinxTranslator):
 
     def depart_block_quote(self, node):
         if "epigraph" in node.attributes["classes"]:
-            self.block_quote['block_quote_type'] = "block-quote"
+            self.block_quote['type'] = "block-quote"
         self.block_quote['in'] = False
         self.add_newline()
 
@@ -269,7 +239,7 @@ class MystTranslator(SphinxTranslator):
 
     def visit_caption(self, node):
         self.caption = True
-        if self.literal_block['in']:
+        if self.literal_block:
             raise nodes.SkipNode
 
     def depart_caption(self, node):
@@ -287,7 +257,7 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/rst/directives.html#citations
 
     def visit_citation(self, node):
-        self.citation['in'] = True
+        self.citation = True
         if "ids" in node.attributes:
             id_text = ""
             for id_ in node.attributes["ids"]:
@@ -297,7 +267,7 @@ class MystTranslator(SphinxTranslator):
         self.output.append(self.syntax.visit_citation(id_text))
 
     def depart_citation(self, node):
-        self.citation['in'] = False
+        self.citation = False
 
     # docutils.elements.citation_reference
     # https://docutils.sourceforge.io/docs/ref/doctree.html#citation-reference
@@ -384,7 +354,7 @@ class MystTranslator(SphinxTranslator):
 
     def depart_definition_list(self, node):
         self.add_newline()
-        self.output.append(self.syntax.depart_definition_list())  
+        self.output.append(self.syntax.depart_definition_list())
         self.add_newparagraph()
 
     # docutils.elements.definition_list_item
@@ -418,12 +388,12 @@ class MystTranslator(SphinxTranslator):
     # https://www.sphinx-doc.org/en/master/extdev/nodes.html#new-inline-nodes
 
     def visit_download_reference(self, node):
-        self.download_reference['in'] = True
+        self.download_reference = True
         html = "<a href={} download>".format(node["reftarget"])
         self.output.append(html)
 
     def depart_download_reference(self, node):
-        self.download_reference['in'] = False
+        self.download_reference = False
         self.output.append("</a>")
 
     # docutils.elements.emphasis
@@ -544,10 +514,10 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#footnote
 
     def visit_footnote(self, node):
-        self.footnote['in'] = True
+        self.footnote = True
 
     def depart_footnote(self, node):
-        self.footnote['in'] = False
+        self.footnote = False
 
     # docutils.elements.footnote_reference
     # https://docutils.sourceforge.io/docs/ref/doctree.html#footnote-reference
@@ -631,10 +601,10 @@ class MystTranslator(SphinxTranslator):
     # https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#index-generating-markup
 
     def visit_index(self, node):
-        self.index = True
+        pass
 
     def depart_index(self, node):
-        self.index=False
+        pass
 
     # docutils.elements.inline
     # uses: container?
@@ -651,10 +621,10 @@ class MystTranslator(SphinxTranslator):
 
     def visit_label(self, node):
         """
-        Notes: footnote requires `html` to create links within the 
-        notebooks as there is no markdown equivalent 
+        Notes: footnote requires `html` to create links within the
+        notebooks as there is no markdown equivalent
         """
-        if self.footnote['in']:
+        if self.footnote:
             ids = node.parent.attributes["ids"]
             id_text = ""
             for id_ in ids:
@@ -664,11 +634,11 @@ class MystTranslator(SphinxTranslator):
             self.output.append("<a id='{}'></a>\n**[{}]** ".format(id_text, node.astext())) #TODO: can this be harmonized with HTML
             raise nodes.SkipNode
 
-        if self.citation['in']:
+        if self.citation:
             self.output.append(self.syntax.visit_label())
 
     def depart_label(self, node):
-        if self.citation['in']:
+        if self.citation:
             self.output.append(self.syntax.depart_label())
             self.add_space()
 
@@ -704,7 +674,7 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#literal
 
     def visit_literal(self, node):
-        if self.download_reference['in']:
+        if self.download_reference:
             return            #TODO: can we just raise SkipNode?
 
         if self.List:
@@ -713,7 +683,7 @@ class MystTranslator(SphinxTranslator):
             self.output.append(self.syntax.visit_literal())
 
     def depart_literal(self, node):
-        if self.download_reference['in']:
+        if self.download_reference:
             return
 
         if self.List:
@@ -725,7 +695,7 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#literal-block
 
     def visit_literal_block(self, node):
-        self.literal_block['in'] = True
+        self.literal_block = True
         options = self.infer_literal_block_attrs(node)
         self.nodelang = node.attributes["language"].strip()
         self.output.append(self.syntax.visit_literal_block(self.nodelang))
@@ -770,7 +740,7 @@ class MystTranslator(SphinxTranslator):
     def depart_literal_block(self, node):
         self.output.append(self.syntax.depart_literal_block())
         self.add_newparagraph()
-        self.literal_block['in'] = False
+        self.literal_block = False
 
     # docutils.element.math
     # https://docutils.sourceforge.io/docs/ref/doctree.html#math
@@ -791,7 +761,7 @@ class MystTranslator(SphinxTranslator):
         TODO:
             1. Deprecate support for sphinx < 1.8
         """
-        self.math['in'] = True
+        self.math = True
         try: # sphinx < 1.8
             math_text = node.attributes["latex"].strip()
         except KeyError:
@@ -807,7 +777,7 @@ class MystTranslator(SphinxTranslator):
             self.output.append(formatted_text)
 
     def depart_math(self, node):
-        self.math['in'] = False
+        self.math = False
 
     # docutils.element.math_block
     # https://docutils.sourceforge.io/docs/ref/doctree.html#math-block
@@ -825,7 +795,7 @@ class MystTranslator(SphinxTranslator):
         if node["label"]:
             #Use \tags in the embedded LaTeX environment
             #Haven't included this in self.syntax.MardownSyntax as it should be general across HTML (mathjax), PDF (latex)
-            self.math_block['math_block_label'] = "\\tag{" + str(node["number"]) + "}\n"
+            self.math_block['label'] = "\\tag{" + str(node["number"]) + "}\n"
 
     def depart_math_block(self, node):
         self.math_block['in'] = False
@@ -878,7 +848,7 @@ class MystTranslator(SphinxTranslator):
                 self.add_newline()
             elif self.Table:
                 pass
-            elif self.block_quote['block_quote_type'] == "epigraph":
+            elif self.block_quote['type'] == "epigraph":
                 try:
                     attribution = node.parent.children[1]
                     self.output.append("\n>\n")   #Continue block for attribution
@@ -996,14 +966,12 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#rubric
 
     def visit_rubric(self, node):
-        self.rubric = True
-
         if len(node.children) == 1 and node.children[0].astext() in ['Footnotes']:
             self.output.append('**{}**\n\n'.format(node.children[0].astext()))            #TODO: add to MarkdownSyntax?
             raise nodes.SkipNode
 
     def depart_rubric(self, node):
-        self.rubric = False
+        pass
 
     # docutils.elements.section
     # https://docutils.sourceforge.io/docs/ref/doctree.html#section
@@ -1091,7 +1059,7 @@ class MystTranslator(SphinxTranslator):
 
     def depart_term(self, node):
         self.output.append("</dt>\n")
-    
+
     # docutils.element.tgroup
     # uses: table
     # https://docutils.sourceforge.io/docs/ref/doctree.html#tgroup
@@ -1123,9 +1091,6 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#title
 
     def visit_title(self, node):
-        if self.visit_first_title:
-            self.title = node.astext()
-        self.visit_first_title = False
         if self.topic:
             # this prevents from making it a subsection from section
             self.output.append(self.syntax.visit_title(self.section_level + 1))
