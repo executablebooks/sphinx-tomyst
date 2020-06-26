@@ -1204,15 +1204,18 @@ class MystTranslator(SphinxTranslator):
     @staticmethod
     def myst_options(options):
         """ return myst options block
-
-        #TODO: add support for returning shorthand options syntax
-        # if there are less than or equal to 2 options specified
         """
+        num_options = len(options.keys())
         myst_options = []
-        myst_options.append("---")
-        for item in sorted(options.keys()):
-            myst_options.append('{}: {}'.format(item, options[item]))
-        myst_options.append("---")
-        if len(myst_options) == 2:
-            myst_options = []
-        return myst_options
+        if num_options == 0:
+            return myst_options
+        elif num_options < 2:   #TODO parameterise this in conf.py
+            for option, option_val in options.items():
+                myst_options.append(":{}: {}".format(option, option_val))
+            return myst_options
+        else:
+            myst_options.append("---")
+            for item in sorted(options.keys()):
+                myst_options.append('{}: {}'.format(item, options[item]))
+            myst_options.append("---")
+            return myst_options
