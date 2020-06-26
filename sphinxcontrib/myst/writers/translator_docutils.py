@@ -648,8 +648,8 @@ class MystDocutils:
         #Escape Special markdown chars except in code block
         if self.caption:
             raise nodes.SkipNode
-        if self.literal_block['in'] == False:
-            text = text.replace("$", "\$")
+        # if self.literal_block['in'] == False:   #TODO python=3.8 considers this invalid
+        #     text = text.replace("$", "\$")
         #Inline Math
         if self.math['in']:
             text = self.syntax.visit_math(text.strip())

@@ -28,7 +28,7 @@ class MarkdownSyntax:
 
     def visit_bold(self):
         return "**"
-    
+
     def depart_bold(self):
         return "**"
 
@@ -37,7 +37,7 @@ class MarkdownSyntax:
 
     def visit_code_block(self, language):
         return "``` {}".format(language)
-    
+
     def depart_code_block(self):
         return "```"
 
@@ -112,7 +112,7 @@ class MarkdownSyntax:
 
     def visit_note(self):
         return ">**Note**\n>\n>"
-    
+
     def visit_title(self, level):
         return "#" * level
 
