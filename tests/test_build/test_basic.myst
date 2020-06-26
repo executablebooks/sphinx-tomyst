@@ -38,9 +38,7 @@ width: 200px
 ```
 
 ```{figure} _static/qs.png
----
-scale: 50
----
+:scale: 50
 ```
 
 ```{code-block} python3
