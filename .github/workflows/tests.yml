@@ -35,5 +35,4 @@ jobs:
         pip install -e .[testing]
     - name: Run pytest
       run: |
-        pytest --cov=sphinxcontrib-myst --cov-report=xml --cov-report=term-missing
-        coverage xml
+        pytest
