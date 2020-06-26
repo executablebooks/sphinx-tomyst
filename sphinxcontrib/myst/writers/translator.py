@@ -9,7 +9,6 @@ https://github.com/sphinx-doc/sphinx/blob/275d93b5068a4b6af4c912d5bebb2df9284160
 
 from __future__ import unicode_literals
 import re
-import nbformat.v4
 from docutils import nodes, writers
 from shutil import copyfile
 import copy
