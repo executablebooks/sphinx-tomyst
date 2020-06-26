@@ -26,3 +26,26 @@ def test_basic(
 
     get_sphinx_app_doctree(app, docname="test", regress=True)
     get_sphinx_app_output(app, files=["index.myst", "test.myst"], regress=True)
+
+@pytest.mark.sphinx(
+    buildername="myst", srcdir=os.path.join(SOURCE_DIR, "docutils"), freshenv=True
+)
+def test_docutils(
+    app,
+    status,
+    warning,
+    get_sphinx_app_doctree,
+    get_sphinx_app_output,
+    remove_sphinx_builds,
+):
+    """basic test."""
+    app.build()
+
+    assert "build succeeded" in status.getvalue()  # Build succeeded
+    warnings = warning.getvalue().strip()
+    assert warnings == ""
+
+    #Note: pytest needs to run twice to initialise fixtures
+
+    get_sphinx_app_doctree(app, docname="elements", regress=True)
+    get_sphinx_app_output(app, files=["index.myst", "elements.myst"], regress=True)
