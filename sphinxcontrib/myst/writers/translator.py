@@ -886,6 +886,8 @@ class MystTranslator(SphinxTranslator):
         self.reference = True
         if self.List:
             self.List.add_item("[")
+        elif self.figure['in']:
+            pass
         else:
             self.output.append("[")
 
@@ -911,7 +913,6 @@ class MystTranslator(SphinxTranslator):
                     refid = node["refid"]
                     self.inpage_reference = True
                     #markdown doesn't handle closing brackets very well so will replace with %28 and %29
-                    #ignore adjustment when targeting pdf as pandoc doesn't parse %28 correctly
                     refid = refid.replace("(", "%28")
                     refid = refid.replace(")", "%29")
                     #markdown target
@@ -934,6 +935,8 @@ class MystTranslator(SphinxTranslator):
         ## if there is a list add to it, else add it to the cell directly
         if self.List:
             self.List.add_item(formatted_text)
+        elif self.figure['in']:
+            pass
         else:
             self.output.append(formatted_text)
 

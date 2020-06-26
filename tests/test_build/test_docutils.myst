@@ -4,13 +4,13 @@ index.myst
 
 # Docutils Tests
 
-  * Elements
+  * [Elements](elements.myst)
 
 # Indices and tables
 
-  * Index
-  * Module Index
-  * Search Page
+  * [Index](genindex.myst)
+  * [Module Index](py-modindex.myst)
+  * [Search Page](search.myst)
 
 
 -------------
