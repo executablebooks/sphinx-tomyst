@@ -30,6 +30,12 @@ class MystSyntax(MarkdownSyntax):
         else:
             options = "\n".join(options)
             return "```{{figure}} {}\n{}".format(uri, options)
-    
+
     def depart_figure(self):
+        return "```"
+
+    def visit_note(self):
+        return "```{{note}} "
+
+    def depart_note(self):
         return "```"

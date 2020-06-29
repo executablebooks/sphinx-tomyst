@@ -18,6 +18,9 @@ This is some text
 admonition
 ----------
 
+Generic admonition requires a title argument to 
+be provided
+
 .. admonition:: My markdown link
 
    Here is [markdown link syntax](https://jupyter.org)
@@ -28,3 +31,11 @@ admonition
 
    with some additional lines
 
+note
+----
+
+.. note::
+
+   This is a note admonition.
+
+   It does not require any arguments

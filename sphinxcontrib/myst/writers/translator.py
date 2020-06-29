@@ -142,7 +142,7 @@ class MystTranslator(SphinxTranslator):
         elif self.literal_block:
             self.output.append(self.text)
             self.add_newline()
-        elif self.block_quote['in'] or self.note:
+        elif self.block_quote['in']:
             if self.block_quote['type'] == "epigraph":
                 self.output.append(self.text.replace("\n", "\n> ")) #Ensure all lines are prepended (TODO: should this be in MarkdownSyntax)
             else:
@@ -821,6 +821,8 @@ class MystTranslator(SphinxTranslator):
         self.output.append(self.syntax.visit_note())
 
     def depart_note(self, node):
+        self.remove_newline()
+        self.output.append(self.syntax.depart_note())
         self.note = False
 
     # sphinx.nodes.only

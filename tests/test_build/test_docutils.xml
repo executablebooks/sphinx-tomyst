@@ -18,6 +18,9 @@
         <section ids="admonition" names="admonition">
             <title>
                 admonition
+            <paragraph>
+                Generic admonition requires a title argument to
+                be provided
             <admonition classes="admonition-my-markdown-link">
                 <title>
                     My markdown link
@@ -33,3 +36,11 @@
                     You can make up your own admonition too.
                 <paragraph>
                     with some additional lines
+        <section ids="note" names="note">
+            <title>
+                note
+            <note>
+                <paragraph>
+                    This is a note admonition.
+                <paragraph>
+                    It does not require any arguments
