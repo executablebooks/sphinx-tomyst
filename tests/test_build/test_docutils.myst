@@ -5,12 +5,8 @@ index.myst
 # Docutils Tests
 
   * [Elements](elements.myst)
-
-# Indices and tables
-
-  * [Index](genindex.myst)
-  * [Module Index](py-modindex.myst)
-  * [Search Page](search.myst)
+    * [Text](elements.myst#text)
+    * [admonition](elements.myst#admonition)
 
 
 -------------
@@ -18,4 +14,20 @@ elements.myst
 -------------
 
 # Elements
+
+## Text
+
+This is some text
+
+## admonition
+
+```{admonition} My markdown link
+Here is [markdown link syntax](https://jupyter.org)
+```
+
+```{admonition} title for admonition
+You can make up your own admonition too.
+
+with some additional lines
+```
 

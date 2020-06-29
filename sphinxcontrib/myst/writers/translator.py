@@ -40,6 +40,7 @@ class MystTranslator(SphinxTranslator):
     """
 
     # Boolean(State Tracking)
+    admonition = False
     attribution = False
     caption = False
     citation = False
@@ -156,32 +157,35 @@ class MystTranslator(SphinxTranslator):
     # docutils.elements.abbreviation
     # https://docutils.sourceforge.io/docs/ref/doctree.html#abbreviation
 
-    def visit_abbreviation(self, node):
-        raise NotImplementedError
-
     # docutils.elements.acroynm
     # https://docutils.sourceforge.io/docs/ref/doctree.html#acronym
 
-    def visit_acroynm(self, node):
-        raise NotImplementedError
-
     # docutils.elements.address
     # https://docutils.sourceforge.io/docs/ref/doctree.html#address
-
-    def visit_address(self, node):
-        raise NotImplementedError
-
-    # Docutils: https://docutils.sourceforge.io/docs/ref/rst/directives.html#admonitions
 
     # docutils.elements.admonitions
     # directives: attention, caution, danger, error, hint, important, note, tip, warning
     # https://docutils.sourceforge.io/docs/ref/rst/directives.html#admonitions
 
     def visit_admonition(self, node):
-        pass
+        self.admonition = True
+        title = self.infer_admonition_attrs(node)
+        syntax = self.syntax.visit_admonition(title)
+        self.output.append(syntax)
+        self.add_newline()
 
-    def visit_attention(self, node):
-        raise NotImplementedError
+    def infer_admonition_attrs(self, node):
+        title = None
+        for child in node.children:
+            if type(child) is nodes.title:
+                title = child.astext()
+        return title
+
+    def depart_admonition(self, node):
+        self.remove_newline()
+        self.output.append(self.syntax.depart_admonition())
+        self.add_newparagraph()
+        self.admonition = False
 
     # docutils.elements.attribution
     # https://docutils.sourceforge.io/docs/ref/doctree.html#attribution
@@ -446,6 +450,14 @@ class MystTranslator(SphinxTranslator):
 
     # docutils.elements.field
     # https://docutils.sourceforge.io/docs/ref/doctree.html#field
+
+    def visit_field(self, node):
+        for child in node.children:
+            if type(child) is nodes.field_name:
+                field_name = child.astext()
+            elif type(child) is nodes.field_body:
+                field_body = child.astext()
+        raise NotImplementedError
 
     # docutils.elements.field_body
     # https://docutils.sourceforge.io/docs/ref/doctree.html#field-body
@@ -1082,7 +1094,9 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#title
 
     def visit_title(self, node):
-        if self.topic:
+        if self.admonition:
+            raise nodes.SkipNode
+        elif self.topic:
             # this prevents from making it a subsection from section
             self.output.append(self.syntax.visit_title(self.section_level + 1))
             self.add_space()
@@ -1149,6 +1163,12 @@ class MystTranslator(SphinxTranslator):
 
     def add_newline(self, n=1):
         self.output.append("\n" * n)
+
+    def remove_newline(self):
+        if self.output[-1] == '\n\n':
+            self.output[-1] = '\n'
+        elif self.output[-1] == '\n':
+            self.output.pop()
 
     def add_newparagraph(self):
         self.output.append("\n\n")

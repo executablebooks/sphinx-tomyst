@@ -6,6 +6,15 @@ from .markdown import MarkdownSyntax
 
 class MystSyntax(MarkdownSyntax):
     
+    def visit_admonition(self, title=None):
+        if title is None:
+            return "```{{admonition}}"
+        else:
+            return "```{{admonition}} {}".format(title)
+
+    def depart_admonition(self):
+        return "```"
+
     def visit_literal_block(self, language=None):
         if language is None:
             return "```"

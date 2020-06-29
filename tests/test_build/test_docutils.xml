@@ -2,3 +2,34 @@
     <section ids="elements" names="elements">
         <title>
             Elements
+        <section ids="text" names="text">
+            <title>
+                Text
+            <paragraph>
+                This is some text
+            <comment xml:space="preserve">
+                address
+                -------
+                
+                This is an inline role
+                
+                :Address: 123 Example Ave.
+                         Example, EX
+        <section ids="admonition" names="admonition">
+            <title>
+                admonition
+            <admonition classes="admonition-my-markdown-link">
+                <title>
+                    My markdown link
+                <paragraph>
+                    Here is [markdown link syntax](
+                    <reference refuri="https://jupyter.org">
+                        https://jupyter.org
+                    )
+            <admonition classes="admonition-title-for-admonition">
+                <title>
+                    title for admonition
+                <paragraph>
+                    You can make up your own admonition too.
+                <paragraph>
+                    with some additional lines
