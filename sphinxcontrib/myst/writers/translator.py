@@ -170,6 +170,8 @@ class MystTranslator(SphinxTranslator):
     def visit_admonition(self, node):
         self.admonition = True
         title = self.infer_admonition_attrs(node)
+        if title is None:
+            raise SyntaxWarning("title attribute cannot be None")
         syntax = self.syntax.visit_admonition(title)
         self.output.append(syntax)
         self.add_newline()
