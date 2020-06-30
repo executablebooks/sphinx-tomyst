@@ -11,8 +11,6 @@
                 address
                 -------
                 
-                This is an inline role
-                
                 :Address: 123 Example Ave.
                          Example, EX
         <section ids="admonition" names="admonition">
@@ -42,6 +40,25 @@
             <attention>
                 <paragraph>
                     This is an attention admonition
+            <comment xml:space="preserve">
+                author
+                ------
+                
+                :Author: J. Random Hacker
+            <comment xml:space="preserve">
+                authors
+                -------
+                
+                :Authors: J. Random Hacker; Jane Doe
+        <section ids="block-quote" names="block_quote">
+            <title>
+                block_quote
+            <paragraph>
+                This is the main document
+            <block_quote>
+                <paragraph>
+                    This is a block quote context
+                    with multiple lines
         <section ids="caution" names="caution">
             <title>
                 caution

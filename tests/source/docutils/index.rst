@@ -6,4 +6,5 @@ Docutils Tests
    :caption: Contents:
 
    elements
+   directives
 

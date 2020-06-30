@@ -5,15 +5,20 @@ Myst Syntax
 from .markdown import MarkdownSyntax
 
 class MystSyntax(MarkdownSyntax):
-    
+
+    # - Direct Syntax - #
+
     def visit_admonition(self, title):
         return "```{{admonition}} {}".format(title)
 
-    def visit_admonition_type(self, type):
-        return "```{" + "{}".format(type) + "}\n"
-
     def depart_admonition(self):
         return "```"
+
+    def visit_attribution(self):
+        return "-- "
+
+    def visit_epigraph(self):
+        return "```{{epigraph}}"
 
     def visit_literal_block(self, language=None):
         if language is None:
@@ -32,4 +37,12 @@ class MystSyntax(MarkdownSyntax):
             return "```{{figure}} {}\n{}".format(uri, options)
 
     def depart_figure(self):
+        return "```"
+
+    # - Syntax Methods - #
+
+    def visit_directive(self, type):
+        return "```{" + "{}".format(type) + "}"
+
+    def depart_directive(self):
         return "```"

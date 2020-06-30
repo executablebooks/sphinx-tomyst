@@ -8,6 +8,7 @@ index.myst
     * [Text](elements.myst#text)
     * [admonition](elements.myst#admonition)
     * [attention](elements.myst#attention)
+    * [block_quote](elements.myst#block-quote)
     * [caution](elements.myst#caution)
     * [danger](elements.myst#danger)
     * [error](elements.myst#error)
@@ -16,6 +17,10 @@ index.myst
     * [note](elements.myst#note)
     * [tip](elements.myst#tip)
     * [warning](elements.myst#warning)
+  * [Directives](directives.myst)
+    * [epigraph](directives.myst#epigraph)
+    * [highlights](directives.myst#highlights)
+    * [pull-quote](directives.myst#pull-quote)
 
 
 -------------
@@ -48,6 +53,13 @@ with some additional lines
 ```{attention}
 This is an attention admonition
 ```
+
+## block_quote
+
+This is the main document
+
+> This is a block quote context
+> with multiple lines
 
 ## caution
 
@@ -97,5 +109,32 @@ This is a tip admonition
 
 ```{warning}
 This is a warning admonition
+```
+
+
+---------------
+directives.myst
+---------------
+
+# Directives
+
+## epigraph
+
+```{epigraph}
+No matter where you go, there you are.
+
+-- Buckaroo Banzai
+```
+
+## highlights
+
+```{highlights}
+This is a highlights directive
+```
+
+## pull-quote
+
+```{pull-quote}
+This is a pull-quote directive
 ```
 

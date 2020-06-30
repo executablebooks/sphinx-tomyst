@@ -10,8 +10,6 @@ This is some text
    address
    -------
 
-   This is an inline role
-
    :Address: 123 Example Ave.
             Example, EX
 
@@ -31,13 +29,33 @@ be provided
 
    with some additional lines
 
-
 attention
 ---------
 
 .. attention::
 
    This is an attention admonition
+
+..
+   author
+   ------
+
+   :Author: J. Random Hacker
+
+..
+   authors
+   -------
+
+   :Authors: J. Random Hacker; Jane Doe
+
+block_quote
+-----------
+
+This is the main document
+
+   This is a block quote context
+   with multiple lines
+
 
 caution
 -------
@@ -52,7 +70,6 @@ danger
 .. danger::
 
    This is a danger admonition
-
 
 error
 -----

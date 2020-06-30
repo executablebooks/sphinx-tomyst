@@ -119,6 +119,10 @@ class MystTranslator(SphinxTranslator):
         text = node.astext()
 
         #Escape Special markdown chars except in code block
+        if self.block_quote['in'] and self.block_quote['type'] == 'block_quote':
+            linemarker = self.syntax.visit_block_quote()
+            text = linemarker + text
+            text = text.replace("\n", "\n{}".format(linemarker))
         if self.caption:
             raise nodes.SkipNode
         # if self.literal_block == False:   #TODO python=3.8 considers this invalid
@@ -150,11 +154,6 @@ class MystTranslator(SphinxTranslator):
         elif self.literal_block:
             self.output.append(self.text)
             self.add_newline()
-        elif self.block_quote['in']:
-            if self.block_quote['type'] == "epigraph":
-                self.output.append(self.text.replace("\n", "\n> ")) #Ensure all lines are prepended (TODO: should this be in MarkdownSyntax)
-            else:
-                self.output.append(self.text)
         elif self.caption and self.toctree:         #TODO: Check this condition
             self.output.append("# {}".format(self.text))
         else:
@@ -171,8 +170,8 @@ class MystTranslator(SphinxTranslator):
     # docutils.elements.address
     # https://docutils.sourceforge.io/docs/ref/doctree.html#address
 
-    # docutils.elements.admonitions
-    # directives: attention, caution, danger, error, hint, important, note, tip, warning
+    # docutils.elements.admonition
+    # types: attention, caution, danger, error, hint, important, note, tip, warning
     # https://docutils.sourceforge.io/docs/ref/rst/directives.html#admonitions
 
     def visit_admonition(self, node):
@@ -202,11 +201,12 @@ class MystTranslator(SphinxTranslator):
 
     def visit_attention(self, node):
         self.attention = True
-        self.output.append(self.syntax.visit_admonition_type("attention"))
+        self.output.append(self.syntax.visit_directive("attention"))
+        self.add_newline()
 
     def depart_attention(self, node):
         self.remove_newline()
-        self.output.append(self.syntax.depart_admonition())
+        self.output.append(self.syntax.depart_directive())
         self.add_newparagraph()
         self.attention = False
 
@@ -215,6 +215,7 @@ class MystTranslator(SphinxTranslator):
 
     def visit_attribution(self, node):
         self.attribution = True
+        self.add_newline()
         self.output.append(self.syntax.visit_attribution())
 
     def depart_attribution(self, node):
@@ -226,29 +227,42 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#authors
 
     # docutils.element.block_quote
-    # directives: epigraph, highlights, pull_quote
+    # class types: epigraph
+    # https://docutils.sourceforge.io/docs/ref/doctree.html#block-quote
 
     def visit_block_quote(self, node):
         self.block_quote['in'] = True
-        if "epigraph" in node.attributes["classes"]:
-            self.block_quote['type'] = "epigraph"
-        if self.List:
+        if self.List:           #TODO: can you have block quote in List?
             self.add_newline()
             return
-        self.output.append(self.syntax.visit_block_quote())
+        # Determine class type
+        if "epigraph" in node.attributes["classes"]:
+            self.block_quote['type'] = "epigraph"
+            self.output.append(self.syntax.visit_directive("epigraph"))
+            self.add_newline()
+        elif "highlights" in node.attributes["classes"]:
+            self.block_quote['type'] = "highlights"
+            self.output.append(self.syntax.visit_directive("highlights"))
+            self.add_newline()
+        elif "pull-quote" in node.attributes["classes"]:
+            self.block_quote['type'] = "pull-quote"
+            self.output.append(self.syntax.visit_directive("pull-quote"))
+            self.add_newline()
+        else:
+            self.block_quote['type'] = "block_quote"
 
     def depart_block_quote(self, node):
-        if "epigraph" in node.attributes["classes"]:
-            self.block_quote['type'] = "block-quote"
+        if self.block_quote['type'] != "block_quote":
+            self.output.append(self.syntax.depart_directive())
+            self.add_newparagraph()
         self.block_quote['in'] = False
-        self.add_newline()
 
     # docutils.elements.bullet_list
     # https://docutils.sourceforge.io/docs/ref/doctree.html#bullet-list
 
     def visit_bullet_list(self, node):
         if not self.List:
-            self.List = List(level=0,markers=dict())
+            self.List = List(level=0, markers=dict())
         self.List.increment_level()
 
     def depart_bullet_list(self, node):
@@ -277,11 +291,12 @@ class MystTranslator(SphinxTranslator):
 
     def visit_caution(self, node):
         self.caution = True
-        self.output.append(self.syntax.visit_admonition_type("caution"))
+        self.output.append(self.syntax.visit_directive("caution"))
+        self.add_newline()
 
     def depart_caution(self, node):
         self.remove_newline()
-        self.output.append(self.syntax.depart_admonition())
+        self.output.append(self.syntax.depart_directive())
         self.add_newparagraph()
         self.caution = False
 
@@ -324,7 +339,7 @@ class MystTranslator(SphinxTranslator):
     # https://www.sphinx-doc.org/en/master/extdev/nodes.html?highlight=compact_paragraph#sphinx.addnodes.compact_paragraph
 
     def visit_compact_paragraph(self, node):
-        pass
+        pass #TODO: review
 
     def depart_compact_paragraph(self, node):
         pass
@@ -358,11 +373,12 @@ class MystTranslator(SphinxTranslator):
 
     def visit_danger(self, node):
         self.danger = True
-        self.output.append(self.syntax.visit_admonition_type("danger"))
+        self.output.append(self.syntax.visit_directive("danger"))
+        self.add_newline()
 
     def depart_danger(self, node):
         self.remove_newline()
-        self.output.append(self.syntax.depart_admonition())
+        self.output.append(self.syntax.depart_directive())
         self.add_newparagraph()
         self.danger= False
 
@@ -400,10 +416,10 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#definition-list-item
 
     def visit_definition_list_item(self, node):
-        pass #TODO: remove? use SphinxTranslator version
+        pass #TODO: review
 
     def depart_definition_list_item(self, node):
-        pass #TODO: remove? use SphinxTranslator version
+        pass
 
     # docutils.elements.description
     # https://docutils.sourceforge.io/docs/ref/doctree.html#description
@@ -484,11 +500,12 @@ class MystTranslator(SphinxTranslator):
 
     def visit_error(self, node):
         self.error = True
-        self.output.append(self.syntax.visit_admonition_type("error"))
+        self.output.append(self.syntax.visit_directive("error"))
+        self.add_newline()
 
     def depart_error(self, node):
         self.remove_newline()
-        self.output.append(self.syntax.depart_admonition())
+        self.output.append(self.syntax.depart_directive())
         self.add_newparagraph()
         self.error= False
 
@@ -598,11 +615,12 @@ class MystTranslator(SphinxTranslator):
 
     def visit_hint(self, node):
         self.hint = True
-        self.output.append(self.syntax.visit_admonition_type("hint"))
+        self.output.append(self.syntax.visit_directive("hint"))
+        self.add_newline()
 
     def depart_hint(self, node):
         self.remove_newline()
-        self.output.append(self.syntax.depart_admonition())
+        self.output.append(self.syntax.depart_directive())
         self.add_newparagraph()
         self.hint= False
 
@@ -656,11 +674,12 @@ class MystTranslator(SphinxTranslator):
 
     def visit_important(self, node):
         self.important = True
-        self.output.append(self.syntax.visit_admonition_type("important"))
+        self.output.append(self.syntax.visit_directive("important"))
+        self.add_newline()
 
     def depart_important(self, node):
         self.remove_newline()
-        self.output.append(self.syntax.depart_admonition())
+        self.output.append(self.syntax.depart_directive())
         self.add_newparagraph()
         self.important= False
 
@@ -876,11 +895,12 @@ class MystTranslator(SphinxTranslator):
 
     def visit_note(self, node):
         self.note = True
-        self.output.append(self.syntax.visit_admonition_type("note"))
+        self.output.append(self.syntax.visit_directive("note"))
+        self.add_newline()
 
     def depart_note(self, node):
         self.remove_newline()
-        self.output.append(self.syntax.depart_admonition())
+        self.output.append(self.syntax.depart_directive())
         self.add_newparagraph()
         self.note = False
 
@@ -913,20 +933,16 @@ class MystTranslator(SphinxTranslator):
 
     def depart_paragraph(self, node):
         if self.List:
-            pass
-        else:
-            if self.List and self.List.getlevel() > 0:           #TODO: is this ever reach given above if statement?
+            if self.List.getlevel() > 0:
                 self.add_newline()
-            elif self.Table:
-                pass
-            elif self.block_quote['type'] == "epigraph":
-                try:
-                    attribution = node.parent.children[1]
-                    self.output.append("\n>\n")   #Continue block for attribution
-                except:
-                    self.add_newparagraph()
             else:
-                self.add_newparagraph()
+                return
+        if self.Table:
+            return
+        if self.block_quote['in'] and self.block_quote['type'] != 'block_quote':
+            self.add_newline()
+            return
+        self.add_newparagraph()
 
     # docutils.elements.pending
     # https://docutils.sourceforge.io/docs/ref/doctree.html#pending
@@ -1150,11 +1166,12 @@ class MystTranslator(SphinxTranslator):
 
     def visit_tip(self, node):
         self.tip = True
-        self.output.append(self.syntax.visit_admonition_type("tip"))
+        self.output.append(self.syntax.visit_directive("tip"))
+        self.add_newline()
 
     def depart_tip(self, node):
         self.remove_newline()
-        self.output.append(self.syntax.depart_admonition())
+        self.output.append(self.syntax.depart_directive())
         self.add_newparagraph()
         self.tip = False
 
@@ -1216,11 +1233,12 @@ class MystTranslator(SphinxTranslator):
 
     def visit_warning(self, node):
         self.warning = True
-        self.output.append(self.syntax.visit_admonition_type("warning"))
+        self.output.append(self.syntax.visit_directive("warning"))
+        self.add_newline()
 
     def depart_warning(self, node):
         self.remove_newline()
-        self.output.append(self.syntax.depart_admonition())
+        self.output.append(self.syntax.depart_directive())
         self.add_newparagraph()
         self.warning = False
 
