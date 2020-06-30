@@ -38,8 +38,9 @@ This is some text
 Generic admonition requires a title argument to
 be provided
 
-```{admonition} My markdown link
-Here is [markdown link syntax](https://jupyter.org)
+```{admonition} My rst link
+Here is [rst link syntax](https://jupyter.org)
+converted to markdown
 ```
 
 ```{admonition} title for admonition

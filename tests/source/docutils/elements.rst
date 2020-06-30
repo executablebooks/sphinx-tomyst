@@ -19,9 +19,10 @@ admonition
 Generic admonition requires a title argument to
 be provided
 
-.. admonition:: My markdown link
+.. admonition:: My rst link
 
-   Here is [markdown link syntax](https://jupyter.org)
+   Here is `rst link syntax <https://jupyter.org>`__
+   converted to markdown
 
 .. admonition:: title for admonition
 

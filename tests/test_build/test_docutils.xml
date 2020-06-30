@@ -19,14 +19,15 @@
             <paragraph>
                 Generic admonition requires a title argument to
                 be provided
-            <admonition classes="admonition-my-markdown-link">
+            <admonition classes="admonition-my-rst-link">
                 <title>
-                    My markdown link
+                    My rst link
                 <paragraph>
-                    Here is [markdown link syntax](
-                    <reference refuri="https://jupyter.org">
-                        https://jupyter.org
-                    )
+                    Here is 
+                    <reference name="rst link syntax" refuri="https://jupyter.org">
+                        rst link syntax
+                    
+                    converted to markdown
             <admonition classes="admonition-title-for-admonition">
                 <title>
                     title for admonition

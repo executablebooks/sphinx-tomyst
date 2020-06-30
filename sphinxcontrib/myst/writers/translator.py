@@ -1022,7 +1022,7 @@ class MystTranslator(SphinxTranslator):
         if self.toctree:
             formatted_text += "\n"
 
-        ## if there is a list add to it, else add it to the cell directly
+        ## if there is a list add to it, else add it to the output
         if self.List:
             self.List.add_item(formatted_text)
         elif self.figure['in']:
