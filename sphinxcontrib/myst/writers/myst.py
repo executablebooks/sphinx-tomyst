@@ -20,6 +20,13 @@ class MystSyntax(MarkdownSyntax):
     def visit_epigraph(self):
         return "```{{epigraph}}"
 
+    def visit_image(self, uri, options=None):
+        if options is None:
+            return "```{{image}} {}".format(uri)
+        else:
+            options = "\n".join(options)
+            return "```{{image}} {}\n{}".format(uri, options)
+
     def visit_literal_block(self, language=None):
         if language is None:
             return "```"

@@ -576,7 +576,8 @@ class MystTranslator(SphinxTranslator):
         return options
 
     def depart_figure(self, node):
-        self.figure = {}
+        self.figure['in'] = False
+        self.figure['figure-options'] = None
 
     # docutils.elements.footer
     # https://docutils.sourceforge.io/docs/ref/doctree.html#footer
