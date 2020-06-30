@@ -18,7 +18,7 @@ This is some text
 admonition
 ----------
 
-Generic admonition requires a title argument to 
+Generic admonition requires a title argument to
 be provided
 
 .. admonition:: My markdown link
@@ -30,6 +30,21 @@ be provided
    You can make up your own admonition too.
 
    with some additional lines
+
+
+attention
+---------
+
+.. attention::
+
+   This is an attention admonition
+
+caution
+-------
+
+.. caution::
+
+   This is a caution admonition
 
 note
 ----

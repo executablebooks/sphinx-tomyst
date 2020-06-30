@@ -7,6 +7,8 @@ index.myst
   * [Elements](elements.myst)
     * [Text](elements.myst#text)
     * [admonition](elements.myst#admonition)
+    * [attention](elements.myst#attention)
+    * [caution](elements.myst#caution)
     * [note](elements.myst#note)
 
 
@@ -35,9 +37,22 @@ You can make up your own admonition too.
 with some additional lines
 ```
 
+## attention
+
+```{{attention}}
+This is an attention admonition
+```
+
+## caution
+
+```{{caution}}
+This is a caution admonition
+```
+
 ## note
 
-```{{note}} This is a note admonition.
+```{{note}}
+This is a note admonition.
 
 It does not require any arguments
 ```

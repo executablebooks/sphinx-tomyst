@@ -189,6 +189,19 @@ class MystTranslator(SphinxTranslator):
         self.add_newparagraph()
         self.admonition = False
 
+    # docutils.elements.attention
+    # https://docutils.sourceforge.io/docs/ref/doctree.html#attention
+
+    def visit_attention(self, node):
+        self.attention = True
+        self.output.append(self.syntax.visit_admonition_type("attention"))
+
+    def depart_attention(self, node):
+        self.remove_newline()
+        self.output.append(self.syntax.depart_admonition())
+        self.add_newparagraph()
+        self.attention = False
+
     # docutils.elements.attribution
     # https://docutils.sourceforge.io/docs/ref/doctree.html#attribution
 
@@ -255,7 +268,14 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#caution
 
     def visit_caution(self, node):
-        raise NotImplementedError
+        self.caution = True
+        self.output.append(self.syntax.visit_admonition_type("caution"))
+
+    def depart_caution(self, node):
+        self.remove_newline()
+        self.output.append(self.syntax.depart_admonition())
+        self.add_newparagraph()
+        self.caution = False
 
     # docutils.citations
     # https://docutils.sourceforge.io/docs/ref/rst/directives.html#citations
@@ -820,11 +840,11 @@ class MystTranslator(SphinxTranslator):
 
     def visit_note(self, node):
         self.note = True
-        self.output.append(self.syntax.visit_note())
+        self.output.append(self.syntax.visit_admonition_type("note"))
 
     def depart_note(self, node):
         self.remove_newline()
-        self.output.append(self.syntax.depart_note())
+        self.output.append(self.syntax.depart_admonition())
         self.note = False
 
     # sphinx.nodes.only
@@ -1151,7 +1171,14 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#warning
 
     def visit_warning(self, node):
-        raise NotImplementedError
+        self.warning = True
+        self.output.append(self.syntax.visit_admonition_type("warning"))
+
+    def depart_warning(self, node):
+        self.remove_newline()
+        self.output.append(self.syntax.depart_admonition())
+        self.add_newparagraph()
+        self.warning = False
 
     #-----------#
     #-Utilities-#

@@ -9,6 +9,9 @@ class MystSyntax(MarkdownSyntax):
     def visit_admonition(self, title):
         return "```{{admonition}} {}".format(title)
 
+    def visit_admonition_type(self, type):
+        return "```{{" + "{}".format(type) + "}}\n"
+
     def depart_admonition(self):
         return "```"
 
@@ -29,10 +32,4 @@ class MystSyntax(MarkdownSyntax):
             return "```{{figure}} {}\n{}".format(uri, options)
 
     def depart_figure(self):
-        return "```"
-
-    def visit_note(self):
-        return "```{{note}} "
-
-    def depart_note(self):
         return "```"

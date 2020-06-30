@@ -36,6 +36,18 @@
                     You can make up your own admonition too.
                 <paragraph>
                     with some additional lines
+        <section ids="attention" names="attention">
+            <title>
+                attention
+            <attention>
+                <paragraph>
+                    This is an attention admonition
+        <section ids="caution" names="caution">
+            <title>
+                caution
+            <caution>
+                <paragraph>
+                    This is a caution admonition
         <section ids="note" names="note">
             <title>
                 note
