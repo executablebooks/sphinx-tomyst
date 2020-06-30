@@ -46,6 +46,35 @@ caution
 
    This is a caution admonition
 
+danger
+------
+
+.. danger::
+
+   This is a danger admonition
+
+
+error
+-----
+
+.. error::
+
+   This is an error admonition
+
+hint
+----
+
+.. hint::
+
+   This is a hint admonition
+
+important
+---------
+
+.. important::
+
+   This is an important admonition
+
 note
 ----
 
@@ -54,3 +83,17 @@ note
    This is a note admonition.
 
    It does not require any arguments
+
+tip
+---
+
+.. tip::
+
+   This is a tip admonition
+
+warning
+-------
+
+.. warning::
+
+   This is a warning admonition

@@ -42,16 +42,24 @@ class MystTranslator(SphinxTranslator):
     # Boolean(State Tracking)
     admonition = False
     attribution = False
+    attention = False
     caption = False
+    caution = False
     citation = False
+    danger = False
     download_reference = False
+    error = False
     footnote = False
+    hint = False
+    important = False
     literal_block = False
     math = False
     note = False
     inpage_reference = False
+    tip = False
     toctree = False
     topic = False
+    warning = False
 
     # Dict(State Tracking)
     # Block Quote
@@ -349,7 +357,14 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#danger
 
     def visit_danger(self, node):
-        raise NotImplementedError
+        self.danger = True
+        self.output.append(self.syntax.visit_admonition_type("danger"))
+
+    def depart_danger(self, node):
+        self.remove_newline()
+        self.output.append(self.syntax.depart_admonition())
+        self.add_newparagraph()
+        self.danger= False
 
     # docutils.elements.date
     # https://docutils.sourceforge.io/docs/ref/doctree.html#date
@@ -468,7 +483,14 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#error
 
     def visit_error(self, node):
-        raise NotImplementedError
+        self.error = True
+        self.output.append(self.syntax.visit_admonition_type("error"))
+
+    def depart_error(self, node):
+        self.remove_newline()
+        self.output.append(self.syntax.depart_admonition())
+        self.add_newparagraph()
+        self.error= False
 
     # docutils.elements.field
     # https://docutils.sourceforge.io/docs/ref/doctree.html#field
@@ -575,7 +597,14 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#hint
 
     def visit_hint(self, node):
-        raise NotImplementedError
+        self.hint = True
+        self.output.append(self.syntax.visit_admonition_type("hint"))
+
+    def depart_hint(self, node):
+        self.remove_newline()
+        self.output.append(self.syntax.depart_admonition())
+        self.add_newparagraph()
+        self.hint= False
 
     # docutils.elements.image
     # https://docutils.sourceforge.io/docs/ref/rst/directives.html#images
@@ -626,7 +655,14 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#important
 
     def visit_important(self, node):
-        raise NotImplementedError
+        self.important = True
+        self.output.append(self.syntax.visit_admonition_type("important"))
+
+    def depart_important(self, node):
+        self.remove_newline()
+        self.output.append(self.syntax.depart_admonition())
+        self.add_newparagraph()
+        self.important= False
 
     # sphinx.nodes.index
     # https://www.sphinx-doc.org/en/master/extdev/nodes.html#new-inline-nodes
@@ -845,6 +881,7 @@ class MystTranslator(SphinxTranslator):
     def depart_note(self, node):
         self.remove_newline()
         self.output.append(self.syntax.depart_admonition())
+        self.add_newparagraph()
         self.note = False
 
     # sphinx.nodes.only
@@ -1112,7 +1149,14 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#tip
 
     def visit_tip(self, node):
-        raise NotImplementedError
+        self.tip = True
+        self.output.append(self.syntax.visit_admonition_type("tip"))
+
+    def depart_tip(self, node):
+        self.remove_newline()
+        self.output.append(self.syntax.depart_admonition())
+        self.add_newparagraph()
+        self.tip = False
 
     # docutils.element.title
     # https://docutils.sourceforge.io/docs/ref/doctree.html#title

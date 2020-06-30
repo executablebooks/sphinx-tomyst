@@ -9,7 +9,13 @@ index.myst
     * [admonition](elements.myst#admonition)
     * [attention](elements.myst#attention)
     * [caution](elements.myst#caution)
+    * [danger](elements.myst#danger)
+    * [error](elements.myst#error)
+    * [hint](elements.myst#hint)
+    * [important](elements.myst#important)
     * [note](elements.myst#note)
+    * [tip](elements.myst#tip)
+    * [warning](elements.myst#warning)
 
 
 -------------
@@ -39,20 +45,57 @@ with some additional lines
 
 ## attention
 
-```{{attention}}
+```{attention}
 This is an attention admonition
 ```
 
 ## caution
 
-```{{caution}}
+```{caution}
 This is a caution admonition
+```
+
+## danger
+
+```{danger}
+This is a danger admonition
+```
+
+## error
+
+```{error}
+This is an error admonition
+```
+
+## hint
+
+```{hint}
+This is a hint admonition
+```
+
+## important
+
+```{important}
+This is an important admonition
 ```
 
 ## note
 
-```{{note}}
+```{note}
 This is a note admonition.
 
 It does not require any arguments
 ```
+
+## tip
+
+```{tip}
+This is a tip admonition
+```
+
+## warning
+
+```{warning}
+This is a warning admonition
+```
+

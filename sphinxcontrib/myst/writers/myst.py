@@ -10,7 +10,7 @@ class MystSyntax(MarkdownSyntax):
         return "```{{admonition}} {}".format(title)
 
     def visit_admonition_type(self, type):
-        return "```{{" + "{}".format(type) + "}}\n"
+        return "```{" + "{}".format(type) + "}\n"
 
     def depart_admonition(self):
         return "```"

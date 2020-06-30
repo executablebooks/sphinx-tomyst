@@ -48,6 +48,30 @@
             <caution>
                 <paragraph>
                     This is a caution admonition
+        <section ids="danger" names="danger">
+            <title>
+                danger
+            <danger>
+                <paragraph>
+                    This is a danger admonition
+        <section ids="error" names="error">
+            <title>
+                error
+            <error>
+                <paragraph>
+                    This is an error admonition
+        <section ids="hint" names="hint">
+            <title>
+                hint
+            <hint>
+                <paragraph>
+                    This is a hint admonition
+        <section ids="important" names="important">
+            <title>
+                important
+            <important>
+                <paragraph>
+                    This is an important admonition
         <section ids="note" names="note">
             <title>
                 note
@@ -56,3 +80,15 @@
                     This is a note admonition.
                 <paragraph>
                     It does not require any arguments
+        <section ids="tip" names="tip">
+            <title>
+                tip
+            <tip>
+                <paragraph>
+                    This is a tip admonition
+        <section ids="warning" names="warning">
+            <title>
+                warning
+            <warning>
+                <paragraph>
+                    This is a warning admonition
