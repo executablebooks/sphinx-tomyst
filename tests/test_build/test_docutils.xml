@@ -60,6 +60,60 @@
                 <paragraph>
                     This is a block quote context
                     with multiple lines
+        <section ids="bullet-list" names="bullet_list">
+            <title>
+                bullet_list
+            <paragraph>
+                A simple bullet list
+            <bullet_list bullet="-">
+                <list_item>
+                    <paragraph>
+                        first item
+                <list_item>
+                    <paragraph>
+                        second item
+            <paragraph>
+                A multi-paragraph example
+            <bullet_list bullet="-">
+                <list_item>
+                    <paragraph>
+                        Item 1, paragraph 1.
+                    <paragraph>
+                        Item 1, paragraph 2.
+                <list_item>
+                    <paragraph>
+                        Item 2.
+            <paragraph>
+                A nested bullet list
+            <bullet_list bullet="-">
+                <list_item>
+                    <paragraph>
+                        first item level 0
+                    <bullet_list bullet="-">
+                        <list_item>
+                            <paragraph>
+                                first item of first item (level 0)
+                <list_item>
+                    <paragraph>
+                        second item level 0
+                    <bullet_list bullet="-">
+                        <list_item>
+                            <paragraph>
+                                first item of second item (level 0)
+                        <list_item>
+                            <paragraph>
+                                second item of second item (level 0)
+            <paragraph>
+                An example with nested code-block
+            <bullet_list bullet="-">
+                <list_item>
+                    <paragraph>
+                        Step 1. Example:
+                    <literal_block force="False" highlight_args="{}" language="bash" xml:space="preserve">
+                        Example code
+                <list_item>
+                    <paragraph>
+                        Step 2.
         <section ids="caution" names="caution">
             <title>
                 caution

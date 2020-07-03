@@ -6,6 +6,8 @@ from .markdown import MarkdownSyntax
 
 class MystSyntax(MarkdownSyntax):
 
+    indentation = " " * 2
+
     # - Direct Syntax - #
 
     def visit_admonition(self, title):
@@ -16,6 +18,11 @@ class MystSyntax(MarkdownSyntax):
 
     def visit_attribution(self):
         return "-- "
+
+    def visit_bullet_list_item(self, listobj):
+        indent = self.indentation * listobj['level']
+        marker = listobj['marker']
+        return "{}{} ".format(indent, marker)
 
     def visit_epigraph(self):
         return "```{{epigraph}}"

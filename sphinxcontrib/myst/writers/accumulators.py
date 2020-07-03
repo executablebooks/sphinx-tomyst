@@ -4,37 +4,95 @@ Provides accumulator objects to assist with building Syntax
 
 from docutils import nodes
 
+class ListBuilder:
+
+    marker = "*"
+    indentation = " "*2
+    item_count = 0
+    level = 0
+
+    def __init__(self, marker):
+        self.items = []
+        self.set_marker(marker)
+
+    def visit_list(self):
+        self.level += 1
+
+    def depart_list(self):
+        self.level -= 1
+
+    def set_marker(self, marker):
+        if marker is not None:
+            self.marker = marker
+
+    def add_item(self, content):
+        self.item_count += 1
+        item = {
+            'level' : self.level,
+            'content' : content,
+            'item_count' : self.item_count,
+            'marker' : self.marker,
+        }
+        self.items.append(item)
+
+    def to_markdown(self):
+        markdown = []
+        for item in self.items:
+            indent = self.indentation * item['level']
+            marker = item['marker']
+            offset = indent + " "*len(marker) + " "
+            content = item['content'].replace("\n", "\n{}".format(offset))
+            markdown.append("{}{} {}".format(indent, marker, content))
+        return "\n".join(markdown)
+
+# class ListCollector:
+
+#     def __init__(self, marker="*"):
+#         self.lists = []
+#         self.current = SimpleList(marker)
+
+#     def visit_list(self, marker="*"):
+#         self.lists.append(self.current)
+#         level = self.current.level
+#         self.current = SimpleList(level=level)
+
+#     def to_markdown(self):
+#         markdown = []
+#         for item in self.lists:
+#             markdown.append(item.to_markdown())
+
 class List:
 
-    indentation = " "*2
+    item_collector = None
+    level = 0
+    indentation = " "*2     # markdown indentation of 2 spaces
+    item_count = 0
+    from_child = False
     marker = "*"
-    markers = dict()
-    item_no = 0
+    parent = None
 
-    def __init__(self, level, markers, item_no=0):
+    def __init__(self, marker=None, parent='base'):
         """
-        List Object
-
-        Parameters
-        ----------
-        level : int
-                Specify Level for List (base level=0)
-        markers : dict
-                A dictionary of markers with keys as levels and values as the current marker in that level
-        item_no : stores at what count the current item came in the list, if we consider the list as a queue of items
+        List Accumulator
+        Consists of <items> and <List> objects to define
+        markdown syntax
 
         Example
         -------
         from markdown import List
-        a = List(level=0)
+        a = List()
         a.add_item("first")
         a.add_item("second")
         a.to_markdown()
         """
         self.items = []
-        self.level = level
-        self.markers = markers
-        self.item_no = item_no
+        if marker:
+            self.marker = marker
+        if parent:
+            self.parent = parent
+        if type(parent) is List:
+            self.level += parent.level + 1
+            self.item_count = parent.item_count
 
     def __repr__(self):
         return self.to_markdown()
@@ -46,100 +104,59 @@ class List:
         Parameters
         ----------
         item : str or List
-               add an element or a list object
         """
-        marker = self.markers[self.level]
-        itemtuple = (marker, self.item_no, self.level, item)
-        if len(self.items) > 0:
-            last_item = self.items.pop()
-            ### checking if the new item is a child of the same list item
-            if self.item_no == last_item[1] and last_item[2] == self.level:
-                last_item_text = last_item[3]
-                item_text = item
-                if not isinstance(last_item_text, str):
-                    last_item_text = last_item_text.astext()
-                if not isinstance(item_text, str):
-                    item_text = item_text.astext()
-                content = last_item_text + item_text
-                itemtuple = (marker, self.item_no, self.level, content)
+        # Support for Unpacking Recursion
+        if self.from_child:
+            self.items.append(item)
+            self.from_child = False
+        else:
+            # Support for Building from Independent Objects
+            if type(item) is List:
+                item.increment_level()
             else:
-                self.items.append(last_item)
-        self.items.append(itemtuple)
-
-    def build_syntax(self, item):
-        indent = self.indentation * item[2]
-        marker = item[0]
-        if isinstance(item[0], int):
-            marker = str(item[0]) + "."
-
-        content = ""
-        for children in item[3]:
-            if isinstance(children, str) or isinstance(children, int):
-                content +=  children
-            else:
-                content +=  children.astext()
-        return indent, marker, content
+                content = item
+                item = {
+                    'content'   : content,
+                    'level'     : self.level,
+                    'marker'    : self.marker,
+                    'item_count' : self.item_count,
+                }
+            self.items.append(item)
+            self.item_count += 1
 
     def to_markdown(self):
-        """
-        converts the list items to markdown
-        """
         markdown = []
         for item in self.items:
-            indent, marker, content = self.build_syntax(item)
-            markdown.append("{}{} {}".format(indent, marker, content))
-
-        ## need a new line at the end
-        markdown.append("\n")
+            if type(item) is List:
+                markdown.append(item.to_markdown())
+            else:
+                indent = self.indentation * item['level']
+                marker = item['marker']
+                offset = indent + " "*len(marker) + " "
+                content = item['content'].replace("\n", "\n{}".format(offset))
+                markdown.append("{}{} {}".format(indent, marker, content))
         return "\n".join(markdown)
-
-    def to_latex(self):
-        """
-        converts the list items to a latex string
-        """
-        latex = []
-        for item in self.items:
-            indent, marker, content = self.build_syntax(item)
-            latex.append("{}".format(content))
-
-        latex.append("\n")
-        return "\n".join(latex)
 
     def increment_level(self):
         self.level += 1
+        for item in self.items:
+            if type(item) is List:
+                item.level += 1
+            else:
+                item['level'] += 1
 
     def decrement_level(self):
         self.level -= 1
+        for item in self.items:
+            if type(item) is List:
+                item.level -= 1
+            item['level'] -= 1
 
-    def get_marker(self):
-        return self.markers
-
-    def set_marker(self, node):
-        """
-        sets the updated marker for the current level in the self.markers dictionary
-
-        Parameters
-        ----------
-        node : the node object under whose visit/depart method this function was called
-        """
-        if isinstance(node.parent, nodes.enumerated_list) or isinstance(node.parent.parent, nodes.enumerated_list):
-            if self.level in self.markers:
-                count = self.markers[self.level]
-                self.markers[self.level] = count + 1
-            else:
-                self.markers[self.level] = 1
-        else:
-            self.markers[self.level] = "*"
-        self.item_no += 1
-
-    def itemlist(self):
-        return self.items
-
-    def getlevel(self):
-        return self.level
-
-    def get_item_no(self):
-        return self.item_no
+    def add_to_parent(self):
+        if type(self.parent) is List:
+            self.parent.from_child = True
+            self.parent.add_item(self)
+            return self.parent
 
 #-Table Builder-#
 

@@ -57,6 +57,42 @@ This is the main document
    This is a block quote context
    with multiple lines
 
+bullet_list
+-----------
+
+A simple bullet list
+
+- first item
+- second item
+
+A multi-paragraph example
+
+- Item 1, paragraph 1.
+
+  Item 1, paragraph 2.
+
+- Item 2.
+
+A nested bullet list
+
+- first item level 0
+
+  - first item of first item (level 0)
+
+- second item level 0
+
+  - first item of second item (level 0)
+  - second item of second item (level 0)
+
+An example with nested code-block
+
+- Step 1. Example:
+
+  .. code-block:: bash
+
+     Example code
+
+- Step 2.
 
 caution
 -------

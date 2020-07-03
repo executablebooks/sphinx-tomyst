@@ -20,7 +20,8 @@ from sphinx.util import logging
 from sphinx.util.docutils import SphinxTranslator
 
 from .myst import MystSyntax
-from .accumulators import List, TableBuilder
+from .accumulators import ListBuilder as List
+from .accumulators import TableBuilder
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +39,8 @@ class MystTranslator(SphinxTranslator):
         1. review NotImplementedError to see if visit methods in base classes
            are suitable
     """
+
+    indentation = " " * 2
 
     # Boolean(State Tracking)
     admonition = False
@@ -74,6 +77,23 @@ class MystTranslator(SphinxTranslator):
     footnote_reference = dict()
     footnote_reference['in'] = False
     footnote_reference['link'] = None
+    # Bullet List
+    bullet_list = dict()
+    bullet_list['in'] = True
+    bullet_list['marker'] = "*"
+    bullet_list['level'] = -1
+    # List
+    listobj = dict()
+    listobj['in'] = True
+    listobj['type'] = None
+    listobj['marker'] = "*"
+    listobj['level'] = -1
+    listobj['apply-offset'] = False
+    # List Item
+    list_item = dict()
+    list_item['in'] = False
+    list_item['collect'] = []
+    list_acc = []
     # Math
     math_block = dict()
     math_block['in'] = False
@@ -125,8 +145,6 @@ class MystTranslator(SphinxTranslator):
             text = text.replace("\n", "\n{}".format(linemarker))
         if self.caption:
             raise nodes.SkipNode
-        # if self.literal_block == False:   #TODO python=3.8 considers this invalid
-        #     text = text.replace("$", "\$")
         #Inline Math
         if self.math:
             text = self.syntax.visit_math(text.strip())
@@ -136,16 +154,21 @@ class MystTranslator(SphinxTranslator):
             self.math_block['label'] = None
         elif self.math_block['in']:
             text = self.syntax.visit_math_block(text.strip())
+        # Lists
+        if self.listobj['in']:
+            offset = self.compute_offset()
+            text = offset + text
         #Code Blocks
-        if self.literal_block:
-            text = self.strip_whitespace(text)
+        # if self.literal_block:
+            # text = self.strip_whitespace(text)
 
         self.text = text
 
     def depart_Text(self, node):
-        #Add text to cell
-        if self.List:
-            self.List.add_item(self.text)
+        if self.listobj['in']:
+            print("<----- EXIT TEXT: {}".format(self.text))
+            self.output.append(self.text)
+            self.add_newline()
         elif self.Table:
             self.Table.add_item(self.text)
         elif self.math_block['in']:
@@ -261,17 +284,19 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#bullet-list
 
     def visit_bullet_list(self, node):
-        if not self.List:
-            self.List = List(level=0, markers=dict())
-        self.List.increment_level()
+        print("ENTER BULLET_LIST\n{}".format(node.pformat()))
+        self.listobj['in'] = True
+        self.listobj['type'] = 'bullet'
+        self.listobj['level'] += 1  # Level 1 is the first level
+        if node.hasattr("bullet"):
+            self.listobj['marker'] = node.attributes['bullet']
 
     def depart_bullet_list(self, node):
-        if self.List is not None:
-            self.List.decrement_level()
-        if self.List and self.List.level == 0:
-            markdown = self.List.to_markdown()
-            self.output.append(markdown)
-            self.List = None
+        print("EXIT BULLET_LIST")
+        self.listobj['level'] -= 1
+        if self.listobj['level'] == -1:
+            self.listobj['in'] = False
+            self.listobj['type'] = None
 
     # docutils.elements.caption
     # https://docutils.sourceforge.io/docs/ref/doctree.html#caption
@@ -416,7 +441,7 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#definition-list-item
 
     def visit_definition_list_item(self, node):
-        pass #TODO: review
+        pass
 
     def depart_definition_list_item(self, node):
         pass
@@ -755,8 +780,18 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#list-item
 
     def visit_list_item(self, node):
-        if self.List:
-            self.List.set_marker(node)
+        print("ENTER LIST ITEM -->")
+        self.list_item = True
+        self.listobj['apply-offset'] = False 
+        if node.hasattr("bullet"):
+            self.listobj['marker'] = node.attributes['bullet']
+        if self.listobj['type'] == 'bullet':
+            syntax = self.syntax.visit_bullet_list_item(self.listobj)
+            self.output.append(syntax)
+
+    def depart_list_item(self, node):
+        self.list_item = False
+        print("<--- EXIT LIST ITEM: {}".format(node.astext()))
 
     # docutils.element.literal
     # https://docutils.sourceforge.io/docs/ref/doctree.html#literal
@@ -786,11 +821,23 @@ class MystTranslator(SphinxTranslator):
         self.literal_block = True
         options = self.infer_literal_block_attrs(node)
         self.nodelang = node.attributes["language"].strip()
-        self.output.append(self.syntax.visit_literal_block(self.nodelang))
+        offset = self.compute_offset()
+        syntax = offset + self.syntax.visit_literal_block(self.nodelang)
+        self.output.append(syntax)
         self.add_newline()
         if options != []:
-            self.output.append("\n".join(options))
+            syntax = "\n{}".format(offset).join(options)
+            self.output.append(syntax)
             self.add_newline()
+
+    def compute_offset(self):
+        indent = self.indentation * self.listobj['level']
+        marker = self.listobj['marker']
+        if self.listobj['apply-offset'] == True:
+            offset = indent + " "*len(marker) + " "  #MuliLine Text
+        else:
+            offset = ''
+        return offset
 
     def infer_literal_block_attrs(self, node):
         """
@@ -826,7 +873,9 @@ class MystTranslator(SphinxTranslator):
         return options
 
     def depart_literal_block(self, node):
-        self.output.append(self.syntax.depart_literal_block())
+        offset = self.compute_offset()
+        syntax = offset + self.syntax.depart_literal_block()
+        self.output.append(syntax)
         self.add_newparagraph()
         self.literal_block = False
 
@@ -930,16 +979,12 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#paragraph
 
     def visit_paragraph(self, node):
-        pass
+        if self.listobj['in']:
+            print("ENTER PARAGRAPH: {}".format(node.astext()))
 
     def depart_paragraph(self, node):
-        if self.List:
-            if self.List.getlevel() > 0:
-                self.add_newline()
-            else:
-                return
-        if self.Table:
-            return
+        if self.listobj['in']:
+            self.listobj['apply-offset'] = True
         if self.block_quote['in'] and self.block_quote['type'] != 'block_quote':
             self.add_newline()
             return
