@@ -65,7 +65,7 @@ class List:
 
     list_item = None
     level = 0
-    indentation = " "*2     # markdown indentation of 2 spaces
+    indentation = " "*4  #4 space indentation as default commonmark
     item_count = 0
     from_child = False
     marker = "*"

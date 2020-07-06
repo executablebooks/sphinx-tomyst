@@ -94,6 +94,9 @@ An example with nested code-block
 
 - Step 2.
 
+For extended **list** testing please refer
+to the `list <list>`__ test page.
+
 caution
 -------
 
@@ -107,6 +110,19 @@ danger
 .. danger::
 
    This is a danger admonition
+
+enumerated_list
+---------------
+
+The enumerated list from docutils
+
+1. Item 1.
+
+   (A) Item A.
+   (B) Item B.
+   (C) Item C.
+
+2. Item 2.
 
 error
 -----

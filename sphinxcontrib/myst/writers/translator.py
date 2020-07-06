@@ -499,6 +499,9 @@ class MystTranslator(SphinxTranslator):
         """
         .. TODO: should use item_count to make a more readable
         list in markdown output
+
+        .. TODO: add support for different styles of enumerated
+        lists. This currently is nested numbered lists
         """
         marker = "1."
         if not self.List:

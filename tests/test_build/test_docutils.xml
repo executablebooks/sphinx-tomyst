@@ -114,6 +114,15 @@
                 <list_item>
                     <paragraph>
                         Step 2.
+            <paragraph>
+                For extended 
+                <strong>
+                    list
+                 testing please refer
+                to the 
+                <reference name="list" refuri="list">
+                    list
+                 test page.
         <section ids="caution" names="caution">
             <title>
                 caution
@@ -126,6 +135,28 @@
             <danger>
                 <paragraph>
                     This is a danger admonition
+        <section ids="enumerated-list" names="enumerated_list">
+            <title>
+                enumerated_list
+            <paragraph>
+                The enumerated list from docutils
+            <enumerated_list enumtype="arabic" prefix="" suffix=".">
+                <list_item>
+                    <paragraph>
+                        Item 1.
+                    <enumerated_list enumtype="upperalpha" prefix="(" suffix=")">
+                        <list_item>
+                            <paragraph>
+                                Item A.
+                        <list_item>
+                            <paragraph>
+                                Item B.
+                        <list_item>
+                            <paragraph>
+                                Item C.
+                <list_item>
+                    <paragraph>
+                        Item 2.
         <section ids="error" names="error">
             <title>
                 error

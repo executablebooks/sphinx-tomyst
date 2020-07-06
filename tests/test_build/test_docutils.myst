@@ -6,23 +6,24 @@ index.myst
 
 
 * [Elements](elements.myst)
-  * [Text](elements.myst#text)
-  * [admonition](elements.myst#admonition)
-  * [attention](elements.myst#attention)
-  * [block_quote](elements.myst#block-quote)
-  * [bullet_list](elements.myst#bullet-list)
-  * [caution](elements.myst#caution)
-  * [danger](elements.myst#danger)
-  * [error](elements.myst#error)
-  * [hint](elements.myst#hint)
-  * [important](elements.myst#important)
-  * [note](elements.myst#note)
-  * [tip](elements.myst#tip)
-  * [warning](elements.myst#warning)
+    * [Text](elements.myst#text)
+    * [admonition](elements.myst#admonition)
+    * [attention](elements.myst#attention)
+    * [block_quote](elements.myst#block-quote)
+    * [bullet_list](elements.myst#bullet-list)
+    * [caution](elements.myst#caution)
+    * [danger](elements.myst#danger)
+    * [enumerated_list](elements.myst#enumerated-list)
+    * [error](elements.myst#error)
+    * [hint](elements.myst#hint)
+    * [important](elements.myst#important)
+    * [note](elements.myst#note)
+    * [tip](elements.myst#tip)
+    * [warning](elements.myst#warning)
 * [Directives](directives.myst)
-  * [epigraph](directives.myst#epigraph)
-  * [highlights](directives.myst#highlights)
-  * [pull-quote](directives.myst#pull-quote)
+    * [epigraph](directives.myst#epigraph)
+    * [highlights](directives.myst#highlights)
+    * [pull-quote](directives.myst#pull-quote)
 
 
 -------------
@@ -81,10 +82,10 @@ A multi-paragraph example
 A nested bullet list
 
 - first item level 0
-  - first item of first item (level 0)
+    - first item of first item (level 0)
 - second item level 0
-  - first item of second item (level 0)
-  - second item of second item (level 0)
+    - first item of second item (level 0)
+    - second item of second item (level 0)
 
 An example with nested code-block
 
@@ -95,6 +96,9 @@ An example with nested code-block
   ```
   
 - Step 2.
+
+For extended **list** testing please refer
+to the [list](list) test page.
 
 ## caution
 
@@ -107,6 +111,16 @@ This is a caution admonition
 ```{danger}
 This is a danger admonition
 ```
+
+## enumerated_list
+
+The enumerated list from docutils
+
+1. Item 1.
+    1. Item A.
+    1. Item B.
+    1. Item C.
+1. Item 2.
 
 ## error
 
