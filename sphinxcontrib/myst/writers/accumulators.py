@@ -63,7 +63,7 @@ class ListBuilder:
 
 class List:
 
-    item_collector = None
+    list_item = None
     level = 0
     indentation = " "*2     # markdown indentation of 2 spaces
     item_count = 0
@@ -88,14 +88,31 @@ class List:
         self.items = []
         if marker:
             self.marker = marker
-        if parent:
-            self.parent = parent
+        self.parent = parent
         if type(parent) is List:
             self.level += parent.level + 1
             self.item_count = parent.item_count
 
     def __repr__(self):
         return self.to_markdown()
+
+    def start_list_item(self):
+        self.list_item = []
+
+    def addto_list_item(self, content):
+        self.list_item.append(content)
+
+    def add_list_item(self):
+        content = "".join(self.list_item)
+        content = self.parse_paragraphs(content)
+        self.add_item(content)
+        self.list_item = None
+
+    def parse_paragraphs(self, content):
+        #-Paragraph Markers-#
+        content = content.rstrip("<\\paragraph>")
+        content = content.replace("<\\paragraph>", "\n\n")
+        return content
 
     def add_item(self, item):
         """
