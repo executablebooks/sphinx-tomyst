@@ -266,16 +266,6 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#bullet-list
 
     def visit_bullet_list(self, node):
-        """
-        Notes
-        -----
-        1. See if we can get recursive accumulator to work
-        alongise this manual approach to formatting lists based
-        on translator methods and self.output context appends. 
-        Then replace. 
-
-        TODO: remove debug
-        """
         marker = None
         if node.hasattr("bullet"):
             marker = node.attributes['bullet']
@@ -506,18 +496,26 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#enumerated-list
 
     def visit_enumerated_list(self, node):
+        """
+        .. TODO: should use item_count to make a more readable
+        list in markdown output
+        """
+        marker = "1."
         if not self.List:
-            self.List = List(level=0,markers=dict())
-        self.List.increment_level()
+            self.List = List(marker=marker)
+        else:
+            #Finalise any open List Item
+            if self.List.list_item:
+                self.List.add_list_item()
+            self.List = List(marker=marker, parent=self.List)
 
     def depart_enumerated_list(self, node):
-        if self.List is not None:
-            self.List.decrement_level()
-
-        if self.List.level == 0:
-            markdown = self.List.to_markdown()
-            self.output.append(markdown)
+        if self.List.parent == 'base':
+            self.output.append(self.List.to_markdown())
+            self.add_newparagraph()
             self.List = None
+        else:
+            self.List = self.List.add_to_parent()
 
     # docutils.elements.error
     # https://docutils.sourceforge.io/docs/ref/doctree.html#error
