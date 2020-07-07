@@ -42,8 +42,6 @@ def test_docutils(
     app.build()
 
     assert "build succeeded" in status.getvalue()  # Build succeeded
-    warnings = warning.getvalue().strip()
-    assert warnings == ""
 
     #Note: pytest needs to run twice to initialise fixtures
 

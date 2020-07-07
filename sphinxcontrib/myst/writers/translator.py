@@ -406,25 +406,37 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#definition
 
     def visit_definition(self, node):
-        self.output.append(self.syntax.visit_definition())
-        self.add_newline()
+        pass
+        # Current Syntax consists of HTML markers
+        # self.output.append(self.syntax.visit_definition()) #html markers!
+        # self.add_newline()
 
     def depart_definition(self, node):
-        self.output.append(self.syntax.depart_definition())
-        self.add_newline()
+        pass
+        # Current Syntax consists of HTML markers
+        # self.output.append(self.syntax.depart_definition())
+        # self.add_newline()
 
     # docutils.elements.definition_list
     # https://docutils.sourceforge.io/docs/ref/doctree.html#definition-list
 
     def visit_definition_list(self, node):
-        self.add_newline()
-        self.output.append(self.syntax.visit_definition_list())
-        self.add_newline()
+        msg = """
+        SKIP [definition_list] objects are not supported in commonmark
+        """.strip()
+        logger.warning(msg)
+        raise nodes.SkipNode
+        # Current Syntax consists of HTML markers
+        # self.add_newline()
+        # self.output.append(self.syntax.visit_definition_list())
+        # self.add_newline()
 
     def depart_definition_list(self, node):
-        self.add_newline()
-        self.output.append(self.syntax.depart_definition_list())
-        self.add_newparagraph()
+        pass
+        # Current Syntax consists of HTML markers
+        # self.add_newline()
+        # self.output.append(self.syntax.depart_definition_list())
+        # self.add_newparagraph()
 
     # docutils.elements.definition_list_item
     # https://docutils.sourceforge.io/docs/ref/doctree.html#definition-list-item
@@ -443,12 +455,6 @@ class MystTranslator(SphinxTranslator):
 
     # docutils.elements.doctest-block
     # https://docutils.sourceforge.io/docs/ref/doctree.html#doctest-block
-
-    def visit_doctest_block(self, node):
-        pass #TODO: remove? use SphinxTranslator version
-
-    def depart_doctest_block(self, node):
-        pass
 
     # docutils.elements.document
     # https://docutils.sourceforge.io/docs/ref/doctree.html#document
