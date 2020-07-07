@@ -111,6 +111,19 @@ danger
 
    This is a danger admonition
 
+definition_list
+---------------
+
+This tests ``definition``, ``definition_list`` and
+``definition_list_item``
+
+Term
+  Definition.
+
+Term : classifier
+    The ' : ' indicates a classifier in
+    definition list item terms only.
+
 enumerated_list
 ---------------
 

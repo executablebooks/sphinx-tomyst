@@ -13,6 +13,7 @@ index.myst
     * [bullet_list](elements.myst#bullet-list)
     * [caution](elements.myst#caution)
     * [danger](elements.myst#danger)
+    * [definition_list](elements.myst#definition-list)
     * [enumerated_list](elements.myst#enumerated-list)
     * [error](elements.myst#error)
     * [hint](elements.myst#hint)
@@ -111,6 +112,11 @@ This is a caution admonition
 ```{danger}
 This is a danger admonition
 ```
+
+## definition_list
+
+This tests `definition`, `definition_list` and
+`definition_list_item`
 
 ## enumerated_list
 

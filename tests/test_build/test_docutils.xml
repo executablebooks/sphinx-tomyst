@@ -135,6 +135,35 @@
             <danger>
                 <paragraph>
                     This is a danger admonition
+        <section ids="definition-list" names="definition_list">
+            <title>
+                definition_list
+            <paragraph>
+                This tests 
+                <literal>
+                    definition
+                , 
+                <literal>
+                    definition_list
+                 and
+                <literal>
+                    definition_list_item
+            <definition_list>
+                <definition_list_item>
+                    <term>
+                        Term
+                    <definition>
+                        <paragraph>
+                            Definition.
+                <definition_list_item>
+                    <term>
+                        Term
+                    <classifier>
+                        classifier
+                    <definition>
+                        <paragraph>
+                            The ‘ : ‘ indicates a classifier in
+                            definition list item terms only.
         <section ids="enumerated-list" names="enumerated_list">
             <title>
                 enumerated_list
