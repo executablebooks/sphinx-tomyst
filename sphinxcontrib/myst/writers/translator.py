@@ -946,6 +946,9 @@ class MystTranslator(SphinxTranslator):
         options = []
         if node["label"]:
             options.append(":label: {}".format(node["label"]))
+        if node.hasattr("nowrap"):
+            if node["nowrap"]:
+                options.append(":nowrap:")
         return "\n".join(options)
 
     def depart_math_block(self, node):
