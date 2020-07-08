@@ -90,7 +90,7 @@ class MystTranslator(SphinxTranslator):
     # Math
     math_block = dict()
     math_block['in'] = False
-    math_block['label'] = None
+    math_block['options'] = []
 
     # Accumulators
     List = None
@@ -935,12 +935,15 @@ class MystTranslator(SphinxTranslator):
 
     def visit_math_block(self, node):
         self.math_block['in'] = True
-        self.output.append(self.syntax.visit_directive("math"))
-        self.add_newline()
-        options = self.infer_math_block_attrs(node)
-        if options:
-            self.output.append(options)
+        self.math_block['options'] = self.infer_math_block_attrs(node)
+        if self.math_block['options']:
+            self.output.append(self.syntax.visit_directive("math"))
+            self.add_newline()
+            self.output.append(self.math_block['options'])
             self.add_newparagraph()
+        else:
+            self.output.append(self.syntax.visit_math_block())
+            self.add_newline()
 
     def infer_math_block_attrs(self, node):
         options = []
@@ -952,10 +955,10 @@ class MystTranslator(SphinxTranslator):
         return "\n".join(options)
 
     def depart_math_block(self, node):
-        if self.math_block['label']:
-            self.output.append(self.math_block["label"])
-        self.math_block['label'] = None
-        self.output.append(self.syntax.depart_directive())
+        if self.math_block['options']:
+            self.output.append(self.syntax.depart_directive())
+        else:
+            self.output.append(self.syntax.depart_math_block())
         self.add_newparagraph()
         self.math_block['in'] = False
 
