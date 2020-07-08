@@ -27,6 +27,7 @@ index.myst
     * [error](directives.myst#error)
     * [hint](directives.myst#hint)
     * [important](directives.myst#important)
+    * [math](directives.myst#math)
     * [note](directives.myst#note)
     * [tip](directives.myst#tip)
     * [warning](directives.myst#warning)
@@ -233,6 +234,26 @@ This is a hint admonition
 This is an important admonition
 ```
 
+## math
+
+```{math}
+(a + b)^2 = a^2 + 2ab + b^2
+```
+
+```{math}
+(a + b)^2 = a^2 + 2ab + b^2
+
+(a - b)^2 = a^2 - 2ab + b^2
+```
+
+```{math}
+:label: math-label
+
+(a + b)^2 = a^2 + 2ab + b^2
+
+(a - b)^2 = a^2 - 2ab + b^2
+```
+
 ## note
 
 ```{note}
@@ -273,4 +294,6 @@ Is this the same with some text
 This is pair of entries index entries
 
 ## math
+
+Since Pythagoras, we know that $a^2 + b^2 = c^2$.
 

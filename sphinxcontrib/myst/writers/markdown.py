@@ -101,14 +101,17 @@ class MarkdownSyntax:
     def depart_literal_block(self):
         return "```"
 
-    def visit_math(self, text):
-        return "$ {} $".format(text)
+    def visit_math(self):
+        return "$"
 
-    def visit_math_block(self, text, label=None):
-        if label:
-            return "$$\n{0} {1}$$".format(text, label)
-        else:
-            return "$$\n{0}\n$$".format(text)
+    def depart_math(self):
+        return "$"
+
+    def visit_math_block(self):
+        return "$$"
+
+    def depart_math_block(self):
+        return "$$"
 
     def visit_note(self):
         return ">**Note**\n>\n>"

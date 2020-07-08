@@ -138,18 +138,12 @@ class MystTranslator(SphinxTranslator):
             text = text.replace("\n", "\n{}".format(linemarker))
         if self.caption:
             raise nodes.SkipNode
-        #Inline Math
-        if self.math:
-            text = self.syntax.visit_math(text.strip())
-        #Math Blocks
-        elif self.math_block['in'] and self.math_block['label']:
-            text = self.syntax.visit_math_block(text.strip(), self.math_block['label'])
-            self.math_block['label'] = None
-        elif self.math_block['in']:
-            text = self.syntax.visit_math_block(text.strip())
+        if self.math_block["in"]:
+            text = text.strip()
         #Code Blocks
         # if self.literal_block:
             # text = self.strip_whitespace(text)
+            # text = text.strip()
 
         self.text = text
 
@@ -161,7 +155,7 @@ class MystTranslator(SphinxTranslator):
             self.Table.add_item(self.text)
             return
         if self.math_block['in']:
-            self.text = self.text + "\n\n"
+            self.text = self.text + "\n"
         if self.literal_block:
             self.text = self.text + "\n"
         if self.caption and self.toctree:         #TODO: Check this condition
@@ -922,58 +916,44 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#math
 
     def visit_math(self, node):
-        """
-        Inline Math
-
-        Notes
-        -----
-        With sphinx < 1.8, a math node has a 'latex' attribute, from which the
-        formula can be obtained and added to the text.
-
-        With sphinx >= 1.8, a math node has no 'latex' attribute, which mean
-        that a flag has to be raised, so that the in visit_Text() we know that
-        we are dealing with a formula.
-
-        TODO:
-            1. Deprecate support for sphinx < 1.8
-        """
+        """Inline Math"""
         self.math = True
-        try: # sphinx < 1.8
-            math_text = node.attributes["latex"].strip()
-        except KeyError:
-            # sphinx >= 1.8
-            # the flag is raised, the function can be exited.
-            return                                              #TODO: raise nodes.SkipNode?
-
-        formatted_text = self.syntax.visit_math(math_text)
-
-        if self.Table:
-            self.Table.add_item(formatted_text)
+        syntax = self.syntax.visit_math()
+        if self.List:
+            self.List.addto_list_item(syntax)
+        elif self.Table:
+            self.Table.add_item(syntax)
         else:
-            self.output.append(formatted_text)
+            self.output.append(syntax)
 
     def depart_math(self, node):
+        self.output.append(self.syntax.depart_math())
         self.math = False
 
     # docutils.element.math_block
     # https://docutils.sourceforge.io/docs/ref/doctree.html#math-block
 
     def visit_math_block(self, node):
-        """
-        Math from Directives
-
-        Notes:
-        ------
-        visit_math_block is called only with sphinx >= 1.8
-        """
         self.math_block['in'] = True
-        #check for labelled math
+        self.output.append(self.syntax.visit_directive("math"))
+        self.add_newline()
+        options = self.infer_math_block_attrs(node)
+        if options:
+            self.output.append(options)
+            self.add_newparagraph()
+
+    def infer_math_block_attrs(self, node):
+        options = []
         if node["label"]:
-            #Use \tags in the embedded LaTeX environment
-            #Haven't included this in self.syntax.MardownSyntax as it should be general across HTML (mathjax), PDF (latex)
-            self.math_block['label'] = "\\tag{" + str(node["number"]) + "}\n"
+            options.append(":label: {}".format(node["label"]))
+        return "\n".join(options)
 
     def depart_math_block(self, node):
+        if self.math_block['label']:
+            self.output.append(self.math_block["label"])
+        self.math_block['label'] = None
+        self.output.append(self.syntax.depart_directive())
+        self.add_newparagraph()
         self.math_block['in'] = False
 
     # docutils.elements.paragraph

@@ -17,3 +17,4 @@ This is pair of entries :index:`index entries <pair: index; entry>`
 math
 ----
 
+Since Pythagoras, we know that :math:`a^2 + b^2 = c^2`.

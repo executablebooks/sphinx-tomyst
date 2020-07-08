@@ -115,6 +115,24 @@ important
 
    This is an important admonition
 
+math
+----
+
+.. math:: (a + b)^2 = a^2 + 2ab + b^2
+
+.. math::
+
+   (a + b)^2 = a^2 + 2ab + b^2
+
+   (a - b)^2 = a^2 - 2ab + b^2
+
+.. math::
+   :label: math-label
+
+   (a + b)^2 = a^2 + 2ab + b^2
+
+   (a - b)^2 = a^2 - 2ab + b^2
+
 note
 ----
 
