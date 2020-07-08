@@ -1,4 +1,4 @@
-docs/_build/
+docs/build/
 __pycache__
 *.egg-info/
 *.pyc
