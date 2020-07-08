@@ -1,6 +1,9 @@
 # sphinxcontrib-myst
 A sphinx translator for producing myst syntax files
 
+[![Documentation Status](https://readthedocs.org/projects/sphinxcontrib-myst/badge/?version=latest)](https://sphinxcontrib-myst.readthedocs.io/en/latest/?badge=latest)
+  
+
 ## Installation
 
 **Step 1:** To install the extension you need to clone the repository then run:
