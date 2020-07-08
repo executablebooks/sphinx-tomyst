@@ -82,6 +82,11 @@ class MystTranslator(SphinxTranslator):
     bullet_list['in'] = True
     bullet_list['marker'] = "*"
     bullet_list['level'] = -1
+    # Index
+    index = dict()
+    index['in'] = False
+    index['type'] = None
+    index['skip-target'] = False
     # Math
     math_block = dict()
     math_block['in'] = False
@@ -720,10 +725,47 @@ class MystTranslator(SphinxTranslator):
     # https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#index-generating-markup
 
     def visit_index(self, node):
-        pass
+        self.index['in'] = True
+        inline = True
+        if node.hasattr("inline"):
+            inline = node.attributes['inline']
+        if inline:
+            syntax = self.parse_index_as_role(node)
+        else:
+            syntax = self.parse_index_as_directive(node)
+        self.output.append(syntax)
+        self.add_newparagraph()
+
+    def parse_index_as_role(self, node):
+        self.index['type'] = 'role'
+        docname = self.builder.current_docname
+        line = node.line
+        msg = """
+        [{}:{}] contains an inline :index: role that cannot be converted.
+        """.format(docname, line).strip()
+        logger.warning(msg)
+        raise nodes.SkipNode
+
+    def parse_index_as_directive(self, node):
+        self.index['type'] = 'directive'
+        syntax = ["```{{index}}"]
+        options = []
+        for entry in node.attributes['entries']:
+            entrytype, entryname, target, ignored, key = entry
+            syntax.append("{}: {}".format(entrytype, entryname))
+            #Sphinx > 3.0
+            if not re.match("index-", target) and target != '':
+                option = ":name: {}".format(target)
+                if option not in options:
+                    options.append(option)
+        syntax += options
+        syntax.append("```")
+        return "\n".join(syntax)
 
     def depart_index(self, node):
-        pass
+        self.index['in'] = False
+        self.index['type'] = None
+        self.index['skip-target'] = True
 
     # docutils.elements.inline
     # uses: container?
@@ -1155,12 +1197,14 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#target
 
     def visit_target(self, node):
+        if self.index['skip-target']:
+            raise nodes.SkipNode
         if "refid" in node.attributes:
             self.output.append(self.syntax.visit_target(node.attributes["refid"]))
             self.add_newline()
 
     def depart_target(self, node):
-        pass
+        self.index['skip-target'] = False
 
     # docutils.elements.tbody
     # uses: table
@@ -1249,7 +1293,6 @@ class MystTranslator(SphinxTranslator):
     # https://www.sphinx-doc.org/en/master/extdev/nodes.html#sphinx.addnodes.toctree
 
     def visit_toctree(self, node):
-        import pdb; pdb.set_trace()
         self.toctree = True
 
     def depart_toctree(self, node):

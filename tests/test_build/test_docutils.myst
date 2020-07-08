@@ -21,6 +21,8 @@ index.myst
     * [epigraph](directives.myst#epigraph)
     * [figure](directives.myst#figure)
     * [highlights](directives.myst#highlights)
+    * [index](directives.myst#index)
+    * [The execution context](directives.myst#the-execution-context)
     * [pull-quote](directives.myst#pull-quote)
     * [error](directives.myst#error)
     * [hint](directives.myst#hint)
@@ -28,6 +30,9 @@ index.myst
     * [note](directives.myst#note)
     * [tip](directives.myst#tip)
     * [warning](directives.myst#warning)
+* [Roles](roles.myst)
+    * [index](roles.myst#index)
+    * [math](roles.myst#math)
 
 
 -------------
@@ -175,6 +180,35 @@ TBD
 This is a highlights directive
 ```
 
+## index
+
+```{{index}}
+single: python
+```
+
+```{{index}}
+single: python
+single: programming
+```
+
+A point in the text you’d like to reference something
+about python
+
+```{{index}}
+single: python
+single: programming
+:name: reference-id
+```
+
+A point in the text you’d like to reference something
+about python
+
+```{{index}}
+single: execution; context
+```
+
+## The execution context
+
 ## pull-quote
 
 ```{pull-quote}
@@ -218,4 +252,25 @@ This is a tip admonition
 ```{warning}
 This is a warning admonition
 ```
+
+
+----------
+roles.myst
+----------
+
+# Roles
+
+Test cases for role syntax
+
+## index
+
+Note: this will raise warnings as markup cannot be fully converted
+
+This is a standard paragraph
+
+Is this the same with some text
+
+This is pair of entries index entries
+
+## math
 

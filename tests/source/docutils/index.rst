@@ -7,4 +7,5 @@ Docutils Tests
 
    elements
    directives
+   roles
 

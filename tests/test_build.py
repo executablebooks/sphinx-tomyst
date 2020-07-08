@@ -46,4 +46,4 @@ def test_docutils(
     #Note: pytest needs to run twice to initialise fixtures
 
     get_sphinx_app_doctree(app, docname="elements", regress=True)
-    get_sphinx_app_output(app, files=["index.myst", "elements.myst", "directives.myst"], regress=True)
+    get_sphinx_app_output(app, files=["index.myst", "elements.myst", "directives.myst", "roles.myst"], regress=True)

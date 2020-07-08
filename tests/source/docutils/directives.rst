@@ -63,6 +63,30 @@ highlights
 
     This is a highlights directive
 
+index
+-----
+
+.. index:: python
+
+.. index:: python, programming
+
+A point in the text you'd like to reference something
+about python
+
+.. index::
+   single: python
+   single: programming
+   :name: reference-id
+
+A point in the text you'd like to reference something
+about python
+
+.. index::
+   single: execution; context
+
+The execution context
+---------------------
+
 pull-quote
 ----------
 
