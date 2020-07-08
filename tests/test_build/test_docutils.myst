@@ -7,24 +7,27 @@ index.myst
 
 * [Elements](elements.myst)
     * [Text](elements.myst#text)
-    * [admonition](elements.myst#admonition)
-    * [attention](elements.myst#attention)
     * [block_quote](elements.myst#block-quote)
     * [bullet_list](elements.myst#bullet-list)
-    * [caution](elements.myst#caution)
-    * [danger](elements.myst#danger)
     * [definition_list](elements.myst#definition-list)
+    * [docinfo](elements.myst#docinfo)
+    * [emphasis](elements.myst#emphasis)
     * [enumerated_list](elements.myst#enumerated-list)
-    * [error](elements.myst#error)
-    * [hint](elements.myst#hint)
-    * [important](elements.myst#important)
-    * [note](elements.myst#note)
-    * [tip](elements.myst#tip)
-    * [warning](elements.myst#warning)
 * [Directives](directives.myst)
+    * [admonition](directives.myst#admonition)
+    * [attention](directives.myst#attention)
+    * [caution](directives.myst#caution)
+    * [danger](directives.myst#danger)
     * [epigraph](directives.myst#epigraph)
+    * [figure](directives.myst#figure)
     * [highlights](directives.myst#highlights)
     * [pull-quote](directives.myst#pull-quote)
+    * [error](directives.myst#error)
+    * [hint](directives.myst#hint)
+    * [important](directives.myst#important)
+    * [note](directives.myst#note)
+    * [tip](directives.myst#tip)
+    * [warning](directives.myst#warning)
 
 
 -------------
@@ -33,31 +36,12 @@ elements.myst
 
 # Elements
 
+This document contains test cases for elements that
+are **not** directives.
+
 ## Text
 
 This is some text
-
-## admonition
-
-Generic admonition requires a title argument to
-be provided
-
-```{admonition} My rst link
-Here is [rst link syntax](https://jupyter.org)
-converted to markdown
-```
-
-```{admonition} title for admonition
-You can make up your own admonition too.
-
-with some additional lines
-```
-
-## attention
-
-```{attention}
-This is an attention admonition
-```
 
 ## block_quote
 
@@ -101,6 +85,66 @@ An example with nested code-block
 For extended **list** testing please refer
 to the [list](list) test page.
 
+## definition_list
+
+This tests `definition`, `definition_list` and
+`definition_list_item`
+
+## docinfo
+
+See docinfo elements at the top of this document
+just underneath the first title.
+
+They don’t appear to be transformed by sphinx/docutils
+to be docinfo elements.
+
+[https://github.com/mmcky/sphinxcontrib-myst/issues/19](https://github.com/mmcky/sphinxcontrib-myst/issues/19)
+
+## emphasis
+
+This is *emphasis* markup text
+
+## enumerated_list
+
+The enumerated list from docutils
+
+1. Item 1.
+    1. Item A.
+    1. Item B.
+    1. Item C.
+1. Item 2.
+
+
+---------------
+directives.myst
+---------------
+
+# Directives
+
+This document contains directive test cases
+
+## admonition
+
+Generic admonition requires a title argument to
+be provided
+
+```{admonition} My rst link
+Here is [rst link syntax](https://jupyter.org)
+converted to markdown
+```
+
+```{admonition} title for admonition
+You can make up your own admonition too.
+
+with some additional lines
+```
+
+## attention
+
+```{attention}
+This is an attention admonition
+```
+
 ## caution
 
 ```{caution}
@@ -113,20 +157,29 @@ This is a caution admonition
 This is a danger admonition
 ```
 
-## definition_list
+## epigraph
 
-This tests `definition`, `definition_list` and
-`definition_list_item`
+```{epigraph}
+No matter where you go, there you are.
 
-## enumerated_list
+-- Buckaroo Banzai
+```
 
-The enumerated list from docutils
+## figure
 
-1. Item 1.
-    1. Item A.
-    1. Item B.
-    1. Item C.
-1. Item 2.
+TBD
+
+## highlights
+
+```{highlights}
+This is a highlights directive
+```
+
+## pull-quote
+
+```{pull-quote}
+This is a pull-quote directive
+```
 
 ## error
 
@@ -164,32 +217,5 @@ This is a tip admonition
 
 ```{warning}
 This is a warning admonition
-```
-
-
----------------
-directives.myst
----------------
-
-# Directives
-
-## epigraph
-
-```{epigraph}
-No matter where you go, there you are.
-
--- Buckaroo Banzai
-```
-
-## highlights
-
-```{highlights}
-This is a highlights directive
-```
-
-## pull-quote
-
-```{pull-quote}
-This is a pull-quote directive
 ```
 

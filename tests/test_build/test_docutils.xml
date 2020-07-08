@@ -2,55 +2,68 @@
     <section ids="elements" names="elements">
         <title>
             Elements
+        <field_list>
+            <field>
+                <field_name>
+                    Author
+                <field_body>
+                    <paragraph>
+                        Random Hacker
+            <field>
+                <field_name>
+                    Contact
+                <field_body>
+                    <paragraph>
+                        <reference refuri="mailto:jrh@example.com">
+                            jrh@example.com
+            <field>
+                <field_name>
+                    Date
+                <field_body>
+                    <paragraph>
+                        2002-08-18
+            <field>
+                <field_name>
+                    Status
+                <field_body>
+                    <paragraph>
+                        Work In Progress
+            <field>
+                <field_name>
+                    Version
+                <field_body>
+                    <paragraph>
+                        1
+            <field>
+                <field_name>
+                    Filename
+                <field_body>
+                    <paragraph>
+                        $RCSfile$
+            <field>
+                <field_name>
+                    Copyright
+                <field_body>
+                    <paragraph>
+                        This document has been placed in the public domain.
+            <field>
+                <field_name>
+                    Address
+                <field_body>
+                    <paragraph>
+                        123 Example Ave.
+                        Example, EX
+        <paragraph>
+            This document contains test cases for elements that
+            are 
+            <strong>
+                not
+             directives.
         <section ids="text" names="text">
             <title>
                 Text
             <paragraph>
                 This is some text
-            <comment xml:space="preserve">
-                address
-                -------
-                
-                :Address: 123 Example Ave.
-                         Example, EX
-        <section ids="admonition" names="admonition">
-            <title>
-                admonition
-            <paragraph>
-                Generic admonition requires a title argument to
-                be provided
-            <admonition classes="admonition-my-rst-link">
-                <title>
-                    My rst link
-                <paragraph>
-                    Here is 
-                    <reference name="rst link syntax" refuri="https://jupyter.org">
-                        rst link syntax
-                    
-                    converted to markdown
-            <admonition classes="admonition-title-for-admonition">
-                <title>
-                    title for admonition
-                <paragraph>
-                    You can make up your own admonition too.
-                <paragraph>
-                    with some additional lines
-        <section ids="attention" names="attention">
-            <title>
-                attention
-            <attention>
-                <paragraph>
-                    This is an attention admonition
-            <comment xml:space="preserve">
-                author
-                ------
-                
-                :Author: J. Random Hacker
-            <comment xml:space="preserve">
-                authors
-                -------
-                
-                :Authors: J. Random Hacker; Jane Doe
         <section ids="block-quote" names="block_quote">
             <title>
                 block_quote
@@ -123,18 +136,6 @@
                 <reference name="list" refuri="list">
                     list
                  test page.
-        <section ids="caution" names="caution">
-            <title>
-                caution
-            <caution>
-                <paragraph>
-                    This is a caution admonition
-        <section ids="danger" names="danger">
-            <title>
-                danger
-            <danger>
-                <paragraph>
-                    This is a danger admonition
         <section ids="definition-list" names="definition_list">
             <title>
                 definition_list
@@ -164,6 +165,29 @@
                         <paragraph>
                             The ‘ : ‘ indicates a classifier in
                             definition list item terms only.
+        <section ids="docinfo" names="docinfo">
+            <title>
+                docinfo
+            <paragraph>
+                See docinfo elements at the top of this document
+                just underneath the first title.
+            <paragraph>
+                They don’t appear to be transformed by sphinx/docutils
+                to be 
+                <title_reference>
+                    docinfo
+                 elements.
+            <paragraph>
+                <reference refuri="https://github.com/mmcky/sphinxcontrib-myst/issues/19">
+                    https://github.com/mmcky/sphinxcontrib-myst/issues/19
+        <section ids="emphasis" names="emphasis">
+            <title>
+                emphasis
+            <paragraph>
+                This is 
+                <emphasis>
+                    emphasis
+                 markup text
         <section ids="enumerated-list" names="enumerated_list">
             <title>
                 enumerated_list
@@ -186,41 +210,3 @@
                 <list_item>
                     <paragraph>
                         Item 2.
-        <section ids="error" names="error">
-            <title>
-                error
-            <error>
-                <paragraph>
-                    This is an error admonition
-        <section ids="hint" names="hint">
-            <title>
-                hint
-            <hint>
-                <paragraph>
-                    This is a hint admonition
-        <section ids="important" names="important">
-            <title>
-                important
-            <important>
-                <paragraph>
-                    This is an important admonition
-        <section ids="note" names="note">
-            <title>
-                note
-            <note>
-                <paragraph>
-                    This is a note admonition.
-                <paragraph>
-                    It does not require any arguments
-        <section ids="tip" names="tip">
-            <title>
-                tip
-            <tip>
-                <paragraph>
-                    This is a tip admonition
-        <section ids="warning" names="warning">
-            <title>
-                warning
-            <warning>
-                <paragraph>
-                    This is a warning admonition

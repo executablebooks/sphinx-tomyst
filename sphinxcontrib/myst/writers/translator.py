@@ -564,7 +564,7 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#field-list
 
     def visit_field_list(self, node):
-        self.visit_definition_list(node)  #TODO: review if wrapper of definition
+        self.visit_definition_list(node)
 
     def depart_field_list(self, node):
         self.depart_definition_list(node)

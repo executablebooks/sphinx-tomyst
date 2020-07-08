@@ -1,53 +1,24 @@
 Elements
 ========
 
+:Author: Random Hacker
+:Contact: jrh@example.com
+:Date: 2002-08-18
+:Status: Work In Progress
+:Version: 1
+:Filename: $RCSfile$
+:Copyright: This document has been placed in the public domain.
+:Address: 123 Example Ave.
+          Example, EX
+
+This document contains test cases for elements that
+are **not** directives.
+
 Text
 ----
 
 This is some text
 
-..
-   address
-   -------
-
-   :Address: 123 Example Ave.
-            Example, EX
-
-admonition
-----------
-
-Generic admonition requires a title argument to
-be provided
-
-.. admonition:: My rst link
-
-   Here is `rst link syntax <https://jupyter.org>`__
-   converted to markdown
-
-.. admonition:: title for admonition
-
-   You can make up your own admonition too.
-
-   with some additional lines
-
-attention
----------
-
-.. attention::
-
-   This is an attention admonition
-
-..
-   author
-   ------
-
-   :Author: J. Random Hacker
-
-..
-   authors
-   -------
-
-   :Authors: J. Random Hacker; Jane Doe
 
 block_quote
 -----------
@@ -97,20 +68,6 @@ An example with nested code-block
 For extended **list** testing please refer
 to the `list <list>`__ test page.
 
-caution
--------
-
-.. caution::
-
-   This is a caution admonition
-
-danger
-------
-
-.. danger::
-
-   This is a danger admonition
-
 definition_list
 ---------------
 
@@ -124,6 +81,22 @@ Term : classifier
     The ' : ' indicates a classifier in
     definition list item terms only.
 
+docinfo
+-------
+
+See docinfo elements at the top of this document
+just underneath the first title.
+
+They don't appear to be transformed by sphinx/docutils
+to be `docinfo` elements.
+
+https://github.com/mmcky/sphinxcontrib-myst/issues/19
+
+emphasis
+--------
+
+This is *emphasis* markup text
+
 enumerated_list
 ---------------
 
@@ -136,47 +109,3 @@ The enumerated list from docutils
    (C) Item C.
 
 2. Item 2.
-
-error
------
-
-.. error::
-
-   This is an error admonition
-
-hint
-----
-
-.. hint::
-
-   This is a hint admonition
-
-important
----------
-
-.. important::
-
-   This is an important admonition
-
-note
-----
-
-.. note::
-
-   This is a note admonition.
-
-   It does not require any arguments
-
-tip
----
-
-.. tip::
-
-   This is a tip admonition
-
-warning
--------
-
-.. warning::
-
-   This is a warning admonition
