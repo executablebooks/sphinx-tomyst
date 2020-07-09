@@ -9,14 +9,31 @@ Welcome to sphinxcontrib-myst's documentation!
 `sphinxcontrib-myst <https://github.com/mmcky/sphinxcontrib-myst>`__ is
 a Sphinx extension that enables projects to be converted to `myst <https://myst-parser.readthedocs.io/en/latest/using/syntax.html>`__.
 
+.. image:: https://readthedocs.org/projects/sphinxcontrib-myst/badge/?version=latest
+   :target: https://sphinxcontrib-myst.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
 Myst files can be compiled using:
 
 #. `myst_parser <https://myst-parser.readthedocs.io/en/latest/>`__, or
 #. `Jupyter Book <https://jupyterbook.org/intro.html>`__
 
+Installation
+------------
+
+**Step 1:** To install the extension you need to clone the repository then run:
+
+.. code-block:: bash
+
+   python setup.py install
+
+**Step 2:** Add ``sphinxcontrib.myst`` to your sphinx ``extensions`` in the ``conf.py``
+
+**Step 3:** Build using ``make myst``
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :hidden:
 
    issues
 
