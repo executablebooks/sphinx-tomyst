@@ -25,7 +25,7 @@ def test_basic(
     #Note: pytest needs to run twice to initialise fixtures
 
     get_sphinx_app_doctree(app, docname="test", regress=True)
-    get_sphinx_app_output(app, files=["index.myst", "test.myst"], regress=True)
+    get_sphinx_app_output(app, files=["index.md", "test.md"], regress=True)
 
 @pytest.mark.sphinx(
     buildername="myst", srcdir=os.path.join(SOURCE_DIR, "docutils"), freshenv=True
@@ -46,4 +46,4 @@ def test_docutils(
     #Note: pytest needs to run twice to initialise fixtures
 
     get_sphinx_app_doctree(app, docname="elements", regress=True)
-    get_sphinx_app_output(app, files=["index.myst", "elements.myst", "directives.myst", "roles.myst"], regress=True)
+    get_sphinx_app_output(app, files=["index.md", "elements.md", "directives.md", "roles.md"], regress=True)
