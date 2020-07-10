@@ -27,7 +27,7 @@ Installation
 
    python setup.py install
 
-**Step 2:** Add ``sphinxcontrib.myst`` to your sphinx ``extensions`` in the ``conf.py``
+**Step 2:** Add ``sphinxcontrib.rst2myst`` to your sphinx ``extensions`` in the ``conf.py``
 
 **Step 3:** Build using ``make myst``
 
