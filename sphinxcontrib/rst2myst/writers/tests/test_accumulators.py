@@ -2,7 +2,7 @@
 Tests for writers.accumulators
 """
 
-from sphinxcontrib.myst.writers.accumulators import List
+from sphinxcontrib.rst2myst.writers.accumulators import List
 
 def test_simple():
     a = List()
