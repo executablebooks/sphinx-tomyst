@@ -1,6 +1,6 @@
-----------
-index.myst
-----------
+--------
+index.md
+--------
 
 # Basic Test
 
@@ -10,9 +10,9 @@ index.myst
 This is the index page
 
 
----------
-test.myst
----------
+-------
+test.md
+-------
 
 # Testing Document
 

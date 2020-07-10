@@ -1,6 +1,6 @@
-----------
-index.myst
-----------
+--------
+index.md
+--------
 
 # Docutils Tests
 
@@ -36,9 +36,9 @@ index.myst
     * [math](roles.myst#math)
 
 
--------------
-elements.myst
--------------
+-----------
+elements.md
+-----------
 
 # Elements
 
@@ -121,9 +121,9 @@ The enumerated list from docutils
 1. Item 2.
 
 
----------------
-directives.myst
----------------
+-------------
+directives.md
+-------------
 
 # Directives
 
@@ -284,9 +284,9 @@ This is a warning admonition
 ```
 
 
-----------
-roles.myst
-----------
+--------
+roles.md
+--------
 
 # Roles
 

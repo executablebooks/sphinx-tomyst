@@ -26,8 +26,8 @@ logger = logging.getLogger(__name__)
 class MystBuilder(Builder):
 
     name = 'myst'
-    format = 'myst'
-    out_suffix = ".myst"
+    format = 'markdown(myst)'
+    out_suffix = ".md"
     epilog = __('The myst files are in %(outdir)s.')
 
     allow_parallel = True
