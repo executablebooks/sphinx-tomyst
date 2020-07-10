@@ -1,7 +1,7 @@
-# sphinxcontrib-myst
+# sphinxcontrib-rst2myst
 A sphinx translator for producing myst syntax files
 
-[![Documentation Status](https://readthedocs.org/projects/sphinxcontrib-myst/badge/?version=latest)](https://sphinxcontrib-myst.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/sphinxcontrib-rst2myst/badge/?version=latest)](https://sphinxcontrib-rst2myst.readthedocs.io/en/latest/?badge=latest)
   
 
 ## Installation

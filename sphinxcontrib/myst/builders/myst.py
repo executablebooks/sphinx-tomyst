@@ -1,5 +1,5 @@
 """
-sphinxcontrib-myst.builders.myst
+sphinxcontrib-rst2myst.builders.myst
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A MyST Sphinx Builder

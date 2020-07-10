@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'sphinxcontrib-myst'
+project = 'sphinxcontrib-rst2myst'
 copyright = '2020, QuantEcon Developers'
 author = 'QuantEcon Developers'
 

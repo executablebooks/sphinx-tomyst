@@ -1,16 +1,16 @@
-.. sphinxcontrib-myst documentation master file, created by
+.. sphinxcontrib-rst2myst documentation master file, created by
    sphinx-quickstart on Wed Jul  8 15:41:25 2020.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to sphinxcontrib-myst's documentation!
+Welcome to sphinxcontrib-rst2myst's documentation!
 ==============================================
 
-`sphinxcontrib-myst <https://github.com/mmcky/sphinxcontrib-myst>`__ is
+`sphinxcontrib-rst2myst <https://github.com/mmcky/sphinxcontrib-rst2myst>`__ is
 a Sphinx extension that enables projects to be converted to `myst <https://myst-parser.readthedocs.io/en/latest/using/syntax.html>`__.
 
-.. image:: https://readthedocs.org/projects/sphinxcontrib-myst/badge/?version=latest
-   :target: https://sphinxcontrib-myst.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/sphinxcontrib-rst2myst/badge/?version=latest
+   :target: https://sphinxcontrib-rst2myst.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
 Myst files can be compiled using:
