@@ -104,7 +104,7 @@ just underneath the first title.
 They don’t appear to be transformed by sphinx/docutils
 to be docinfo elements.
 
-[https://github.com/mmcky/sphinxcontrib-myst/issues/19](https://github.com/mmcky/sphinxcontrib-myst/issues/19)
+[https://github.com/mmcky/sphinxcontrib-rst2myst/issues/19](https://github.com/mmcky/sphinxcontrib-rst2myst/issues/19)
 
 ## emphasis
 
