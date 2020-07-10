@@ -36,6 +36,7 @@ class MystBuilder(Builder):
     current_docname = None # type: str
 
     def init(self) -> None:
+        # import pdb; pdb.set_trace()
         self.secnumbers = {}  # type: Dict[str, Tuple[int, ...]]
 
     def get_outdated_docs(self) -> Iterator[str]:

@@ -28,7 +28,8 @@ author = 'QuantEcon Developers'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.todo'
+    'sphinx.ext.todo',
+    'sphinxcontrib.myst'
 ]
 
 # Add any paths that contain templates here, relative to this directory.

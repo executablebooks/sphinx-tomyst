@@ -59,6 +59,7 @@ class MystTranslator(SphinxTranslator):
     math = False
     note = False
     inpage_reference = False
+    reference = False
     tip = False
     toctree = False
     topic = False
@@ -82,6 +83,10 @@ class MystTranslator(SphinxTranslator):
     bullet_list['in'] = True
     bullet_list['marker'] = "*"
     bullet_list['level'] = -1
+    # Image
+    image = dict()
+    image['in'] = False
+    image['skip-reference'] = False
     # Index
     index = dict()
     index['in'] = False
@@ -95,6 +100,9 @@ class MystTranslator(SphinxTranslator):
     # Accumulators
     List = None
     Table = None
+
+    #sphinx.ext.todo
+    todo = False
 
     def __init__(self, document, builder):
         """
@@ -663,6 +671,12 @@ class MystTranslator(SphinxTranslator):
         1. the scale, height and width properties are not combined in this
         implementation as is done in http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
         """
+        self.image['in'] = True
+        # Image wrapped within a reference
+        if self.reference:
+            if self.output[-1] == self.syntax.visit_reference():
+                self.output.pop()
+                self.image['skip-reference'] = True
         options = self.infer_image_attrs(node)
         if self.figure['in']:
             figure_options = self.figure['figure-options']
@@ -699,6 +713,7 @@ class MystTranslator(SphinxTranslator):
         self.add_newline()
         self.output.append(self.syntax.depart_figure())
         self.add_newparagraph()
+        self.image['in'] = False
 
     # docutils.elements.important
     # https://docutils.sourceforge.io/docs/ref/doctree.html#important
@@ -1045,16 +1060,22 @@ class MystTranslator(SphinxTranslator):
 
     def visit_reference(self, node):
         self.reference = True
+        syntax = self.syntax.visit_reference()
         if self.List:
-            self.List.addto_list_item("[")
-        elif self.figure['in']:
+            self.List.addto_list_item(syntax)
+        elif self.figure['in'] or self.image['in']:
             pass
         else:
-            self.output.append("[")
+            self.output.append(syntax)
 
     def depart_reference(self, node):
         subdirectory = False
         formatted_text = ""
+
+        if self.image['skip-reference']:
+            self.image['skip-reference'] = False
+            self.reference = False
+            return
 
         if self.topic:
             # Jupyter Notebook uses the target text as its id
@@ -1088,15 +1109,16 @@ class MystTranslator(SphinxTranslator):
             #ignore adjustment when targeting pdf as pandoc doesn't parse %28 correctly
             refuri = refuri.replace("(", "%28")  #Special case to handle markdown issue with reading first )
             refuri = refuri.replace(")", "%29")
-            formatted_text = "]({})".format(refuri)
+            formatted_text = self.syntax.depart_reference(refuri)
 
         ## if there is a list add to it, else add it to the output
         if self.List:
             self.List.addto_list_item(formatted_text)
-        elif self.figure['in']:
+        elif self.figure['in'] or self.image['in']:
             pass
         else:
             self.output.append(formatted_text)
+        self.reference = False
 
     # docutils.elements.revision
     # https://docutils.sourceforge.io/docs/ref/doctree.html#revision
@@ -1312,6 +1334,19 @@ class MystTranslator(SphinxTranslator):
         self.output.append(self.syntax.depart_directive())
         self.add_newparagraph()
         self.warning = False
+
+    #-Extension Support-#
+
+    def visit_todo_node(self, node):
+        """ Support for sphinx.ext.todo """
+        self.todo = True
+        self.output.append(self.syntax.visit_directive("todo"))
+        self.add_newline()
+
+    def depart_todo_node(self, node):
+        self.output.append(self.syntax.depart_directive())
+        self.add_newparagraph()
+        self.todo = False
 
     #-----------#
     #-Utilities-#

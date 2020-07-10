@@ -116,6 +116,12 @@ class MarkdownSyntax:
     def visit_note(self):
         return ">**Note**\n>\n>"
 
+    def visit_reference(self):
+        return "["
+
+    def depart_reference(self, link):
+        return "]({})".format(link)
+
     def visit_title(self, level):
         return "#" * level
 
