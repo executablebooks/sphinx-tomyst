@@ -29,7 +29,6 @@ author = 'QuantEcon Developers'
 # ones.
 extensions = [
     'sphinx.ext.todo',
-    'sphinxcontrib.myst'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
