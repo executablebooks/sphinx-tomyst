@@ -1,5 +1,5 @@
 """
-myst-parser.tests.test_sphinx
+sphinxcontrib-rst2myst.tests
 
 Uses sphinx's pytest fixture to run builds
 
