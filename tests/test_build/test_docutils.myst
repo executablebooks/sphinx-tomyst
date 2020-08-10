@@ -4,36 +4,16 @@ index.md
 
 # Docutils Tests
 
+```{toctree}
+---
+caption: Contents:
+maxdepth: 2
+---
 
-* [Elements](elements.myst)
-    * [Text](elements.myst#text)
-    * [block_quote](elements.myst#block-quote)
-    * [bullet_list](elements.myst#bullet-list)
-    * [definition_list](elements.myst#definition-list)
-    * [docinfo](elements.myst#docinfo)
-    * [emphasis](elements.myst#emphasis)
-    * [enumerated_list](elements.myst#enumerated-list)
-* [Directives](directives.myst)
-    * [admonition](directives.myst#admonition)
-    * [attention](directives.myst#attention)
-    * [caution](directives.myst#caution)
-    * [danger](directives.myst#danger)
-    * [epigraph](directives.myst#epigraph)
-    * [figure](directives.myst#figure)
-    * [highlights](directives.myst#highlights)
-    * [index](directives.myst#index)
-    * [The execution context](directives.myst#the-execution-context)
-    * [pull-quote](directives.myst#pull-quote)
-    * [error](directives.myst#error)
-    * [hint](directives.myst#hint)
-    * [important](directives.myst#important)
-    * [math](directives.myst#math)
-    * [note](directives.myst#note)
-    * [tip](directives.myst#tip)
-    * [warning](directives.myst#warning)
-* [Roles](roles.myst)
-    * [index](roles.myst#index)
-    * [math](roles.myst#math)
+elements
+directives
+roles
+```
 
 
 -----------
@@ -101,7 +81,7 @@ This tests `definition`, `definition_list` and
 See docinfo elements at the top of this document
 just underneath the first title.
 
-They don’t appear to be transformed by sphinx/docutils
+They don't appear to be transformed by sphinx/docutils
 to be docinfo elements.
 
 [https://github.com/mmcky/sphinxcontrib-rst2myst/issues/19](https://github.com/mmcky/sphinxcontrib-rst2myst/issues/19)
@@ -192,7 +172,7 @@ single: python
 single: programming
 ```
 
-A point in the text you’d like to reference something
+A point in the text you'd like to reference something
 about python
 
 ```{{index}}
@@ -201,7 +181,7 @@ single: programming
 :name: reference-id
 ```
 
-A point in the text you’d like to reference something
+A point in the text you'd like to reference something
 about python
 
 ```{{index}}

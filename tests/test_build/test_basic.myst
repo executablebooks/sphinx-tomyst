@@ -4,8 +4,14 @@ index.md
 
 # Basic Test
 
+```{toctree}
+---
+caption: Contents:
+maxdepth: 2
+---
 
-* [Testing Document](test.myst)
+test
+```
 
 This is the index page
 
