@@ -1328,13 +1328,10 @@ class MystTranslator(SphinxTranslator):
             if node.attributes["hidden"]:
                 options['hidden'] = ''
         if node.hasattr("numbered"):
-            if node.attributes['numbered'] == 0:   #top level default value
+            if node.attributes['numbered'] == 999:   #top level default value
                 options['numbered'] = ''
-            else:
-                options['numbered'] = node.attributes['numbered']
         if node.hasattr("caption"):
-            if node.attributes['caption'] != 'Contents:':   #skip default value
-                options['caption'] = node.attributes['caption']
+            options['caption'] = node.attributes['caption']
         #TODO: implement :name: option
         if node.hasattr('titlesonly'):
             if node.attributes['titlesonly']:
@@ -1348,6 +1345,9 @@ class MystTranslator(SphinxTranslator):
         if node.hasattr('includehidden'):
             if node.attributes['includehidden']:
                 options['includehidden'] = ''
+        if node.hasattr('maxdepth'):
+            if type(node.attributes['maxdepth']) is int:
+                options['maxdepth'] = node.attributes['maxdepth']
         return listing, options
 
     def depart_toctree(self, node):
