@@ -636,11 +636,15 @@ class MystTranslator(SphinxTranslator):
 
     def visit_footnote_reference(self, node):
         self.footnote_reference['in'] = True
-        refid = node.attributes['refid']
-        ids = node.astext()
-        self.footnote_reference['link'] = "<sup>[{}](#{})</sup>".format(ids, refid) #TODO: can this be harmonized with HTML
-        self.output.append(self.footnote_reference['link'])
-        raise nodes.SkipNode
+        if node.hasattr("refid"):
+            refid = node.attributes['refid']
+            ids = node.astext()
+            self.footnote_reference['link'] = "<sup>[{}](#{})</sup>".format(ids, refid) #TODO: can this be harmonized with HTML
+            self.output.append(self.footnote_reference['link'])
+            raise nodes.SkipNode
+        else:
+            msg = "[footnote_reference] unable to find refid"
+            logger.warn(msg)
 
     def depart_footnote_reference(self, node):
         self.footnote_reference['in'] = False
@@ -650,6 +654,16 @@ class MystTranslator(SphinxTranslator):
 
     # docutils.elements.header
     # https://docutils.sourceforge.io/docs/ref/doctree.html#header
+
+    # sphinx.elements.highlightlang
+    # https://www.sphinx-doc.org/en/master/extdev/nodes.html#sphinx.addnodes.highlightlang
+
+    def visit_highlightlang(self, node):
+        msg = "[highlightang] typically handeled by transform/post-transform"
+        logger.info(msg)
+
+    def depart_highlightlang(self, node):
+        pass
 
     # docutils.elements.hint
     # https://docutils.sourceforge.io/docs/ref/doctree.html#hint
@@ -1036,6 +1050,20 @@ class MystTranslator(SphinxTranslator):
     # docutils.elements.pending
     # https://docutils.sourceforge.io/docs/ref/doctree.html#pending
 
+    def visit_pending(self, node):
+        msg = "[pending] typically handeled by transform/post-transform"
+        logger.info(msg)
+
+    def depart_pending(self, node):
+        pass
+
+    def visit_pending_xref(self, node):
+        msg = "[pending_xref] typically handeled by transform/post-transform"
+        logger.info(msg)
+
+    def depart_pending_xref(self, node):
+        pass
+
     # docutils.elements.problematic
     # https://docutils.sourceforge.io/docs/ref/doctree.html#problematic
 
@@ -1189,6 +1217,13 @@ class MystTranslator(SphinxTranslator):
 
     # docutils.elements.system_message
     # https://docutils.sourceforge.io/docs/ref/doctree.html#system-message
+
+    def visit_system_message(self, node):
+        msg = "[system_mesage] typically handeled by transform/post-transform"
+        logger.info(msg)
+
+    def depart_system_message(self, node):
+        pass
 
     # docutils.elements.table
     # Category: Compound
