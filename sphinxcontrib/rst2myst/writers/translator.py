@@ -367,12 +367,14 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#compound
 
     def visit_compound(self, node):
-        if "toctree-wrapper" in node['classes']:
-            self.toctree = True
+        pass
+        # if "toctree-wrapper" in node['classes']:
+        #     self.toctree = True
 
     def depart_compound(self, node):
-        if "toctree-wrapper" in node['classes']:
-            self.toctree = False
+        pass
+        # if "toctree-wrapper" in node['classes']:
+        #     self.toctree = False
 
     # docutils.elements.contact
     # https://docutils.sourceforge.io/docs/ref/doctree.html#contact
@@ -1302,8 +1304,55 @@ class MystTranslator(SphinxTranslator):
 
     def visit_toctree(self, node):
         self.toctree = True
+        listing, options = self.infer_toctree_attrs(node)
+        options = self.myst_options(options)
+        self.output.append(self.syntax.visit_directive('toctree', options))
+        self.add_newparagraph()
+        self.output.append("\n".join(listing))
+        self.add_newline()
+        # import pdb; pdb.set_trace()   #implement toctree option parsing
+
+    def infer_toctree_attrs(self, node):
+        """
+        https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-toctree
+        """
+        #Parse File Listing
+        listing = []
+        if node.hasattr("entries"):
+            for entry in node.attributes['entries']:
+                title, fn = entry
+                listing.append(fn)
+        #Parse Options
+        options = {}
+        if node.hasattr("hidden"):
+            if node.attributes["hidden"]:
+                options['hidden'] = ''
+        if node.hasattr("numbered"):
+            if node.attributes['numbered'] == 0:   #top level default value
+                options['numbered'] = ''
+            else:
+                options['numbered'] = node.attributes['numbered']
+        if node.hasattr("caption"):
+            if node.attributes['caption'] != 'Contents:':   #skip default value
+                options['caption'] = node.attributes['caption']
+        #TODO: implement :name: option
+        if node.hasattr('titlesonly'):
+            if node.attributes['titlesonly']:
+                options['titlesonly'] = ''
+        if node.hasattr('glob'):
+            if node.attributes['glob']:
+                options['glob'] = ''
+        if node.hasattr('reversed'):
+            if node.attributes['reversed']:
+                options['reversed'] = ''
+        if node.hasattr('includehidden'):
+            if node.attributes['includehidden']:
+                options['includehidden'] = ''
+        return listing, options
 
     def depart_toctree(self, node):
+        self.output.append(self.syntax.depart_directive())
+        self.add_newparagraph()
         self.toctree = False
 
     # docutils.elements.topic
@@ -1430,7 +1479,7 @@ class MystTranslator(SphinxTranslator):
             return myst_options
         elif num_options < 2:   #TODO parameterise this in conf.py
             for option, option_val in options.items():
-                myst_options.append(":{}: {}".format(option, option_val))
+                myst_options.append(":{}: {}".format(option, option_val).rstrip())
             return myst_options
         else:
             myst_options.append("---")
