@@ -3,14 +3,12 @@ from typing import Any, Dict, Generator, List, Iterable, Optional, Set, Tuple, U
 from sphinx.application import Sphinx
 
 from .builders import MystBuilder
+from .transform import InterceptAST
 
 def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_builder(MystBuilder)
 
-    # app.add_config_value('text_sectionchars', '*=-~"+`', 'env')
-    # app.add_config_value('text_newlines', 'unix', 'env')
-    # app.add_config_value('text_add_secnumbers', True, 'env')
-    # app.add_config_value('text_secnumber_suffix', '. ', 'env')
+    app.add_transform(InterceptAST)
 
     return {
         'version': 'builtin',

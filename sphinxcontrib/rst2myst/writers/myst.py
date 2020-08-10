@@ -55,8 +55,11 @@ class MystSyntax(MarkdownSyntax):
 
     # - Syntax Methods - #
 
-    def visit_directive(self, type):
-        return "```{" + "{}".format(type) + "}"
+    def visit_directive(self, type, options=None):
+        if options:
+            return "```{" + "{}".format(type) + "}" + "\n{}".format("\n".join(options))
+        else:
+            return "```{" + "{}".format(type) + "}"
 
     def depart_directive(self):
         return "```"
