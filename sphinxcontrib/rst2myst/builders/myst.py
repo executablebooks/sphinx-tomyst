@@ -15,6 +15,7 @@ from docutils.io import StringOutput
 from docutils.nodes import Node
 
 from sphinx.util import logging
+from sphinx.util.fileutil import copy_asset_file
 from sphinx.builders import Builder
 from sphinx.locale import __
 from sphinx.util.osutil import ensuredir, os_path
@@ -73,6 +74,20 @@ class MystBuilder(Builder):
                 f.write(self.writer.output)
         except OSError as err:
             logger.warning(__("error writing file %s: %s"), outfilename, err)
+    
+    def copy_build_files(self):
+        """Copies Makedile and conf.py to _build/myst."""
+        import io
+        makefile = path.join(self.confdir,"Makefile")
+        src_conf = path.join(self.confdir,"conf.py")
+        dest_conf = path.join(self.outdir,"conf.py")
+
+        copy_asset_file(self.confdir + "/Makefile", self.outdir)
+        with io.open(src_conf,"r") as inpf, io.open(dest_conf, "w") as outf:
+            for line in inpf.readlines():
+                if all(l in line for l in ["extensions","=","["]): 
+                    line = line + "'myst_parser',\n"
+                outf.write(line)
 
     def finish(self):
-        pass
+        self.finish_tasks.add_task(self.copy_build_files)
