@@ -1079,10 +1079,16 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#raw
 
     def visit_raw(self, node):
-        pass
+        self.raw = True
+        rawformat = node.attributes['format']
+        self.output.append(self.syntax.visit_raw(rawformat))
+        self.add_newline()
 
     def depart_raw(self, node):
+        self.add_newline()
+        self.output.append(self.syntax.depart_raw())
         self.add_newparagraph()
+        self.raw = False
 
     # docutils.elements.references
     # https://docutils.sourceforge.io/docs/ref/doctree.html#reference
