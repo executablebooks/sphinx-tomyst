@@ -888,8 +888,11 @@ class MystTranslator(SphinxTranslator):
     def visit_literal_block(self, node):
         self.literal_block = True
         options = self.infer_literal_block_attrs(node)
-        self.nodelang = node.attributes["language"].strip()
-        syntax = self.syntax.visit_literal_block(self.nodelang)
+        if node.hasattr("language"):
+            self.nodelang = node.attributes["language"].strip()
+            syntax = self.syntax.visit_literal_block(self.nodelang)
+        else:
+            syntax = self.syntax.visit_literal_block()
         #option block parsing
         if options != []:
             options = "\n".join(options)
@@ -1081,8 +1084,19 @@ class MystTranslator(SphinxTranslator):
     def visit_raw(self, node):
         self.raw = True
         rawformat = node.attributes['format']
+        options = self.infer_raw_attrs(node)
         self.output.append(self.syntax.visit_raw(rawformat))
         self.add_newline()
+
+    def infer_raw_attrs(self, node):
+        options = {}
+        if node.hasattr("source"):
+            fn = self.builder.current_docname
+            line = node.line
+            msg = "[{}:{}] raw directive specifies a source file. The contents of this \
+file will be included in the myst directive".format(fn, line)
+            logger.info(msg)
+        #TODO: add support for :url and :encoding:
 
     def depart_raw(self, node):
         self.add_newline()

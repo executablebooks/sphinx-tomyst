@@ -164,6 +164,13 @@ These directives are linked to builder
 
    \setlength{\parindent}{0pt}
 
+**Options:**
+
+.. raw:: html
+   :file: inclusion.html
+
+**TODO:** add support for url, encoding
+
 tip
 ---
 

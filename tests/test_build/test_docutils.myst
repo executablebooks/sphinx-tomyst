@@ -263,6 +263,15 @@ These directives are linked to builder
 \setlength{\parindent}{0pt}
 ```
 
+**Options:**
+
+```{raw} html
+<div><style type="text/css">h1,.breadcrumbs{display:none;}</style></div>
+
+```
+
+**TODO:** add support for url, encoding
+
 ## tip
 
 ```{tip}
