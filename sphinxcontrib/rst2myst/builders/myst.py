@@ -93,10 +93,12 @@ class MystBuilder(Builder):
                 outf.write(line)
     
     def copy_static_files(self):
-        ensuredir(path.join(self.outdir, '_static'))
-        for static_path in self.config["jupyter_static_file_path"]:
-            entry = path.join(self.confdir, static_path)
-            copy_asset(entry, path.join(self.outdir, "_static"))
+        if "jupyter_static_file_path" in self.config:
+            for static_path in self.config["jupyter_static_file_path"]:
+                output_path = path.join(self.outdir, static_path)
+                ensuredir(output_path)
+                entry = path.join(self.confdir, static_path)
+                copy_asset(entry, output_path)
 
     def finish(self):
         self.finish_tasks.add_task(self.copy_static_files)
