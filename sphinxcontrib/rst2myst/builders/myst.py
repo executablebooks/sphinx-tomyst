@@ -10,6 +10,7 @@ A MyST Sphinx Builder
 
 from typing import Any, Dict, Iterator, Set, Tuple
 from os import path
+from sphinx.util.fileutil import copy_asset
 
 from docutils.io import StringOutput
 from docutils.nodes import Node
@@ -67,7 +68,9 @@ class MystBuilder(Builder):
         self.current_docname = docname
         destination = StringOutput(encoding='utf-8')
         self.writer.write(doctree, destination)
-        outfilename = path.join(self.outdir, os_path(docname) + self.out_suffix)
+        src_folder = self.srcdir.split(self.confdir)[1][1:]
+        outdir = path.join(self.outdir, src_folder)
+        outfilename = path.join(outdir, os_path(docname) + self.out_suffix)
         ensuredir(path.dirname(outfilename))
         try:
             with open(outfilename, 'w', encoding='utf-8') as f:
@@ -85,9 +88,16 @@ class MystBuilder(Builder):
         copy_asset_file(self.confdir + "/Makefile", self.outdir)
         with io.open(src_conf,"r") as inpf, io.open(dest_conf, "w") as outf:
             for line in inpf.readlines():
-                if all(l in line for l in ["extensions","=","["]): 
-                    line = line + "'myst_parser',\n"
+                if "sphinxcontrib.rst2myst" in line: 
+                    line = line.replace("sphinxcontrib.rst2myst","myst_parser")
                 outf.write(line)
+    
+    def copy_static_files(self):
+        ensuredir(path.join(self.outdir, '_static'))
+        for static_path in self.config["jupyter_static_file_path"]:
+            entry = path.join(self.confdir, static_path)
+            copy_asset(entry, path.join(self.outdir, "_static"))
 
     def finish(self):
+        self.finish_tasks.add_task(self.copy_static_files)
         self.finish_tasks.add_task(self.copy_build_files)
