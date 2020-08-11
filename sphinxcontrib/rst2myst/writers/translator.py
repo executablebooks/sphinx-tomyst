@@ -751,7 +751,7 @@ class MystTranslator(SphinxTranslator):
 
     def visit_index(self, node):
         self.index['in'] = True
-        inline = True
+        inline = True  #default value
         if node.hasattr("inline"):
             inline = node.attributes['inline']
         if inline:
@@ -762,6 +762,8 @@ class MystTranslator(SphinxTranslator):
         self.add_newparagraph()
 
     def parse_index_as_role(self, node):
+        # TODO: this information should be recoverable from node.parent
+        # by iterating over the children
         self.index['type'] = 'role'
         docname = self.builder.current_docname
         line = node.line
@@ -1366,7 +1368,8 @@ class MystTranslator(SphinxTranslator):
             if node.attributes['numbered'] == 999:   #top level default value
                 options['numbered'] = ''
         if node.hasattr("caption"):
-            options['caption'] = node.attributes['caption']
+            if node.attributes['caption'] is not None:
+                options['caption'] = node.attributes['caption']
         #TODO: implement :name: option
         if node.hasattr('titlesonly'):
             if node.attributes['titlesonly']:
@@ -1381,7 +1384,7 @@ class MystTranslator(SphinxTranslator):
             if node.attributes['includehidden']:
                 options['includehidden'] = ''
         if node.hasattr('maxdepth'):
-            if type(node.attributes['maxdepth']) is int:
+            if node.attributes['maxdepth'] != -1:  #default value -1
                 options['maxdepth'] = node.attributes['maxdepth']
         return listing, options
 
