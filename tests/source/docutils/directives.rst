@@ -151,6 +151,19 @@ note
 
    It does not require any arguments
 
+raw
+---
+
+These directives are linked to builder
+
+.. raw:: html
+
+   <div><style type="text/css">h1,.breadcrumbs{display:none;}</style></div>
+
+.. raw:: latex
+
+   \setlength{\parindent}{0pt}
+
 tip
 ---
 
