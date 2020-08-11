@@ -100,8 +100,9 @@ class List:
         self.list_item = []
 
     def addto_list_item(self, content):
-        if self.list_item:
-            self.list_item.append(content)
+        if self.list_item is None:
+            self.start_list_item()
+        self.list_item.append(content)
 
     def add_list_item(self):
         content = "".join(self.list_item)
