@@ -53,6 +53,12 @@ class MystSyntax(MarkdownSyntax):
     def depart_figure(self):
         return "```"
 
+    def visit_raw(self, rawformat):
+        return "```{{raw}} {}".format(rawformat)
+
+    def depart_raw(self):
+        return "```"
+
     # - Syntax Methods - #
 
     def visit_directive(self, type, options=None):

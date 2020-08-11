@@ -751,7 +751,7 @@ class MystTranslator(SphinxTranslator):
 
     def visit_index(self, node):
         self.index['in'] = True
-        inline = True
+        inline = True  #default value
         if node.hasattr("inline"):
             inline = node.attributes['inline']
         if inline:
@@ -762,6 +762,8 @@ class MystTranslator(SphinxTranslator):
         self.add_newparagraph()
 
     def parse_index_as_role(self, node):
+        # TODO: this information should be recoverable from node.parent
+        # by iterating over the children
         self.index['type'] = 'role'
         docname = self.builder.current_docname
         line = node.line
@@ -886,8 +888,11 @@ class MystTranslator(SphinxTranslator):
     def visit_literal_block(self, node):
         self.literal_block = True
         options = self.infer_literal_block_attrs(node)
-        self.nodelang = node.attributes["language"].strip()
-        syntax = self.syntax.visit_literal_block(self.nodelang)
+        if node.hasattr("language"):
+            self.nodelang = node.attributes["language"].strip()
+            syntax = self.syntax.visit_literal_block(self.nodelang)
+        else:
+            syntax = self.syntax.visit_literal_block()
         #option block parsing
         if options != []:
             options = "\n".join(options)
@@ -1077,10 +1082,27 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#raw
 
     def visit_raw(self, node):
-        pass
+        self.raw = True
+        rawformat = node.attributes['format']
+        options = self.infer_raw_attrs(node)
+        self.output.append(self.syntax.visit_raw(rawformat))
+        self.add_newline()
+
+    def infer_raw_attrs(self, node):
+        options = {}
+        if node.hasattr("source"):
+            fn = self.builder.current_docname
+            line = node.line
+            msg = "[{}:{}] raw directive specifies a source file. The contents of this \
+file will be included in the myst directive".format(fn, line)
+            logger.info(msg)
+        #TODO: add support for :url and :encoding:
 
     def depart_raw(self, node):
+        self.add_newline()
+        self.output.append(self.syntax.depart_raw())
         self.add_newparagraph()
+        self.raw = False
 
     # docutils.elements.references
     # https://docutils.sourceforge.io/docs/ref/doctree.html#reference
@@ -1366,7 +1388,8 @@ class MystTranslator(SphinxTranslator):
             if node.attributes['numbered'] == 999:   #top level default value
                 options['numbered'] = ''
         if node.hasattr("caption"):
-            options['caption'] = node.attributes['caption']
+            if node.attributes['caption'] is not None:
+                options['caption'] = node.attributes['caption']
         #TODO: implement :name: option
         if node.hasattr('titlesonly'):
             if node.attributes['titlesonly']:
@@ -1381,7 +1404,7 @@ class MystTranslator(SphinxTranslator):
             if node.attributes['includehidden']:
                 options['includehidden'] = ''
         if node.hasattr('maxdepth'):
-            if type(node.attributes['maxdepth']) is int:
+            if node.attributes['maxdepth'] != -1:  #default value -1
                 options['maxdepth'] = node.attributes['maxdepth']
         return listing, options
 
