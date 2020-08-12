@@ -163,11 +163,11 @@ This is a highlights directive
 
 ## index
 
-```{{index}}
+```{index}
 single: python
 ```
 
-```{{index}}
+```{index}
 single: python
 single: programming
 ```
@@ -175,7 +175,7 @@ single: programming
 A point in the text you'd like to reference something
 about python
 
-```{{index}}
+```{index}
 single: python
 single: programming
 :name: reference-id
@@ -184,7 +184,7 @@ single: programming
 A point in the text you'd like to reference something
 about python
 
-```{{index}}
+```{index}
 single: execution; context
 ```
 
