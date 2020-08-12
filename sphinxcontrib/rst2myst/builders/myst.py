@@ -79,7 +79,7 @@ class MystBuilder(Builder):
             logger.warning(__("error writing file %s: %s"), outfilename, err)
     
     def copy_build_files(self):
-        """Copies Makedile and conf.py to _build/myst."""
+        """Copies Makefile and conf.py to _build/myst."""
         import io
         makefile = path.join(self.confdir,"Makefile")
         src_conf = path.join(self.confdir,"conf.py")
@@ -93,12 +93,14 @@ class MystBuilder(Builder):
                 outf.write(line)
     
     def copy_static_files(self):
-        if "jupyter_static_file_path" in self.config:
-            for static_path in self.config["jupyter_static_file_path"]:
+        if "rst2myst_static_file_path" in self.config and len(self.config["rst2myst_static_file_path"]):
+            for static_path in self.config["rst2myst_static_file_path"]:
                 output_path = path.join(self.outdir, static_path)
                 ensuredir(output_path)
                 entry = path.join(self.confdir, static_path)
                 copy_asset(entry, output_path)
+        else:
+            logger.info("rst2myst_static_file_path not specified in conf.py")
 
     def finish(self):
         self.finish_tasks.add_task(self.copy_static_files)
