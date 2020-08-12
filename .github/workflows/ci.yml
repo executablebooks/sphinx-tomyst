@@ -6,6 +6,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Clone https://github.com/QuantEcon/lecture-python-programming
+        shell: bash -l {0}
+        run: git clone https://github.com/QuantEcon/lecture-python-programming
       - name: Setup Anaconda
         uses: goanpeca/setup-miniconda@v1
         with:
@@ -13,7 +16,7 @@ jobs:
           auto-activate-base: true
           miniconda-version: 'latest'
           python-version: 3.7
-          environment-file: environment.yml
+          environment-file: lecture-python-programming/environment.yml
           activate-environment: qe-lectures
       - name: Install sphinxcontrib-rst2myst
         run: python setup.py install
@@ -29,7 +32,6 @@ jobs:
       - name: Build https://github.com/QuantEcon/lecture-python-programming
         shell: bash -l {0}
         run: |
-          git clone https://github.com/QuantEcon/lecture-python-programming
           cd lecture-python-programming
           git checkout sphinxcontrib-rst2myst
           make myst
