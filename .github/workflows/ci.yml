@@ -24,7 +24,7 @@ jobs:
       - name: Install Dependencies
         shell: bash -l {0}
         run: |
-          pip install spinx-book-theme myst-parser
+          pip install sphinx-book-theme myst-parser
       - name: Display Conda Environment Versions
         shell: bash -l {0}
         run: conda list
