@@ -93,14 +93,12 @@ class MystBuilder(Builder):
                 outf.write(line)
     
     def copy_static_files(self):
-        if "rst2myst_static_file_path" in self.config and len(self.config["rst2myst_static_file_path"]):
+        if "rst2myst_static_file_path" in self.config:
             for static_path in self.config["rst2myst_static_file_path"]:
                 output_path = path.join(self.outdir, static_path)
                 ensuredir(output_path)
                 entry = path.join(self.confdir, static_path)
                 copy_asset(entry, output_path)
-        else:
-            logger.info("rst2myst_static_file_path not specified in conf.py")
 
     def finish(self):
         self.finish_tasks.add_task(self.copy_static_files)

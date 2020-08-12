@@ -9,7 +9,7 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_builder(MystBuilder)
 
     app.add_transform(InterceptAST)
-    app.add_config_value("rst2myst_static_file_path",[],"rst2myst")
+    app.add_config_value("rst2myst_static_file_path",['_static'],"rst2myst")
 
     return {
         'version': 'builtin',
