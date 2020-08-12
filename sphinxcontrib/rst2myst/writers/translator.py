@@ -775,7 +775,8 @@ class MystTranslator(SphinxTranslator):
 
     def parse_index_as_directive(self, node):
         self.index['type'] = 'directive'
-        syntax = ["```{{index}}"]
+        syntax = []
+        syntax.append(self.syntax.visit_directive("index"))
         options = []
         for entry in node.attributes['entries']:
             entrytype, entryname, target, ignored, key = entry
@@ -786,7 +787,7 @@ class MystTranslator(SphinxTranslator):
                 if option not in options:
                     options.append(option)
         syntax += options
-        syntax.append("```")
+        syntax.append(self.syntax.depart_directive())
         return "\n".join(syntax)
 
     def depart_index(self, node):
