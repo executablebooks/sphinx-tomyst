@@ -19,8 +19,10 @@ jobs:
           environment-file: lecture-python-programming/environment.yml
           activate-environment: qe-lectures
       - name: Install sphinxcontrib-rst2myst
+        shell: bash -l {0}
         run: python setup.py install
       - name: Install Dependencies
+        shell: bash -l {0}
         run: |
           pip install spinx-book-theme myst-parser
       - name: Display Conda Environment Versions
