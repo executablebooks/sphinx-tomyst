@@ -15,6 +15,11 @@ jobs:
           python-version: 3.7
           environment-file: environment.yml
           activate-environment: qe-lectures
+      - name: Install sphinxcontrib-rst2myst
+        run: python setup.py install
+      - name: Install Dependencies
+        run: |
+          pip install spinx-book-theme myst-parser
       - name: Display Conda Environment Versions
         shell: bash -l {0}
         run: conda list
@@ -26,6 +31,7 @@ jobs:
         run: |
           git clone https://github.com/QuantEcon/lecture-python-programming
           cd lecture-python-programming
+          git checkout sphinxcontrib-rst2myst
           make myst
       - name: Build Myst Version
         shell: bash -l {0}
