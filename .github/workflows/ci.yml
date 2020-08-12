@@ -34,6 +34,7 @@ jobs:
       - name: Build https://github.com/QuantEcon/lecture-python-programming
         shell: bash -l {0}
         run: |
+          pwd
           cd lecture-python-programming
           git checkout sphinxcontrib-rst2myst
           make myst
