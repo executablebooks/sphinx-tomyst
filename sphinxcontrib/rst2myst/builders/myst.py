@@ -100,7 +100,7 @@ class MystBuilder(Builder):
                 entry = path.join(self.confdir, static_path)
                 copy_asset(entry, output_path)
         else:
-            logger.warning("rst2myst_static_file_path not specified in conf.py")
+            logger.info("rst2myst_static_file_path not specified in conf.py")
 
     def finish(self):
         self.finish_tasks.add_task(self.copy_static_files)
