@@ -1,5 +1,5 @@
 """
-sphinxcontrib-rst2myst.builders.myst
+sphinxcontrib-tomyst.builders.myst
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A MyST Sphinx Builder
@@ -88,13 +88,13 @@ class MystBuilder(Builder):
         copy_asset_file(self.confdir + "/Makefile", self.outdir)
         with io.open(src_conf,"r") as inpf, io.open(dest_conf, "w") as outf:
             for line in inpf.readlines():
-                if "sphinxcontrib.rst2myst" in line: 
-                    line = line.replace("sphinxcontrib.rst2myst","myst_parser")
+                if "sphinxcontrib.tomyst" in line: 
+                    line = line.replace("sphinxcontrib.tomyst","myst_parser")
                 outf.write(line)
     
     def copy_static_files(self):
-        if "rst2myst_static_file_path" in self.config:
-            for static_path in self.config["rst2myst_static_file_path"]:
+        if "tomyst_static_file_path" in self.config:
+            for static_path in self.config["tomyst_static_file_path"]:
                 output_path = path.join(self.outdir, static_path)
                 ensuredir(output_path)
                 entry = path.join(self.confdir, static_path)
