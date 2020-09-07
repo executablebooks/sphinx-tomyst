@@ -1,2 +1,2 @@
-extensions = ["sphinxcontrib.rst2myst"]
+extensions = ["sphinxcontrib.tomyst"]
 exclude_patterns = ["_build"]

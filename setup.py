@@ -15,22 +15,22 @@ Status
 
 |status-docs| |status-travis|
 
-.. |status-docs| image:: https://readthedocs.org/projects/sphinxcontrib-rst2myst/badge/?version=latest
-   :target: http://sphinxcontrib-rst2myst.readthedocs.io/en/latest/?badge=latest
+.. |status-docs| image:: https://readthedocs.org/projects/sphinxcontrib-tomyst/badge/?version=latest
+   :target: http://sphinxcontrib-tomyst.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. |status-travis| image:: https://travis-ci.org/mmcky/sphinxcontrib-rst2myst.svg?branch=master
-   :target: https://travis-ci.org/mmcky/sphinxcontrib-rst2myst
+.. |status-travis| image:: https://travis-ci.org/mmcky/sphinxcontrib-tomyst.svg?branch=master
+   :target: https://travis-ci.org/mmcky/sphinxcontrib-tomyst
 
 """
 
 requires = ['Sphinx>=0.6']
 
 setup(
-    name='sphinxcontrib-rst2myst',
+    name='sphinxcontrib-tomyst',
     version=VERSION,
-    url='https://github.com/mmcky/sphinxcontrib-rst2myst',
-    download_url='https://github.com/mmcky/sphinxcontrib-rst2myst/archive/{}.tar.gz'.format(VERSION),
+    url='https://github.com/mmcky/sphinxcontrib-tomyst',
+    download_url='https://github.com/mmcky/sphinxcontrib-tomyst/archive/{}.tar.gz'.format(VERSION),
     license='BSD',
     author='QuantEcon',
     author_email='admin@quantecon.org',
