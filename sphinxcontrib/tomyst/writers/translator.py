@@ -1364,7 +1364,7 @@ file will be included in the myst directive".format(fn, line)
         self.toctree = True
         listing, options = self.infer_toctree_attrs(node)
         options = self.myst_options(options)
-        self.output.append(self.syntax.visit_directive('toctree', options))
+        self.output.append(self.syntax.visit_directive('toctree', options=options))
         self.add_newparagraph()
         self.output.append("\n".join(listing))
         self.add_newline()
@@ -1418,9 +1418,35 @@ file will be included in the myst directive".format(fn, line)
     # https://docutils.sourceforge.io/docs/ref/doctree.html#topic
 
     def visit_topic(self, node):
+        # docutils.contents (https://docutils.sourceforge.io/docs/ref/rst/directives.html#table-of-contents)
+        if 'contents' in node.attributes['classes']:
+            title, options = self.infer_contents_attrs(node)
+            options = self.myst_options(options)
+            self.output.append(self.syntax.visit_directive("contents", title, options))
+            self.add_newline()
+            raise nodes.SkipChildren
         self.topic = True
 
+    def infer_contents_attrs(self, node):
+        title, options = None, {}
+        for child in node.children:
+            if type(child) is nodes.title:
+                    title = child.astext()  #This will add default "Contents" to myst output
+            if type(child) is nodes.pending:
+                if 'depth' in child.details:
+                    options['depth'] = child.details['depth']
+                if 'local' in child.details:
+                    options['local'] = ''
+                if 'backlinks' in child.details:
+                    options['backlinks'] = child.details['backlinks']
+                if 'class' in child.details:
+                    options['class'] = ", ".join(child.details['class'])
+        return title, options
+
     def depart_topic(self, node):
+        if 'contents' in node.attributes['classes']:
+            self.output.append(self.syntax.depart_directive())
+            self.add_newparagraph()
         self.topic = False
 
     # docutils.elements.transition
