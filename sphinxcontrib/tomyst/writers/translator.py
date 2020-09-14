@@ -964,7 +964,13 @@ class MystTranslator(SphinxTranslator):
             self.output.append(syntax)
 
     def depart_math(self, node):
-        self.output.append(self.syntax.depart_math())
+        syntax = self.syntax.depart_math()
+        if self.List:
+            self.List.addto_list_item(syntax)
+        elif self.Table:
+            self.Table.add_item(syntax)
+        else:
+            self.output.append(syntax)
         self.math = False
 
     # docutils.element.math_block

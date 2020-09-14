@@ -18,3 +18,7 @@ math
 ----
 
 Since Pythagoras, we know that :math:`a^2 + b^2 = c^2`.
+
+and math in a list:
+
+* this is :math:`a^2 + b^2 = c^2` in a list item
