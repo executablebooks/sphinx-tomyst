@@ -34,6 +34,20 @@ caution
 
    This is a caution admonition
 
+contents
+--------
+
+.. contents::
+
+.. contents:: Table of Contents
+
+.. contents::
+   :depth: 2
+   :local:
+   :backlinks: entry
+   :class: testing
+
+
 danger
 ------
 

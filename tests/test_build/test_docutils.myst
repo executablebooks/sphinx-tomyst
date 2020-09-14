@@ -137,6 +137,23 @@ This is an attention admonition
 This is a caution admonition
 ```
 
+## contents
+
+```{contents} Contents
+```
+
+```{contents} Table of Contents
+```
+
+```{contents}
+---
+backlinks: entry
+class: testing
+depth: 2
+local: 
+---
+```
+
 ## danger
 
 ```{danger}
