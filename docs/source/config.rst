@@ -11,7 +11,11 @@ An array which takes path of your static folders, relative to the project's ``co
 
 For config variable: ``tomyst_static_file_path: ["source/_static"]``, the contents of this folder will be copied over to ``_build/myst/source/_static``.
 
+**tomyst_jupytext**:
+
+[True/False] Enable targetting of jupytext
+
 **tomyst_jupytext_header**:
 
-Enable the inclusion of a `jupytext header <https://myst-nb.readthedocs.io/en/latest/use/markdown.html>`__  
-to enable automatic execution using `myst-nb <https://github.com/executablebooks/MyST-NB>`__
+Can specify a custom `jupytext header <https://myst-nb.readthedocs.io/en/latest/use/markdown.html>`__  
+to support jupytext compatibility and execution using `myst-nb <https://github.com/executablebooks/MyST-NB>`__

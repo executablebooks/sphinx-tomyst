@@ -7,6 +7,7 @@ from .markdown import MarkdownSyntax
 class MystSyntax(MarkdownSyntax):
 
     indentation = " " * 2
+    target_jupytext = False
 
     # - Direct Syntax - #
 
@@ -38,7 +39,10 @@ class MystSyntax(MarkdownSyntax):
         if language is None:
             return "```"
         else:
-            return "```{{code-block}} {0}".format(language)
+            if self.target_jupytext:
+                return "```{{code-cell}} {0}".format(language)
+            else:
+                return "```{{code-block}} {0}".format(language)
 
     def visit_target(self, target):
         return "({})=".format(target)

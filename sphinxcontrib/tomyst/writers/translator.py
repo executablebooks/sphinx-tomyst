@@ -110,6 +110,7 @@ class MystTranslator(SphinxTranslator):
         """
         super().__init__(document, builder)
         self.syntax = MystSyntax()
+        self.syntax.target_jupytext = self.builder.config['tomyst_jupytext']
         self.default_ext = ".myst"
         self.images = []
         self.section_level = 0
@@ -120,7 +121,7 @@ class MystTranslator(SphinxTranslator):
 
     def visit_document(self, node):
         self.output = []
-        if self.builder.config['tomyst_jupytext_header'] is not None:
+        if self.builder.config['tomyst_jupytext']:
             self.output.append(self.builder.config['tomyst_jupytext_header'].lstrip())
             self.add_newline()
 
