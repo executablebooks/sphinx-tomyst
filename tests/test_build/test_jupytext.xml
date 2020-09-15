@@ -1,0 +1,12 @@
+<document source="content.rst">
+    <section ids="content" names="content">
+        <title>
+            Content
+        <paragraph>
+            Simple code example
+        <paragraph>
+            <literal>
+                `{code-block} python3
+                import numpy as np
+                np.__version__
+                `
