@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to sphinxcontrib-tomyst's documentation!
-==============================================
+================================================
 
 `sphinxcontrib-tomyst <https://github.com/mmcky/sphinxcontrib-tomyst>`__ is
 a Sphinx extension that enables projects to be converted to `myst <https://myst-parser.readthedocs.io/en/latest/using/syntax.html>`__.
@@ -36,6 +36,7 @@ Installation
    :hidden:
 
    issues
+   config
 
 Indices and tables
 ==================
