@@ -1,13 +1,11 @@
 Snippet
 =======
 
-A bullet list
+QuantEcon Notes
+---------------
 
-- first item level 0
+QuantEcon has its own site for sharing Jupyter notebooks related
+to economics -- `QuantEcon Notes <http://notes.quantecon.org/>`_.
 
-  - first item of first item (level 0)
-
-- second item level 0
-
-  - first item of second item (level 0)
-  - second item of second item (level 0)
+Notebooks submitted to QuantEcon Notes can be shared with a link, and are open
+to comments and votes by the community.

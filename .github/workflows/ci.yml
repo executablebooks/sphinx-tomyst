@@ -45,7 +45,7 @@ jobs:
           cd lecture-python-programming/_build/myst/
           make html
       - name: Preview Deploy to Netlify
-        uses: nwtgck/actions-netlify@v1.0
+        uses: nwtgck/actions-netlify@v1.1
         with:
           publish-dir: 'lecture-python-programming/_build/myst/_build/html/'
           production-branch: master

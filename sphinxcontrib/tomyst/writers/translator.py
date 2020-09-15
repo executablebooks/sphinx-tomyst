@@ -1248,8 +1248,9 @@ file will be included in the myst directive".format(fn, line)
     # https://docutils.sourceforge.io/docs/ref/doctree.html#system-message
 
     def visit_system_message(self, node):
-        msg = "[system_mesage] typically handeled by transform/post-transform"
+        msg = "[system_mesage] typically handeled by transform/post-transform\n\n{}".format(node.astext())
         logger.info(msg)
+        raise nodes.SkipNode
 
     def depart_system_message(self, node):
         pass
@@ -1374,7 +1375,6 @@ file will be included in the myst directive".format(fn, line)
         self.add_newparagraph()
         self.output.append("\n".join(listing))
         self.add_newline()
-        # import pdb; pdb.set_trace()   #implement toctree option parsing
 
     def infer_toctree_attrs(self, node):
         """

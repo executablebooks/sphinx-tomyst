@@ -16,5 +16,5 @@ def test_snippet(
 ):
     """basic test."""
     app.build()
-    output = get_sphinx_app_output(app, files=["snippet.myst"], regress=True)
+    output = get_sphinx_app_output(app, files=["snippet.md"], regress=True)
     print(output)
