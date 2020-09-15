@@ -9,7 +9,8 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_builder(MystBuilder)
 
     app.add_transform(InterceptAST)
-    app.add_config_value("tomyst_static_file_path",['_static'],"tomyst")
+    app.add_config_value("tomyst_static_file_path", ['_static'], "tomyst")
+    app.add_config_value("tomyst_jupytext_header", None, "tomyst")
 
     return {
         'version': 'builtin',

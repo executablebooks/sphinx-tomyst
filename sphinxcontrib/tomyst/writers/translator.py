@@ -120,6 +120,9 @@ class MystTranslator(SphinxTranslator):
 
     def visit_document(self, node):
         self.output = []
+        if self.builder.config['tomyst_jupytext_header'] is not None:
+            self.output.append(self.builder.config['tomyst_jupytext_header'].lstrip())
+            self.add_newline()
 
     def depart_document(self, node):
         self.body = "".join(self.output)

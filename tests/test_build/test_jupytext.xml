@@ -1,0 +1,9 @@
+<document source="content.rst">
+    <section ids="content" names="content">
+        <title>
+            Content
+        <paragraph>
+            Simple code example
+        <literal_block force="False" highlight_args="{}" language="python3" xml:space="preserve">
+            import numpy as np
+            np.__version__
