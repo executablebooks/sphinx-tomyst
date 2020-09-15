@@ -4,9 +4,6 @@
             Content
         <paragraph>
             Simple code example
-        <paragraph>
-            <literal>
-                `{code-block} python3
-                import numpy as np
-                np.__version__
-                `
+        <literal_block force="False" highlight_args="{}" language="python3" xml:space="preserve">
+            import numpy as np
+            np.__version__
