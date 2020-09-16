@@ -115,6 +115,7 @@ class MystTranslator(SphinxTranslator):
         self.images = []
         self.section_level = 0
 
+
     #----------#
     #-Document-#
     #----------#
@@ -865,6 +866,7 @@ class MystTranslator(SphinxTranslator):
     def depart_list_item(self, node):
         if self.List.list_item:
             self.List.add_list_item()
+
 
     # docutils.element.literal
     # https://docutils.sourceforge.io/docs/ref/doctree.html#literal

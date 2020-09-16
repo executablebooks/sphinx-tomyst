@@ -2,6 +2,7 @@
 Provides accumulator objects to assist with building Syntax
 """
 
+import re
 from docutils import nodes
 
 class ListBuilder:
@@ -111,8 +112,8 @@ class List:
         self.list_item = None
 
     def parse_paragraphs(self, content):
-        #-Paragraph Markers-#
-        content = content.rstrip("<\\paragraph>")
+        # Remove trailing markers
+        content = re.sub("<\\\\paragraph>$", "", content)
         content = content.replace("<\\paragraph>", "\n\n")
         return content
 
