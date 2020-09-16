@@ -75,3 +75,9 @@ class MystSyntax(MarkdownSyntax):
 
     def depart_directive(self):
         return "```"
+
+    def visit_role(self, type, content):
+        return "{" + str(type) + "}`" + "{}".format(content)
+
+    def depart_role(self):
+        return "`"

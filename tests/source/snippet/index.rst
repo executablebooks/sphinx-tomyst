@@ -6,3 +6,4 @@ Snippet
    :caption: Contents:
 
    snippet
+   numpy
