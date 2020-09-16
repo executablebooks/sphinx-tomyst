@@ -1080,9 +1080,13 @@ class MystTranslator(SphinxTranslator):
 
     def visit_pending_xref(self, node):
         reftype = node.attributes['reftype']
-        targetdoc = node.attributes['reftarget']
+        target = node.attributes['reftarget']
         linktext = node.astext()
-        content = "{} <{}>".format(linktext, targetdoc)
+        if reftype == "eq":
+            content = "{}".format(target)
+        else:
+            #doc, ref style links
+            content = "{} <{}>".format(linktext, target)
         syntax = self.syntax.visit_role(reftype, content)
         if self.List:
             self.List.addto_list_item(syntax)
@@ -1093,7 +1097,13 @@ class MystTranslator(SphinxTranslator):
         raise nodes.SkipChildren
 
     def depart_pending_xref(self, node):
-        self.output.append(self.syntax.depart_role())
+        syntax = self.syntax.depart_role()
+        if self.List:
+            self.List.addto_list_item(syntax)
+        elif self.Table:
+            self.Table.add_item(syntax)
+        else:
+            self.output.append(syntax)
 
     # docutils.elements.problematic
     # https://docutils.sourceforge.io/docs/ref/doctree.html#problematic
