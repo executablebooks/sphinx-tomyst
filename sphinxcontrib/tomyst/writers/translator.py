@@ -1080,9 +1080,13 @@ class MystTranslator(SphinxTranslator):
 
     def visit_pending_xref(self, node):
         reftype = node.attributes['reftype']
-        targetdoc = node.attributes['reftarget']
+        target = node.attributes['reftarget']
         linktext = node.astext()
-        content = "{} <{}>".format(linktext, targetdoc)
+        if reftype == "eq":
+            content = "{}".format(target)
+        else:
+            #doc, ref style links
+            content = "{} <{}>".format(linktext, target)
         syntax = self.syntax.visit_role(reftype, content)
         if self.List:
             self.List.addto_list_item(syntax)
