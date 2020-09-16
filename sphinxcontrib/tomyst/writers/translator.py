@@ -1083,7 +1083,13 @@ class MystTranslator(SphinxTranslator):
         targetdoc = node.attributes['reftarget']
         linktext = node.astext()
         content = "{} <{}>".format(linktext, targetdoc)
-        self.output.append(self.syntax.visit_role(reftype, content))
+        syntax = self.syntax.visit_role(reftype, content)
+        if self.List:
+            self.List.addto_list_item(syntax)
+        elif self.Table:
+            self.Table.add_item(syntax)
+        else:
+            self.output.append(syntax)
         raise nodes.SkipChildren
 
     def depart_pending_xref(self, node):
