@@ -8,7 +8,6 @@ from .transform import InterceptAST
 DEFAULT_JUPYTEXT_HEADER="""
 ---
 jupytext:
-  formats: md:myst
   text_representation:
     extension: .md
     format_name: myst
