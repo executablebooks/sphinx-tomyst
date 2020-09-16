@@ -1075,12 +1075,19 @@ class MystTranslator(SphinxTranslator):
     def depart_pending(self, node):
         pass
 
+    # sphinx.pending_xref
+    # https://www.sphinx-doc.org/en/master/extdev/nodes.html#sphinx.addnodes.pending_xref
+
     def visit_pending_xref(self, node):
-        msg = "[pending_xref] typically handeled by transform/post-transform"
-        logger.info(msg)
+        reftype = node.attributes['reftype']
+        targetdoc = node.attributes['reftarget']
+        linktext = node.astext()
+        content = "{} <{}>".format(linktext, targetdoc)
+        self.output.append(self.syntax.visit_role(reftype, content))
+        raise nodes.SkipChildren
 
     def depart_pending_xref(self, node):
-        pass
+        self.output.append(self.syntax.depart_role())
 
     # docutils.elements.problematic
     # https://docutils.sourceforge.io/docs/ref/doctree.html#problematic
