@@ -7,3 +7,4 @@ Snippet
 
    snippet
    numpy
+   another

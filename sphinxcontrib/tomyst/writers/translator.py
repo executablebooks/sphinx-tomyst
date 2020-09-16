@@ -1079,10 +1079,11 @@ class MystTranslator(SphinxTranslator):
     # https://www.sphinx-doc.org/en/master/extdev/nodes.html#sphinx.addnodes.pending_xref
 
     def visit_pending_xref(self, node):
+        reftype = node.attributes['reftype']
         targetdoc = node.attributes['reftarget']
         linktext = node.astext()
         content = "{} <{}>".format(linktext, targetdoc)
-        self.output.append(self.syntax.visit_role("doc", content))
+        self.output.append(self.syntax.visit_role(reftype, content))
         raise nodes.SkipChildren
 
     def depart_pending_xref(self, node):
