@@ -57,6 +57,5 @@ setup(
             "pytest-regressions",
         ],
     },
-    include_package_data=True,
     namespace_packages=['sphinxcontrib'],
 )
