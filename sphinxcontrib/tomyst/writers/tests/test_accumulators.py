@@ -4,11 +4,13 @@ Tests for writers.accumulators
 
 from sphinxcontrib.tomyst.writers.accumulators import List
 
+
 def test_simple():
     a = List()
     a.add_item("first")
     a.add_item("second")
     print(a.to_markdown())
+
 
 def test_manual_nested():
     a = List()
@@ -26,6 +28,7 @@ def test_manual_nested():
     a.add_item(d)
     print(a.to_markdown())
 
+
 def test_nested():
     a = List()
     a.add_item("first item level 0")
@@ -34,7 +37,7 @@ def test_nested():
     a = List(parent=a)
     a.add_item("first item of (first item of (first item level 0))")
     a = a.add_to_parent()
-    a = a.add_to_parent()    
+    a = a.add_to_parent()
     a.add_item("second item level 0")
     a = List(parent=a)
     a.add_item("first item of (second item level 0)")
@@ -50,6 +53,7 @@ def test_multiline():
     a.add_item("third item")
     print(a.to_markdown())
 
+
 def test_multiline_nested():
     a = List()
     a.add_item("first item level 0\nand second line continuation to first item")
@@ -57,6 +61,7 @@ def test_multiline_nested():
     a.add_item("second item level 0\n\nwith new paragraph")
     a = a.add_to_parent()
     print(a.to_markdown())
+
 
 if __name__ == "__main__":
     print("Simple")

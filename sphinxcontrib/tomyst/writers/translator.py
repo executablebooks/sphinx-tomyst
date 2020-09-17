@@ -25,8 +25,9 @@ from .accumulators import TableBuilder
 
 logger = logging.getLogger(__name__)
 
+
 class MystTranslator(SphinxTranslator):
-    """ Myst Translator
+    """Myst Translator
 
     docutils:
         1. https://docutils.sourceforge.io/docs/ref/doctree.html
@@ -68,40 +69,40 @@ class MystTranslator(SphinxTranslator):
     # Dict(State Tracking)
     # Block Quote
     block_quote = dict()
-    block_quote['in'] = False
-    block_quote['type'] = None
+    block_quote["in"] = False
+    block_quote["type"] = None
     # Figure
     figure = dict()
-    figure['in'] = False
-    figure['figure-options'] = None
+    figure["in"] = False
+    figure["figure-options"] = None
     # Footnote Reference
     footnote_reference = dict()
-    footnote_reference['in'] = False
-    footnote_reference['link'] = None
+    footnote_reference["in"] = False
+    footnote_reference["link"] = None
     # Bullet List
     bullet_list = dict()
-    bullet_list['in'] = True
-    bullet_list['marker'] = "*"
-    bullet_list['level'] = -1
+    bullet_list["in"] = True
+    bullet_list["marker"] = "*"
+    bullet_list["level"] = -1
     # Image
     image = dict()
-    image['in'] = False
-    image['skip-reference'] = False
+    image["in"] = False
+    image["skip-reference"] = False
     # Index
     index = dict()
-    index['in'] = False
-    index['type'] = None
-    index['skip-target'] = False
+    index["in"] = False
+    index["type"] = None
+    index["skip-target"] = False
     # Math
     math_block = dict()
-    math_block['in'] = False
-    math_block['options'] = []
+    math_block["in"] = False
+    math_block["options"] = []
 
     # Accumulators
     List = None
     Table = None
 
-    #sphinx.ext.todo
+    # sphinx.ext.todo
     todo = False
 
     def __init__(self, document, builder):
@@ -110,42 +111,41 @@ class MystTranslator(SphinxTranslator):
         """
         super().__init__(document, builder)
         self.syntax = MystSyntax()
-        self.syntax.target_jupytext = self.builder.config['tomyst_jupytext']
+        self.syntax.target_jupytext = self.builder.config["tomyst_jupytext"]
         self.default_ext = ".myst"
         self.images = []
         self.section_level = 0
 
-
-    #----------#
-    #-Document-#
-    #----------#
+    # ----------#
+    # -Document-#
+    # ----------#
 
     def visit_document(self, node):
         self.output = []
-        if self.builder.config['tomyst_jupytext']:
-            self.output.append(self.builder.config['tomyst_jupytext_header'].lstrip())
+        if self.builder.config["tomyst_jupytext"]:
+            self.output.append(self.builder.config["tomyst_jupytext_header"].lstrip())
             self.add_newline()
 
     def depart_document(self, node):
         self.body = "".join(self.output)
 
     def unknown_visit(self, node):
-        raise NotImplementedError('Unknown node: ' + node.__class__.__name__)
+        raise NotImplementedError("Unknown node: " + node.__class__.__name__)
 
     def unknown_departure(self, node):
         pass
 
-    #-------#
-    #-Nodes-#
-    #-------#
+    # -------#
+    # -Nodes-#
+    # -------#
 
     # -- Text -- #
 
     def visit_Text(self, node):
         text = node.astext()
 
-        #Escape Special markdown chars except in code block
-        if self.block_quote['in'] and self.block_quote['type'] == 'block_quote':
+        # Escape Special markdown chars except in code block
+        if self.block_quote["in"] and self.block_quote["type"] == "block_quote":
             linemarker = self.syntax.visit_block_quote()
             text = linemarker + text
             text = text.replace("\n", "\n{}".format(linemarker))
@@ -153,10 +153,10 @@ class MystTranslator(SphinxTranslator):
             raise nodes.SkipNode
         if self.math_block["in"]:
             text = text.strip()
-        #Code Blocks
+        # Code Blocks
         # if self.literal_block:
-            # text = self.strip_whitespace(text)
-            # text = text.strip()
+        # text = self.strip_whitespace(text)
+        # text = text.strip()
 
         self.text = text
 
@@ -167,11 +167,11 @@ class MystTranslator(SphinxTranslator):
         if self.Table:
             self.Table.add_item(self.text)
             return
-        if self.math_block['in']:
+        if self.math_block["in"]:
             self.text = self.text + "\n"
         if self.literal_block:
             self.text = self.text + "\n"
-        if self.caption and self.toctree:         #TODO: Check this condition
+        if self.caption and self.toctree:  # TODO: Check this condition
             self.text = "# {}".format(self.text)
         self.output.append(self.text)
 
@@ -247,32 +247,32 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#block-quote
 
     def visit_block_quote(self, node):
-        self.block_quote['in'] = True
-        if self.List:           #TODO: can you have block quote in List?
+        self.block_quote["in"] = True
+        if self.List:  # TODO: can you have block quote in List?
             pass
             # self.add_newline()
             # return
         # Determine class type
         if "epigraph" in node.attributes["classes"]:
-            self.block_quote['type'] = "epigraph"
+            self.block_quote["type"] = "epigraph"
             self.output.append(self.syntax.visit_directive("epigraph"))
             self.add_newline()
         elif "highlights" in node.attributes["classes"]:
-            self.block_quote['type'] = "highlights"
+            self.block_quote["type"] = "highlights"
             self.output.append(self.syntax.visit_directive("highlights"))
             self.add_newline()
         elif "pull-quote" in node.attributes["classes"]:
-            self.block_quote['type'] = "pull-quote"
+            self.block_quote["type"] = "pull-quote"
             self.output.append(self.syntax.visit_directive("pull-quote"))
             self.add_newline()
         else:
-            self.block_quote['type'] = "block_quote"
+            self.block_quote["type"] = "block_quote"
 
     def depart_block_quote(self, node):
-        if self.block_quote['type'] != "block_quote":
+        if self.block_quote["type"] != "block_quote":
             self.output.append(self.syntax.depart_directive())
             self.add_newparagraph()
-        self.block_quote['in'] = False
+        self.block_quote["in"] = False
 
     # docutils.elements.bullet_list
     # https://docutils.sourceforge.io/docs/ref/doctree.html#bullet-list
@@ -280,17 +280,17 @@ class MystTranslator(SphinxTranslator):
     def visit_bullet_list(self, node):
         marker = None
         if node.hasattr("bullet"):
-            marker = node.attributes['bullet']
+            marker = node.attributes["bullet"]
         if not self.List:
             self.List = List(marker=marker)
         else:
-            #Finalise any open List Item
+            # Finalise any open List Item
             if self.List.list_item:
                 self.List.add_list_item()
             self.List = List(marker=marker, parent=self.List)
 
     def depart_bullet_list(self, node):
-        if self.List.parent == 'base':
+        if self.List.parent == "base":
             self.output.append(self.List.to_markdown())
             self.add_newparagraph()
             self.List = None
@@ -351,7 +351,7 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#colspec
 
     def visit_colspec(self, node):
-        self.Table.add_column_width(node['colwidth'])
+        self.Table.add_column_width(node["colwidth"])
 
     # docutils.elements.comment
     # https://docutils.sourceforge.io/docs/ref/doctree.html#comment
@@ -363,7 +363,7 @@ class MystTranslator(SphinxTranslator):
     # https://www.sphinx-doc.org/en/master/extdev/nodes.html?highlight=compact_paragraph#sphinx.addnodes.compact_paragraph
 
     def visit_compact_paragraph(self, node):
-        pass #TODO: review
+        pass  # TODO: review
 
     def depart_compact_paragraph(self, node):
         pass
@@ -408,7 +408,7 @@ class MystTranslator(SphinxTranslator):
         self.remove_newline()
         self.output.append(self.syntax.depart_directive())
         self.add_newparagraph()
-        self.danger= False
+        self.danger = False
 
     # docutils.elements.date
     # https://docutils.sourceforge.io/docs/ref/doctree.html#date
@@ -501,7 +501,6 @@ class MystTranslator(SphinxTranslator):
         else:
             self.output.append(self.syntax.depart_italic())
 
-
     # docutils.elements.entry
     # uses: table?
     # https://docutils.sourceforge.io/docs/ref/doctree.html#entry
@@ -527,13 +526,13 @@ class MystTranslator(SphinxTranslator):
         if not self.List:
             self.List = List(marker=marker)
         else:
-            #Finalise any open List Item
+            # Finalise any open List Item
             if self.List.list_item:
                 self.List.add_list_item()
             self.List = List(marker=marker, parent=self.List)
 
     def depart_enumerated_list(self, node):
-        if self.List.parent == 'base':
+        if self.List.parent == "base":
             self.output.append(self.List.to_markdown())
             self.add_newparagraph()
             self.List = None
@@ -552,7 +551,7 @@ class MystTranslator(SphinxTranslator):
         self.remove_newline()
         self.output.append(self.syntax.depart_directive())
         self.add_newparagraph()
-        self.error= False
+        self.error = False
 
     # docutils.elements.field
     # https://docutils.sourceforge.io/docs/ref/doctree.html#field
@@ -569,7 +568,7 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#field-body
 
     def visit_field_body(self, node):
-        self.visit_definition(node)  #TODO: review if wrapper of definition
+        self.visit_definition(node)  # TODO: review if wrapper of definition
 
     def depart_field_body(self, node):
         self.depart_definition(node)
@@ -599,8 +598,8 @@ class MystTranslator(SphinxTranslator):
         """
         Note: additional options need parsing in image node
         """
-        self.figure['in'] = True
-        self.figure['figure-options'] = self.infer_figure_attrs(node)
+        self.figure["in"] = True
+        self.figure["figure-options"] = self.infer_figure_attrs(node)
 
     def infer_figure_attrs(self, node):
         """
@@ -611,18 +610,18 @@ class MystTranslator(SphinxTranslator):
         options = {}
         if node.hasattr("align"):
             align = node.attributes["align"]
-            if align not in ["default"]:  #if not set may have default value = default
-                options['align'] = align
+            if align not in ["default"]:  # if not set may have default value = default
+                options["align"] = align
         if node.hasattr("width"):
-            options['figwidth'] = node.attributes["width"]
+            options["figwidth"] = node.attributes["width"]
         if len(node.attributes["classes"]) > 0:
-            classes = str(node.attributes["classes"]).strip('[]').strip("'")
-            options['figclass'] = classes
+            classes = str(node.attributes["classes"]).strip("[]").strip("'")
+            options["figclass"] = classes
         return options
 
     def depart_figure(self, node):
-        self.figure['in'] = False
-        self.figure['figure-options'] = None
+        self.figure["in"] = False
+        self.figure["figure-options"] = None
 
     # docutils.elements.footer
     # https://docutils.sourceforge.io/docs/ref/doctree.html#footer
@@ -640,19 +639,21 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#footnote-reference
 
     def visit_footnote_reference(self, node):
-        self.footnote_reference['in'] = True
+        self.footnote_reference["in"] = True
         if node.hasattr("refid"):
-            refid = node.attributes['refid']
+            refid = node.attributes["refid"]
             ids = node.astext()
-            self.footnote_reference['link'] = "<sup>[{}](#{})</sup>".format(ids, refid) #TODO: can this be harmonized with HTML
-            self.output.append(self.footnote_reference['link'])
+            self.footnote_reference["link"] = "<sup>[{}](#{})</sup>".format(
+                ids, refid
+            )  # TODO: can this be harmonized with HTML
+            self.output.append(self.footnote_reference["link"])
             raise nodes.SkipNode
         else:
             msg = "[footnote_reference] unable to find refid"
             logger.warn(msg)
 
     def depart_footnote_reference(self, node):
-        self.footnote_reference['in'] = False
+        self.footnote_reference["in"] = False
 
     # docutils.elements.generated
     # https://docutils.sourceforge.io/docs/ref/doctree.html#generated
@@ -682,7 +683,7 @@ class MystTranslator(SphinxTranslator):
         self.remove_newline()
         self.output.append(self.syntax.depart_directive())
         self.add_newparagraph()
-        self.hint= False
+        self.hint = False
 
     # docutils.elements.image
     # https://docutils.sourceforge.io/docs/ref/rst/directives.html#images
@@ -692,20 +693,20 @@ class MystTranslator(SphinxTranslator):
         1. the scale, height and width properties are not combined in this
         implementation as is done in http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
         """
-        self.image['in'] = True
+        self.image["in"] = True
         # Image wrapped within a reference
         if self.reference:
             if self.output[-1] == self.syntax.visit_reference():
                 self.output.pop()
-                self.image['skip-reference'] = True
+                self.image["skip-reference"] = True
         options = self.infer_image_attrs(node)
-        if self.figure['in']:
-            figure_options = self.figure['figure-options']
-            options = {**options, **figure_options} #Figure options take precedence
+        if self.figure["in"]:
+            figure_options = self.figure["figure-options"]
+            options = {**options, **figure_options}  # Figure options take precedence
         options = self.myst_options(options)
         uri = node.attributes["uri"]
         self.images.append(uri)
-        if self.figure['in']:
+        if self.figure["in"]:
             syntax = self.syntax.visit_figure(uri, options)
         else:
             syntax = self.syntax.visit_image(uri, options)
@@ -722,19 +723,19 @@ class MystTranslator(SphinxTranslator):
         :target: -> node.parent = docutils.nodes.reference
         """
         options = {}
-        for option in ['alt', 'height', 'width', 'scale', 'align']:
+        for option in ["alt", "height", "width", "scale", "align"]:
             if node.hasattr(option):
                 options[option] = node.attributes[option]
         if type(node.parent) is nodes.reference:
-            if node.parent.hasattr('refuri'):
-                options['target'] = node.parent.attributes['refuri']
+            if node.parent.hasattr("refuri"):
+                options["target"] = node.parent.attributes["refuri"]
         return options
 
     def depart_image(self, node):
         self.add_newline()
         self.output.append(self.syntax.depart_figure())
         self.add_newparagraph()
-        self.image['in'] = False
+        self.image["in"] = False
 
     # docutils.elements.important
     # https://docutils.sourceforge.io/docs/ref/doctree.html#important
@@ -748,17 +749,17 @@ class MystTranslator(SphinxTranslator):
         self.remove_newline()
         self.output.append(self.syntax.depart_directive())
         self.add_newparagraph()
-        self.important= False
+        self.important = False
 
     # sphinx.nodes.index
     # https://www.sphinx-doc.org/en/master/extdev/nodes.html#new-inline-nodes
     # https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#index-generating-markup
 
     def visit_index(self, node):
-        self.index['in'] = True
-        inline = True  #default value
+        self.index["in"] = True
+        inline = True  # default value
         if node.hasattr("inline"):
-            inline = node.attributes['inline']
+            inline = node.attributes["inline"]
         if inline:
             syntax = self.parse_index_as_role(node)
         else:
@@ -769,25 +770,27 @@ class MystTranslator(SphinxTranslator):
     def parse_index_as_role(self, node):
         # TODO: this information should be recoverable from node.parent
         # by iterating over the children
-        self.index['type'] = 'role'
+        self.index["type"] = "role"
         docname = self.builder.current_docname
         line = node.line
         msg = """
         [{}:{}] contains an inline :index: role that cannot be converted.
-        """.format(docname, line).strip()
+        """.format(
+            docname, line
+        ).strip()
         logger.warning(msg)
         raise nodes.SkipNode
 
     def parse_index_as_directive(self, node):
-        self.index['type'] = 'directive'
+        self.index["type"] = "directive"
         syntax = []
         syntax.append(self.syntax.visit_directive("index"))
         options = []
-        for entry in node.attributes['entries']:
+        for entry in node.attributes["entries"]:
             entrytype, entryname, target, ignored, key = entry
             syntax.append("{}: {}".format(entrytype, entryname))
-            #Sphinx > 3.0
-            if not re.match("index-", target) and target != '':
+            # Sphinx > 3.0
+            if not re.match("index-", target) and target != "":
                 option = ":name: {}".format(target)
                 if option not in options:
                     options.append(option)
@@ -796,9 +799,9 @@ class MystTranslator(SphinxTranslator):
         return "\n".join(syntax)
 
     def depart_index(self, node):
-        self.index['in'] = False
-        self.index['type'] = None
-        self.index['skip-target'] = True
+        self.index["in"] = False
+        self.index["type"] = None
+        self.index["skip-target"] = True
 
     # docutils.elements.inline
     # uses: container?
@@ -825,7 +828,9 @@ class MystTranslator(SphinxTranslator):
                 id_text += "{} ".format(id_)
             else:
                 id_text = id_text[:-1]
-            self.output.append("<a id='{}'></a>\n**[{}]** ".format(id_text, node.astext())) #TODO: can this be harmonized with HTML
+            self.output.append(
+                "<a id='{}'></a>\n**[{}]** ".format(id_text, node.astext())
+            )  # TODO: can this be harmonized with HTML
             raise nodes.SkipNode
 
         if self.citation:
@@ -843,7 +848,7 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#line-blocks
 
     def visit_line(self, node):
-        pass  #TODO: remove? use SphinxTranslator version
+        pass  # TODO: remove? use SphinxTranslator version
 
     def depart_line(self, node):
         pass
@@ -852,7 +857,7 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#line-block
 
     def visit_line_block(self, node):
-        pass #TODO: remove? use SphinxTranslator version
+        pass  # TODO: remove? use SphinxTranslator version
 
     def depart_line_block(self, node):
         pass
@@ -867,13 +872,12 @@ class MystTranslator(SphinxTranslator):
         if self.List.list_item:
             self.List.add_list_item()
 
-
     # docutils.element.literal
     # https://docutils.sourceforge.io/docs/ref/doctree.html#literal
 
     def visit_literal(self, node):
         if self.download_reference:
-            return            #TODO: can we just raise SkipNode?
+            return  # TODO: can we just raise SkipNode?
 
         if self.List:
             self.List.addto_list_item(self.syntax.visit_literal())
@@ -900,7 +904,7 @@ class MystTranslator(SphinxTranslator):
             syntax = self.syntax.visit_literal_block(self.nodelang)
         else:
             syntax = self.syntax.visit_literal_block()
-        #option block parsing
+        # option block parsing
         if options != []:
             options = "\n".join(options)
             syntax = syntax + "\n" + options
@@ -920,24 +924,28 @@ class MystTranslator(SphinxTranslator):
         attributes = node.attributes
         options = []
         options.append("---")
-        if node.hasattr('linenos') and attributes['linenos']:
+        if node.hasattr("linenos") and attributes["linenos"]:
             options.append("linenos:")
-        if node.hasattr('highlight_args'):
-            if 'linenostart' in attributes['highlight_args']:
-                options.append("lineno-start: {}".format(attributes['highlight_args']['linenostart']))
-            if 'hl_lines' in attributes['highlight_args']:
-                vals = str(attributes['highlight_args']['hl_lines']).strip('[]')
+        if node.hasattr("highlight_args"):
+            if "linenostart" in attributes["highlight_args"]:
+                options.append(
+                    "lineno-start: {}".format(
+                        attributes["highlight_args"]["linenostart"]
+                    )
+                )
+            if "hl_lines" in attributes["highlight_args"]:
+                vals = str(attributes["highlight_args"]["hl_lines"]).strip("[]")
                 options.append("emphasize-lines: {}".format(vals))
         if type(node.parent) is nodes.container:
-            if node.parent.hasattr('names'):
-                vals = str(node.parent.attributes['names']).strip('[]').strip("'")
+            if node.parent.hasattr("names"):
+                vals = str(node.parent.attributes["names"]).strip("[]").strip("'")
                 options.append("name: {}".format(vals))
             # Check children for caption
             for child in node.parent.children:
                 if type(child) is nodes.caption:
                     caption = child.astext()
                     options.append("caption: {}".format(caption))
-        if node.hasattr("force") and attributes['force']:
+        if node.hasattr("force") and attributes["force"]:
             options.append("force:")
         options.append("---")
         if len(options) == 2:
@@ -983,12 +991,12 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#math-block
 
     def visit_math_block(self, node):
-        self.math_block['in'] = True
-        self.math_block['options'] = self.infer_math_block_attrs(node)
-        if self.math_block['options']:
+        self.math_block["in"] = True
+        self.math_block["options"] = self.infer_math_block_attrs(node)
+        if self.math_block["options"]:
             self.output.append(self.syntax.visit_directive("math"))
             self.add_newline()
-            self.output.append(self.math_block['options'])
+            self.output.append(self.math_block["options"])
             self.add_newparagraph()
         else:
             self.output.append(self.syntax.visit_math_block())
@@ -1004,12 +1012,12 @@ class MystTranslator(SphinxTranslator):
         return "\n".join(options)
 
     def depart_math_block(self, node):
-        if self.math_block['options']:
+        if self.math_block["options"]:
             self.output.append(self.syntax.depart_directive())
         else:
             self.output.append(self.syntax.depart_math_block())
         self.add_newparagraph()
-        self.math_block['in'] = False
+        self.math_block["in"] = False
 
     # docutils.elements.paragraph
     # https://docutils.sourceforge.io/docs/ref/doctree.html#paragraph
@@ -1033,7 +1041,7 @@ class MystTranslator(SphinxTranslator):
     # https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-only
 
     def visit_only(self, node):
-        pass  #TODO: can this be removed in favour of default method
+        pass  # TODO: can this be removed in favour of default method
 
     def depart_only(self, node):
         pass
@@ -1058,9 +1066,9 @@ class MystTranslator(SphinxTranslator):
     def depart_paragraph(self, node):
         if self.List:
             if self.List.list_item:
-                self.List.addto_list_item("<\\paragraph>")  #Used for Formating
+                self.List.addto_list_item("<\\paragraph>")  # Used for Formating
             return
-        if self.block_quote['in'] and self.block_quote['type'] != 'block_quote':
+        if self.block_quote["in"] and self.block_quote["type"] != "block_quote":
             self.add_newline()
             return
         self.add_newparagraph()
@@ -1079,13 +1087,13 @@ class MystTranslator(SphinxTranslator):
     # https://www.sphinx-doc.org/en/master/extdev/nodes.html#sphinx.addnodes.pending_xref
 
     def visit_pending_xref(self, node):
-        reftype = node.attributes['reftype']
-        target = node.attributes['reftarget']
+        reftype = node.attributes["reftype"]
+        target = node.attributes["reftarget"]
         linktext = node.astext()
         if reftype == "eq":
             content = "{}".format(target)
         else:
-            #doc, ref style links
+            # doc, ref style links
             content = "{} <{}>".format(linktext, target)
         syntax = self.syntax.visit_role(reftype, content)
         if self.List:
@@ -1119,7 +1127,7 @@ class MystTranslator(SphinxTranslator):
 
     def visit_raw(self, node):
         self.raw = True
-        rawformat = node.attributes['format']
+        rawformat = node.attributes["format"]
         options = self.infer_raw_attrs(node)
         self.output.append(self.syntax.visit_raw(rawformat))
         self.add_newline()
@@ -1130,9 +1138,11 @@ class MystTranslator(SphinxTranslator):
             fn = self.builder.current_docname
             line = node.line
             msg = "[{}:{}] raw directive specifies a source file. The contents of this \
-file will be included in the myst directive".format(fn, line)
+file will be included in the myst directive".format(
+                fn, line
+            )
             logger.info(msg)
-        #TODO: add support for :url and :encoding:
+        # TODO: add support for :url and :encoding:
 
     def depart_raw(self, node):
         self.add_newline()
@@ -1143,15 +1153,15 @@ file will be included in the myst directive".format(fn, line)
     # docutils.elements.references
     # https://docutils.sourceforge.io/docs/ref/doctree.html#reference
 
-    #TODO: rework references
-    #TODO: add syntax too MarkdownSyntax, MystSyntax
+    # TODO: rework references
+    # TODO: add syntax too MarkdownSyntax, MystSyntax
 
     def visit_reference(self, node):
         self.reference = True
         syntax = self.syntax.visit_reference()
         if self.List:
             self.List.addto_list_item(syntax)
-        elif self.figure['in'] or self.image['in']:
+        elif self.figure["in"] or self.image["in"]:
             pass
         else:
             self.output.append(syntax)
@@ -1160,49 +1170,54 @@ file will be included in the myst directive".format(fn, line)
         subdirectory = False
         formatted_text = ""
 
-        if self.image['skip-reference']:
-            self.image['skip-reference'] = False
+        if self.image["skip-reference"]:
+            self.image["skip-reference"] = False
             self.reference = False
             return
 
         if self.topic:
             # Jupyter Notebook uses the target text as its id
-            uri_text = node.astext().replace(" ","-")
+            uri_text = node.astext().replace(" ", "-")
             formatted_text = "](#{})".format(uri_text)
-            #self.output.append(formatted_text)
+            # self.output.append(formatted_text)
         else:
             # if refuri exists, then it includes id reference
             if "refuri" in node.attributes:
                 refuri = node["refuri"]
                 # add default extension(.ipynb)
-                if "internal" in node.attributes and node.attributes["internal"] == True:
+                if (
+                    "internal" in node.attributes
+                    and node.attributes["internal"] == True
+                ):
                     refuri = self.add_extension_to_inline_link(refuri, self.default_ext)
             else:
                 # in-page link
                 if "refid" in node:
                     refid = node["refid"]
                     self.inpage_reference = True
-                    #markdown doesn't handle closing brackets very well so will replace with %28 and %29
+                    # markdown doesn't handle closing brackets very well so will replace with %28 and %29
                     refid = refid.replace("(", "%28")
                     refid = refid.replace(")", "%29")
-                    #markdown target
+                    # markdown target
                     refuri = "#{}".format(refid)
                 # error
                 else:
                     self.error("Invalid reference")
                     refuri = ""
 
-            #TODO: review if both %28 replacements necessary in this function?
+            # TODO: review if both %28 replacements necessary in this function?
             #      Propose delete above in-link refuri
-            #ignore adjustment when targeting pdf as pandoc doesn't parse %28 correctly
-            refuri = refuri.replace("(", "%28")  #Special case to handle markdown issue with reading first )
+            # ignore adjustment when targeting pdf as pandoc doesn't parse %28 correctly
+            refuri = refuri.replace(
+                "(", "%28"
+            )  # Special case to handle markdown issue with reading first )
             refuri = refuri.replace(")", "%29")
             formatted_text = self.syntax.depart_reference(refuri)
 
         ## if there is a list add to it, else add it to the output
         if self.List:
             self.List.addto_list_item(formatted_text)
-        elif self.figure['in'] or self.image['in']:
+        elif self.figure["in"] or self.image["in"]:
             pass
         else:
             self.output.append(formatted_text)
@@ -1225,8 +1240,10 @@ file will be included in the myst directive".format(fn, line)
     # https://docutils.sourceforge.io/docs/ref/doctree.html#rubric
 
     def visit_rubric(self, node):
-        if len(node.children) == 1 and node.children[0].astext() in ['Footnotes']:
-            self.output.append('**{}**\n\n'.format(node.children[0].astext()))            #TODO: add to MarkdownSyntax?
+        if len(node.children) == 1 and node.children[0].astext() in ["Footnotes"]:
+            self.output.append(
+                "**{}**\n\n".format(node.children[0].astext())
+            )  # TODO: add to MarkdownSyntax?
             raise nodes.SkipNode
 
     def depart_rubric(self, node):
@@ -1277,7 +1294,9 @@ file will be included in the myst directive".format(fn, line)
     # https://docutils.sourceforge.io/docs/ref/doctree.html#system-message
 
     def visit_system_message(self, node):
-        msg = "[system_mesage] typically handeled by transform/post-transform\n\n{}".format(node.astext())
+        msg = "[system_mesage] typically handeled by transform/post-transform\n\n{}".format(
+            node.astext()
+        )
         logger.info(msg)
         raise nodes.SkipNode
 
@@ -1301,14 +1320,14 @@ file will be included in the myst directive".format(fn, line)
     # https://docutils.sourceforge.io/docs/ref/doctree.html#target
 
     def visit_target(self, node):
-        if self.index['skip-target']:
+        if self.index["skip-target"]:
             raise nodes.SkipNode
         if "refid" in node.attributes:
             self.output.append(self.syntax.visit_target(node.attributes["refid"]))
             self.add_newline()
 
     def depart_target(self, node):
-        self.index['skip-target'] = False
+        self.index["skip-target"] = False
 
     # docutils.elements.tbody
     # uses: table
@@ -1400,7 +1419,7 @@ file will be included in the myst directive".format(fn, line)
         self.toctree = True
         listing, options = self.infer_toctree_attrs(node)
         options = self.myst_options(options)
-        self.output.append(self.syntax.visit_directive('toctree', options=options))
+        self.output.append(self.syntax.visit_directive("toctree", options=options))
         self.add_newparagraph()
         self.output.append("\n".join(listing))
         self.add_newline()
@@ -1409,39 +1428,39 @@ file will be included in the myst directive".format(fn, line)
         """
         https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-toctree
         """
-        #Parse File Listing
+        # Parse File Listing
         listing = []
         if node.hasattr("entries"):
-            for entry in node.attributes['entries']:
+            for entry in node.attributes["entries"]:
                 title, fn = entry
                 listing.append(fn)
-        #Parse Options
+        # Parse Options
         options = {}
         if node.hasattr("hidden"):
             if node.attributes["hidden"]:
-                options['hidden'] = ''
+                options["hidden"] = ""
         if node.hasattr("numbered"):
-            if node.attributes['numbered'] == 999:   #top level default value
-                options['numbered'] = ''
+            if node.attributes["numbered"] == 999:  # top level default value
+                options["numbered"] = ""
         if node.hasattr("caption"):
-            if node.attributes['caption'] is not None:
-                options['caption'] = node.attributes['caption']
-        #TODO: implement :name: option
-        if node.hasattr('titlesonly'):
-            if node.attributes['titlesonly']:
-                options['titlesonly'] = ''
-        if node.hasattr('glob'):
-            if node.attributes['glob']:
-                options['glob'] = ''
-        if node.hasattr('reversed'):
-            if node.attributes['reversed']:
-                options['reversed'] = ''
-        if node.hasattr('includehidden'):
-            if node.attributes['includehidden']:
-                options['includehidden'] = ''
-        if node.hasattr('maxdepth'):
-            if node.attributes['maxdepth'] != -1:  #default value -1
-                options['maxdepth'] = node.attributes['maxdepth']
+            if node.attributes["caption"] is not None:
+                options["caption"] = node.attributes["caption"]
+        # TODO: implement :name: option
+        if node.hasattr("titlesonly"):
+            if node.attributes["titlesonly"]:
+                options["titlesonly"] = ""
+        if node.hasattr("glob"):
+            if node.attributes["glob"]:
+                options["glob"] = ""
+        if node.hasattr("reversed"):
+            if node.attributes["reversed"]:
+                options["reversed"] = ""
+        if node.hasattr("includehidden"):
+            if node.attributes["includehidden"]:
+                options["includehidden"] = ""
+        if node.hasattr("maxdepth"):
+            if node.attributes["maxdepth"] != -1:  # default value -1
+                options["maxdepth"] = node.attributes["maxdepth"]
         return listing, options
 
     def depart_toctree(self, node):
@@ -1454,7 +1473,7 @@ file will be included in the myst directive".format(fn, line)
 
     def visit_topic(self, node):
         # docutils.contents (https://docutils.sourceforge.io/docs/ref/rst/directives.html#table-of-contents)
-        if 'contents' in node.attributes['classes']:
+        if "contents" in node.attributes["classes"]:
             title, options = self.infer_contents_attrs(node)
             options = self.myst_options(options)
             self.output.append(self.syntax.visit_directive("contents", title, options))
@@ -1466,20 +1485,22 @@ file will be included in the myst directive".format(fn, line)
         title, options = None, {}
         for child in node.children:
             if type(child) is nodes.title:
-                    title = child.astext()  #This will add default "Contents" to myst output
+                title = (
+                    child.astext()
+                )  # This will add default "Contents" to myst output
             if type(child) is nodes.pending:
-                if 'depth' in child.details:
-                    options['depth'] = child.details['depth']
-                if 'local' in child.details:
-                    options['local'] = ''
-                if 'backlinks' in child.details:
-                    options['backlinks'] = child.details['backlinks']
-                if 'class' in child.details:
-                    options['class'] = ", ".join(child.details['class'])
+                if "depth" in child.details:
+                    options["depth"] = child.details["depth"]
+                if "local" in child.details:
+                    options["local"] = ""
+                if "backlinks" in child.details:
+                    options["backlinks"] = child.details["backlinks"]
+                if "class" in child.details:
+                    options["class"] = ", ".join(child.details["class"])
         return title, options
 
     def depart_topic(self, node):
-        if 'contents' in node.attributes['classes']:
+        if "contents" in node.attributes["classes"]:
             self.output.append(self.syntax.depart_directive())
             self.add_newparagraph()
         self.topic = False
@@ -1504,7 +1525,7 @@ file will be included in the myst directive".format(fn, line)
         self.add_newparagraph()
         self.warning = False
 
-    #-Extension Support-#
+    # -Extension Support-#
 
     def visit_todo_node(self, node):
         """ Support for sphinx.ext.todo """
@@ -1517,9 +1538,9 @@ file will be included in the myst directive".format(fn, line)
         self.add_newparagraph()
         self.todo = False
 
-    #-----------#
-    #-Utilities-#
-    #-----------#
+    # -----------#
+    # -Utilities-#
+    # -----------#
 
     def strip_whitespace(self, text):
         text = text.split("\n")
@@ -1533,9 +1554,9 @@ file will be included in the myst directive".format(fn, line)
         self.output.append("\n" * n)
 
     def remove_newline(self):
-        if self.output[-1] == '\n\n':
-            self.output[-1] = '\n'
-        elif self.output[-1] == '\n':
+        if self.output[-1] == "\n\n":
+            self.output[-1] = "\n"
+        elif self.output[-1] == "\n":
             self.output.pop()
 
     def add_newparagraph(self):
@@ -1565,7 +1586,7 @@ file will be included in the myst directive".format(fn, line)
                 return "{}{}".format(uri, ext)
             else:
                 return "{}{}#{}".format(uri, ext, id_)
-        #adjust relative references
+        # adjust relative references
         elif "../" in uri:
             # uri = uri.replace("../", "")
             uri, id_ = cls.split_uri_id(uri)
@@ -1591,19 +1612,18 @@ file will be included in the myst directive".format(fn, line)
     # Myst Support
     @staticmethod
     def myst_options(options):
-        """ return myst options block
-        """
+        """return myst options block"""
         num_options = len(options.keys())
         myst_options = []
         if num_options == 0:
             return myst_options
-        elif num_options < 2:   #TODO parameterise this in conf.py
+        elif num_options < 2:  # TODO parameterise this in conf.py
             for option, option_val in options.items():
                 myst_options.append(":{}: {}".format(option, option_val).rstrip())
             return myst_options
         else:
             myst_options.append("---")
             for item in sorted(options.keys()):
-                myst_options.append('{}: {}'.format(item, options[item]))
+                myst_options.append("{}: {}".format(item, options[item]))
             myst_options.append("---")
             return myst_options

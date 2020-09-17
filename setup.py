@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 VERSION = 'v0.1.0a'
 
 LONG_DESCRIPTION = """
-This package contains a `Sphinx <http://www.sphinx-doc.org/en/master/>`_ extension 
+This package contains a `Sphinx <http://www.sphinx-doc.org/en/master/>`_ extension
 for converting to rst to myst documents from the sphinx AST.
 
 This project is maintained and supported by `mmcky <http://mmcky.org/>`_.
@@ -57,5 +57,6 @@ setup(
             "pytest-regressions",
         ],
     },
+    include_package_data=True,
     namespace_packages=['sphinxcontrib'],
 )

@@ -5,7 +5,7 @@ from sphinx.application import Sphinx
 from .builders import MystBuilder
 from .transform import InterceptAST
 
-DEFAULT_JUPYTEXT_HEADER="""
+DEFAULT_JUPYTEXT_HEADER = """
 ---
 jupytext:
   text_representation:
@@ -18,18 +18,19 @@ kernelspec:
 ---
 """
 
+
 def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_builder(MystBuilder)
 
     app.add_transform(InterceptAST)
-    app.add_config_value("tomyst_static_file_path", ['_static'], "tomyst")
-    
-    #JupyText Compatibility
+    app.add_config_value("tomyst_static_file_path", ["_static"], "tomyst")
+
+    # JupyText Compatibility
     app.add_config_value("tomyst_jupytext", False, "tomyst")
     app.add_config_value("tomyst_jupytext_header", DEFAULT_JUPYTEXT_HEADER, "tomyst")
 
     return {
-        'version': 'builtin',
-        'parallel_read_safe': True,
-        'parallel_write_safe': True,
+        "version": "builtin",
+        "parallel_read_safe": True,
+        "parallel_write_safe": True,
     }

@@ -3,9 +3,10 @@ from typing import cast
 
 from .translator import MystTranslator
 
+
 class MystWriter(writers.Writer):
-    supported = ('myst',)
-    settings_spec = ('No options here.', '', ())
+    supported = ("myst",)
+    settings_spec = ("No options here.", "", ())
     settings_defaults = {}  # type: Dict
 
     output = None  # type: str
@@ -17,8 +18,10 @@ class MystWriter(writers.Writer):
 
     def translate(self) -> None:
         if self.PRE_TRANSFORM:
-            reporter = self.document.reporter                            #save current reporter
-            self.document = self.document.document_pretransforms         #pass pre-transforms document to writer
+            reporter = self.document.reporter  # save current reporter
+            self.document = (
+                self.document.document_pretransforms
+            )  # pass pre-transforms document to writer
             self.document.reporter = reporter
         visitor = self.builder.create_translator(self.document, self.builder)
         self.document.walkabout(visitor)

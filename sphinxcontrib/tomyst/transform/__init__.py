@@ -9,8 +9,10 @@ from sphinx.util import logging
 
 logger = logging.getLogger(__name__)
 
+
 def intercept_ast(config, document, tags):
     document.document_pretransforms = document.deepcopy()
+
 
 class InterceptAST(SphinxTransform):
 
@@ -18,4 +20,3 @@ class InterceptAST(SphinxTransform):
 
     def apply(self):
         intercept_ast(self.config, self.document, self.app.builder.tags)
-
