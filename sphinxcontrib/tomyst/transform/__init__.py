@@ -2,9 +2,7 @@
 Transform to Intercept Sphinx AST before transforms/post-transforms
 """
 
-from docutils import nodes
 from sphinx.transforms import SphinxTransform
-from sphinx import addnodes
 from sphinx.util import logging
 
 logger = logging.getLogger(__name__)

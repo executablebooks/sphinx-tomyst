@@ -3,7 +3,6 @@ Provides accumulator objects to assist with building Syntax
 """
 
 import re
-from docutils import nodes
 
 
 class ListBuilder:

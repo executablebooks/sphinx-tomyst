@@ -1,4 +1,4 @@
-from typing import Any, Dict, Generator, List, Iterable, Optional, Set, Tuple, Union
+from typing import Any, Dict
 
 from sphinx.application import Sphinx
 
@@ -27,7 +27,9 @@ def setup(app: Sphinx) -> Dict[str, Any]:
 
     # JupyText Compatibility
     app.add_config_value("tomyst_jupytext", False, "tomyst")
-    app.add_config_value("tomyst_jupytext_header", DEFAULT_JUPYTEXT_HEADER, "tomyst")
+    app.add_config_value(
+        "tomyst_jupytext_header", DEFAULT_JUPYTEXT_HEADER, "tomyst"
+    )  # noqa: E501
 
     return {
         "version": "builtin",

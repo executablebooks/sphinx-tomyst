@@ -9,12 +9,7 @@ https://github.com/sphinx-doc/sphinx/blob/275d93b5068a4b6af4c912d5bebb2df9284160
 
 from __future__ import unicode_literals
 import re
-from docutils import nodes, writers
-from shutil import copyfile
-import copy
-import os
-import time
-from collections import OrderedDict
+from docutils import nodes
 
 from sphinx.util import logging
 from sphinx.util.docutils import SphinxTranslator
@@ -1187,7 +1182,7 @@ file will be included in the myst directive".format(
                 # add default extension(.ipynb)
                 if (
                     "internal" in node.attributes
-                    and node.attributes["internal"] == True
+                    and node.attributes["internal"] is True
                 ):
                     refuri = self.add_extension_to_inline_link(refuri, self.default_ext)
             else:
@@ -1214,7 +1209,7 @@ file will be included in the myst directive".format(
             refuri = refuri.replace(")", "%29")
             formatted_text = self.syntax.depart_reference(refuri)
 
-        ## if there is a list add to it, else add it to the output
+        # if there is a list add to it, else add it to the output
         if self.List:
             self.List.addto_list_item(formatted_text)
         elif self.figure["in"] or self.image["in"]:

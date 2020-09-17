@@ -8,7 +8,7 @@ A MyST Sphinx Builder
 :licences: see LICENSE for details
 """
 
-from typing import Any, Dict, Iterator, Set, Tuple
+from typing import Dict, Iterator, Set, Tuple
 from os import path
 from sphinx.util.fileutil import copy_asset
 
@@ -83,7 +83,7 @@ class MystBuilder(Builder):
         """Copies Makefile and conf.py to _build/myst."""
         import io
 
-        makefile = path.join(self.confdir, "Makefile")
+        # makefile = path.join(self.confdir, "Makefile")
         src_conf = path.join(self.confdir, "conf.py")
         dest_conf = path.join(self.outdir, "conf.py")
 
