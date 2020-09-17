@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-VERSION = 'v0.1.0a'
+VERSION = "v0.1.0a"
 
 LONG_DESCRIPTION = """
 This package contains a `Sphinx <http://www.sphinx-doc.org/en/master/>`_ extension
@@ -24,30 +24,32 @@ Status
 
 """
 
-requires = ['Sphinx>=0.6']
+requires = ["Sphinx>=0.6"]
 
 setup(
-    name='sphinxcontrib-tomyst',
+    name="sphinxcontrib-tomyst",
     version=VERSION,
-    url='https://github.com/mmcky/sphinxcontrib-tomyst',
-    download_url='https://github.com/mmcky/sphinxcontrib-tomyst/archive/{}.tar.gz'.format(VERSION),
-    license='BSD',
-    author='QuantEcon',
-    author_email='admin@quantecon.org',
+    url="https://github.com/mmcky/sphinxcontrib-tomyst",
+    download_url="https://github.com/mmcky/sphinxcontrib-tomyst/archive/{}.tar.gz".format(
+        VERSION
+    ),
+    license="BSD",
+    author="QuantEcon",
+    author_email="admin@quantecon.org",
     description='Sphinx "MyST" extension: Convert your RST files into MyST documents.',
     long_description=LONG_DESCRIPTION,
     zip_safe=False,
     classifiers=[
-        'Development Status :: 4 - Beta',
-        'Framework :: Sphinx',
-        'Operating System :: OS Independent',
-        'Programming Language :: Python :: 3',
-        'Framework :: Sphinx :: Extension',
+        "Development Status :: 4 - Beta",
+        "Framework :: Sphinx",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3",
+        "Framework :: Sphinx :: Extension",
     ],
-    platforms='any',
+    platforms="any",
     packages=find_packages(),
     include_package_data=True,
-    install_requires=['docutils', 'sphinx'],
+    install_requires=["docutils", "sphinx"],
     extras_require={
         # "code_style": ["flake8<3.8.0,>=3.7.0", "black", "pre-commit==1.17.0"],
         "testing": [
@@ -57,5 +59,5 @@ setup(
             "pytest-regressions",
         ],
     },
-    namespace_packages=['sphinxcontrib'],
+    namespace_packages=["sphinxcontrib"],
 )
