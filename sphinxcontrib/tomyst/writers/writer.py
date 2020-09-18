@@ -1,7 +1,6 @@
 from docutils import writers
 from typing import cast, Dict
 
-from ..builders import MystBuilder
 from .translator import MystTranslator
 
 

@@ -55,7 +55,7 @@
                         Example, EX
         <paragraph>
             This document contains test cases for elements that
-            are
+            are 
             <strong>
                 not
              directives.
@@ -128,11 +128,11 @@
                     <paragraph>
                         Step 2.
             <paragraph>
-                For extended
+                For extended 
                 <strong>
                     list
                  testing please refer
-                to the
+                to the 
                 <reference name="list" refuri="list">
                     list
                  test page.
@@ -140,10 +140,10 @@
             <title>
                 definition_list
             <paragraph>
-                This tests
+                This tests 
                 <literal>
                     definition
-                ,
+                , 
                 <literal>
                     definition_list
                  and
@@ -173,7 +173,7 @@
                 just underneath the first title.
             <paragraph>
                 They don’t appear to be transformed by sphinx/docutils
-                to be
+                to be 
                 <title_reference>
                     docinfo
                  elements.
@@ -184,7 +184,7 @@
             <title>
                 emphasis
             <paragraph>
-                This is
+                This is 
                 <emphasis>
                     emphasis
                  markup text
