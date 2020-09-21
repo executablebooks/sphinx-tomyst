@@ -113,8 +113,8 @@ class MystTranslator(SphinxTranslator):
         self.target_jupytext = self.builder.config['tomyst_jupytext']
         self.default_ext = ".myst"
         self.default_language = self.builder.config['tomyst_default_language']
-        self.language_synonyms = \
-            self.builder.config['tomyst_language_synonyms'].append(self.default_language)
+        self.language_synonyms = self.builder.config['tomyst_language_synonyms']
+        self.language_synonyms.append(self.default_language)
         self.images = []
         self.section_level = 0
 
