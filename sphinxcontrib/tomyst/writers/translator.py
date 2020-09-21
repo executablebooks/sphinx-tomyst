@@ -941,6 +941,8 @@ class MystTranslator(SphinxTranslator):
         :dedent: option cannot be inferred as text is already altered
         but could be a PR upstream in
         sphinx/directives/code.py -> literal['dedent'] = self.options['dedent']
+
+        # TODO: Rework this function to be dict(options)
         """
         attributes = node.attributes
         options = []
@@ -968,6 +970,8 @@ class MystTranslator(SphinxTranslator):
                     options.append("caption: {}".format(caption))
         if node.hasattr("force") and attributes["force"]:
             options.append("force:")
+        if self.target_jupytext and "skip-test" in node.attributes["classes"]:
+            options.append("tags: [raises-exception]")
         options.append("---")
         if len(options) == 2:
             options = []
