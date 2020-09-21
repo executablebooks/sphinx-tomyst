@@ -106,14 +106,14 @@ class MystTranslator(SphinxTranslator):
         A Myst(Markdown) Translator
         """
         super().__init__(document, builder)
-        #Config
-        self.target_jupytext = self.builder.config['tomyst_jupytext']
+        # Config
+        self.target_jupytext = self.builder.config["tomyst_jupytext"]
         self.default_ext = ".myst"
-        self.default_language = self.builder.config['tomyst_default_language']
-        self.language_synonyms = self.builder.config['tomyst_language_synonyms']
+        self.default_language = self.builder.config["tomyst_default_language"]
+        self.language_synonyms = self.builder.config["tomyst_language_synonyms"]
         self.language_synonyms.append(self.default_language)
         self.debug = self.builder.config["tomyst_debug"]
-        #Document Settings
+        # Document Settings
         self.syntax = MystSyntax()
         self.images = []
         self.section_level = 0
@@ -146,8 +146,8 @@ class MystTranslator(SphinxTranslator):
     def visit_Text(self, node):
         text = node.astext()
 
-        #Escape Special markdown chars except in code block
-        if self.block_quote['in'] and self.block_quote['type'] == 'block_quote':
+        # Escape Special markdown chars except in code block
+        if self.block_quote["in"] and self.block_quote["type"] == "block_quote":
             if self.literal and self.output[-1] == self.syntax.visit_literal():
                 last_syntax = self.output.pop()
                 text = last_syntax + text
@@ -880,7 +880,7 @@ class MystTranslator(SphinxTranslator):
     def visit_literal(self, node):
         self.literal = True
         if self.download_reference:
-            return            #TODO: can we just raise SkipNode?
+            return  # TODO: can we just raise SkipNode?
         if self.List:
             self.List.addto_list_item(self.syntax.visit_literal())
         else:
@@ -907,14 +907,18 @@ class MystTranslator(SphinxTranslator):
                 self.nodelang = self.default_language
             # A code-block that isn't the same as the kernel
             if self.nodelang not in self.language_synonyms:
-                syntax = self.syntax.visit_literal_block(language=self.nodelang, \
-                    target_jupytext=False)
+                syntax = self.syntax.visit_literal_block(
+                    language=self.nodelang, target_jupytext=False
+                )
             else:
-                syntax = self.syntax.visit_literal_block(language=self.nodelang, \
-                    target_jupytext=self.target_jupytext)
+                syntax = self.syntax.visit_literal_block(
+                    language=self.nodelang, target_jupytext=self.target_jupytext
+                )
         else:
-            syntax = self.syntax.visit_literal_block(target_jupytext=self.target_jupytext)
-        #option block parsing
+            syntax = self.syntax.visit_literal_block(
+                target_jupytext=self.target_jupytext
+            )
+        # option block parsing
         if options != []:
             options = "\n".join(options)
             syntax = syntax + "\n" + options
@@ -1144,7 +1148,7 @@ class MystTranslator(SphinxTranslator):
         self.add_newline()
 
     def infer_raw_attrs(self, node):
-        options = {}
+        # options = {}
         if node.hasattr("source") and self.debug:
             fn = self.builder.current_docname
             line = node.line
@@ -1306,7 +1310,9 @@ file will be included in the myst directive".format(
 
     def visit_system_message(self, node):
         if self.debug:
-            msg = "[system_mesage] typically handeled by transform/post-transform\n\n{}".format(node.astext())
+            msg = "[system_mesage] typically handeled by transform/post-transform\n\n{}".format(  # noqa: E501
+                node.astext()
+            )
             logger.info(msg)
         raise nodes.SkipNode
 

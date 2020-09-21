@@ -72,14 +72,16 @@ def test_extended(
     warnings = warning.getvalue().strip()
     assert warnings == ""
 
-    #Note: pytest needs to run twice to initialise fixtures
+    # Note: pytest needs to run twice to initialise fixtures
 
     get_sphinx_app_doctree(app, docname="test", regress=True)
     get_sphinx_app_output(app, files=["index.md", "test.md"], regress=True)
 
 
 @pytest.mark.sphinx(
-    buildername="myst", srcdir=os.path.join(SOURCE_DIR, "jupytext-header"), freshenv=True
+    buildername="myst",
+    srcdir=os.path.join(SOURCE_DIR, "jupytext-header"),
+    freshenv=True,
 )
 def test_jupytext(
     app,
@@ -99,6 +101,7 @@ def test_jupytext(
     get_sphinx_app_doctree(app, docname="content", regress=True)
     get_sphinx_app_output(app, files=["index.md", "content.md"], regress=True)
 
+
 @pytest.mark.sphinx(
     buildername="myst", srcdir=os.path.join(SOURCE_DIR, "multi-lang"), freshenv=True
 )
@@ -115,13 +118,16 @@ def test_multi_language(
 
     assert "build succeeded" in status.getvalue()  # Build succeeded
 
-    #Note: pytest needs to run twice to initialise fixtures
+    # Note: pytest needs to run twice to initialise fixtures
 
     get_sphinx_app_doctree(app, docname="test", regress=True)
     get_sphinx_app_output(app, files=["index.md", "test.md"], regress=True)
 
+
 @pytest.mark.sphinx(
-    buildername="myst", srcdir=os.path.join(SOURCE_DIR, "multi-lang-jupytext"), freshenv=True
+    buildername="myst",
+    srcdir=os.path.join(SOURCE_DIR, "multi-lang-jupytext"),
+    freshenv=True,
 )
 def test_multi_language_jupytext(
     app,
@@ -136,7 +142,7 @@ def test_multi_language_jupytext(
 
     assert "build succeeded" in status.getvalue()  # Build succeeded
 
-    #Note: pytest needs to run twice to initialise fixtures
+    # Note: pytest needs to run twice to initialise fixtures
 
     get_sphinx_app_doctree(app, docname="test", regress=True)
     get_sphinx_app_output(app, files=["index.md", "test.md"], regress=True)
