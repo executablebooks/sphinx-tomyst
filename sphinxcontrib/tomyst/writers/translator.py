@@ -109,12 +109,15 @@ class MystTranslator(SphinxTranslator):
         A Myst(Markdown) Translator
         """
         super().__init__(document, builder)
-        self.syntax = MystSyntax()
+        #Config
         self.target_jupytext = self.builder.config['tomyst_jupytext']
         self.default_ext = ".myst"
         self.default_language = self.builder.config['tomyst_default_language']
         self.language_synonyms = self.builder.config['tomyst_language_synonyms']
         self.language_synonyms.append(self.default_language)
+        self.debug = self.builder.config["tomyst_debug"]
+        #Document Settings
+        self.syntax = MystSyntax()
         self.images = []
         self.section_level = 0
 
@@ -667,8 +670,9 @@ class MystTranslator(SphinxTranslator):
     # https://www.sphinx-doc.org/en/master/extdev/nodes.html#sphinx.addnodes.highlightlang
 
     def visit_highlightlang(self, node):
-        msg = "[highlightang] typically handeled by transform/post-transform"
-        logger.info(msg)
+        if self.debug:
+            msg = "[highlightang] typically handeled by transform/post-transform"
+            logger.info(msg)
 
     def depart_highlightlang(self, node):
         pass
@@ -1078,8 +1082,9 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#pending
 
     def visit_pending(self, node):
-        msg = "[pending] typically handeled by transform/post-transform"
-        logger.info(msg)
+        if self.debug:
+            msg = "[pending] typically handeled by transform/post-transform"
+            logger.info(msg)
 
     def depart_pending(self, node):
         pass
@@ -1135,7 +1140,7 @@ class MystTranslator(SphinxTranslator):
 
     def infer_raw_attrs(self, node):
         options = {}
-        if node.hasattr("source"):
+        if node.hasattr("source") and self.debug:
             fn = self.builder.current_docname
             line = node.line
             msg = "[{}:{}] raw directive specifies a source file. The contents of this \
@@ -1286,8 +1291,9 @@ file will be included in the myst directive".format(fn, line)
     # https://docutils.sourceforge.io/docs/ref/doctree.html#system-message
 
     def visit_system_message(self, node):
-        msg = "[system_mesage] typically handeled by transform/post-transform\n\n{}".format(node.astext())
-        logger.info(msg)
+        if self.debug:
+            msg = "[system_mesage] typically handeled by transform/post-transform\n\n{}".format(node.astext())
+            logger.info(msg)
         raise nodes.SkipNode
 
     def depart_system_message(self, node):
