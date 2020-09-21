@@ -1,0 +1,15 @@
+<document source="test.rst">
+    <section ids="testing-document" names="testing\ document">
+        <title>
+            Testing Document
+        <paragraph>
+            Contains a bunch of edge cases
+        <section ids="block-quote-literal-blocks" names="block\ quote\ &\ literal\ blocks">
+            <title>
+                Block Quote & Literal Blocks
+            <paragraph>
+                Some text with literal in block_quote
+            <block_quote>
+                <paragraph>
+                    <literal>
+                        import numpy as np
