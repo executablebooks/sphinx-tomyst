@@ -15,11 +15,11 @@ Status
 
 |status-docs| |status-travis|
 
-.. |status-docs| image:: https://readthedocs.org/projects/sphinxcontrib-tomyst/badge/?version=latest
+.. |status-docs| image:: https://readthedocs.org/projects/sphinxcontrib-tomyst/badge/?version=latest # noqa: E501
    :target: http://sphinxcontrib-tomyst.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. |status-travis| image:: https://travis-ci.org/mmcky/sphinxcontrib-tomyst.svg?branch=master
+.. |status-travis| image:: https://travis-ci.org/mmcky/sphinxcontrib-tomyst.svg?branch=master # noqa: E501
    :target: https://travis-ci.org/mmcky/sphinxcontrib-tomyst
 
 """
@@ -30,7 +30,7 @@ setup(
     name="sphinxcontrib-tomyst",
     version=VERSION,
     url="https://github.com/mmcky/sphinxcontrib-tomyst",
-    download_url="https://github.com/mmcky/sphinxcontrib-tomyst/archive/{}.tar.gz".format(
+    download_url="https://github.com/mmcky/sphinxcontrib-tomyst/archive/{}.tar.gz".format(  # noqa: E501
         VERSION
     ),
     license="BSD",

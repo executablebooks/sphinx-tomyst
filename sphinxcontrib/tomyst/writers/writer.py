@@ -11,7 +11,7 @@ class MystWriter(writers.Writer):
 
     output = None  # type: str
 
-    def __init__(self, builder: "MystBuilder") -> None:
+    def __init__(self, builder: "MystBuilder") -> None:  # noqa:F821
         super().__init__()
         self.builder = builder
         self.PRE_TRANSFORM = True

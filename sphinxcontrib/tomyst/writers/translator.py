@@ -552,11 +552,11 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#field
 
     def visit_field(self, node):
-        for child in node.children:
-            if type(child) is nodes.field_name:
-                field_name = child.astext()
-            elif type(child) is nodes.field_body:
-                field_body = child.astext()
+        # for child in node.children:
+        #     if type(child) is nodes.field_name:
+        #         field_name = child.astext()
+        #     elif type(child) is nodes.field_body:
+        #         field_body = child.astext()
         raise NotImplementedError
 
     # docutils.elements.field_body
@@ -686,7 +686,7 @@ class MystTranslator(SphinxTranslator):
     def visit_image(self, node):
         """
         1. the scale, height and width properties are not combined in this
-        implementation as is done in http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
+        as in http://docutils.sourceforge.net/docs/ref/rst/directives.html#image
         """
         self.image["in"] = True
         # Image wrapped within a reference
@@ -1123,12 +1123,12 @@ class MystTranslator(SphinxTranslator):
     def visit_raw(self, node):
         self.raw = True
         rawformat = node.attributes["format"]
-        options = self.infer_raw_attrs(node)
+        # options = self.infer_raw_attrs(node)
         self.output.append(self.syntax.visit_raw(rawformat))
         self.add_newline()
 
     def infer_raw_attrs(self, node):
-        options = {}
+        # options = {}
         if node.hasattr("source"):
             fn = self.builder.current_docname
             line = node.line
@@ -1162,7 +1162,7 @@ file will be included in the myst directive".format(
             self.output.append(syntax)
 
     def depart_reference(self, node):
-        subdirectory = False
+        # subdirectory = False
         formatted_text = ""
 
         if self.image["skip-reference"]:
@@ -1190,7 +1190,7 @@ file will be included in the myst directive".format(
                 if "refid" in node:
                     refid = node["refid"]
                     self.inpage_reference = True
-                    # markdown doesn't handle closing brackets very well so will replace with %28 and %29
+                    # markdown doesn't handle closing brackets very well replace with %28 and %29 # noqa: E501
                     refid = refid.replace("(", "%28")
                     refid = refid.replace(")", "%29")
                     # markdown target
@@ -1289,7 +1289,7 @@ file will be included in the myst directive".format(
     # https://docutils.sourceforge.io/docs/ref/doctree.html#system-message
 
     def visit_system_message(self, node):
-        msg = "[system_mesage] typically handeled by transform/post-transform\n\n{}".format(
+        msg = "[system_mesage] typically handeled by transform/post-transform\n\n{}".format(  # noqa:E501
             node.astext()
         )
         logger.info(msg)
@@ -1467,7 +1467,7 @@ file will be included in the myst directive".format(
     # https://docutils.sourceforge.io/docs/ref/doctree.html#topic
 
     def visit_topic(self, node):
-        # docutils.contents (https://docutils.sourceforge.io/docs/ref/rst/directives.html#table-of-contents)
+        # docutils.contents (https://docutils.sourceforge.io/docs/ref/rst/directives.html#table-of-contents) # noqa: E501
         if "contents" in node.attributes["classes"]:
             title, options = self.infer_contents_attrs(node)
             options = self.myst_options(options)

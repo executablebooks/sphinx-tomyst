@@ -76,10 +76,10 @@ class MarkdownSyntax:
         return "#" * depth
 
     def visit_label(self):
-        return "\["
+        return "\["  # noqa: W605
 
     def depart_label(self):
-        return "\]"
+        return "\]"  # noqa: W605
 
     def visit_link(self, text, link):
         return "[text](link)"

@@ -46,7 +46,7 @@ A simple bullet list
 A multi-paragraph example
 
 - Item 1, paragraph 1.
-  
+
   Item 1, paragraph 2.
 - Item 2.
 
@@ -61,11 +61,11 @@ A nested bullet list
 An example with nested code-block
 
 - Step 1. Example:
-  
+
   ```{code-block} bash
   Example code
   ```
-  
+
 - Step 2.
 
 For extended **list** testing please refer
@@ -150,7 +150,7 @@ This is a caution admonition
 backlinks: entry
 class: testing
 depth: 2
-local: 
+local:
 ---
 ```
 
@@ -327,4 +327,3 @@ Since Pythagoras, we know that $a^2 + b^2 = c^2$.
 and math in a list:
 
 * this is $a^2 + b^2 = c^2$ in a list item
-
