@@ -35,11 +35,11 @@ class MystSyntax(MarkdownSyntax):
             options = "\n".join(options)
             return "```{{image}} {}\n{}".format(uri, options)
 
-    def visit_literal_block(self, language=None):
+    def visit_literal_block(self, language=None, target_jupytext=False):
         if language is None:
             return "```"
         else:
-            if self.target_jupytext:
+            if target_jupytext:
                 return "```{{code-cell}} {0}".format(language)
             else:
                 return "```{{code-block}} {0}".format(language)

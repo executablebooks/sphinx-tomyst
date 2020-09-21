@@ -28,6 +28,10 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_config_value("tomyst_jupytext", False, "tomyst")
     app.add_config_value("tomyst_jupytext_header", DEFAULT_JUPYTEXT_HEADER, "tomyst")
 
+    app.add_config_value("tomyst_default_language", "python", "tomyst")
+    app.add_config_value("tomyst_language_synonyms", \
+      ["ipython", "ipython3", "python2", "python3"], "tomyst")
+
     return {
         'version': 'builtin',
         'parallel_read_safe': True,
