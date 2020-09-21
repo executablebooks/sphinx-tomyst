@@ -112,6 +112,9 @@ class MystTranslator(SphinxTranslator):
         self.syntax = MystSyntax()
         self.target_jupytext = self.builder.config['tomyst_jupytext']
         self.default_ext = ".myst"
+        self.default_language = self.builder.config['tomyst_default_language']
+        self.language_synonyms = \
+            self.builder.config['tomyst_language_synonyms'].append(self.default_language)
         self.images = []
         self.section_level = 0
 
@@ -882,7 +885,6 @@ class MystTranslator(SphinxTranslator):
     def depart_literal(self, node):
         if self.download_reference:
             return
-
         if self.List:
             self.List.addto_list_item(self.syntax.depart_literal())
         else:
@@ -896,8 +898,13 @@ class MystTranslator(SphinxTranslator):
         options = self.infer_literal_block_attrs(node)
         if node.hasattr("language"):
             self.nodelang = node.attributes["language"].strip()
-            syntax = self.syntax.visit_literal_block(language=self.nodelang, \
-                target_jupytext=self.target_jupytext)
+            # A code-block that isn't the same as the kernel
+            if self.nodelang not in self.language_synonyms:
+                syntax = self.syntax.visit_literal_block(language=self.nodelang, \
+                    target_jupytext=False)
+            else:
+                syntax = self.syntax.visit_literal_block(language=self.nodelang, \
+                    target_jupytext=self.target_jupytext)
         else:
             syntax = self.syntax.visit_literal_block(target_jupytext=self.target_jupytext)
         #option block parsing
