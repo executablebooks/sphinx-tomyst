@@ -51,6 +51,7 @@ class MystTranslator(SphinxTranslator):
     footnote = False
     hint = False
     important = False
+    literal = False
     literal_block = False
     math = False
     note = False
@@ -105,9 +106,15 @@ class MystTranslator(SphinxTranslator):
         A Myst(Markdown) Translator
         """
         super().__init__(document, builder)
-        self.syntax = MystSyntax()
-        self.syntax.target_jupytext = self.builder.config["tomyst_jupytext"]
+        #Config
+        self.target_jupytext = self.builder.config['tomyst_jupytext']
         self.default_ext = ".myst"
+        self.default_language = self.builder.config['tomyst_default_language']
+        self.language_synonyms = self.builder.config['tomyst_language_synonyms']
+        self.language_synonyms.append(self.default_language)
+        self.debug = self.builder.config["tomyst_debug"]
+        #Document Settings
+        self.syntax = MystSyntax()
         self.images = []
         self.section_level = 0
 
@@ -139,8 +146,11 @@ class MystTranslator(SphinxTranslator):
     def visit_Text(self, node):
         text = node.astext()
 
-        # Escape Special markdown chars except in code block
-        if self.block_quote["in"] and self.block_quote["type"] == "block_quote":
+        #Escape Special markdown chars except in code block
+        if self.block_quote['in'] and self.block_quote['type'] == 'block_quote':
+            if self.literal and self.output[-1] == self.syntax.visit_literal():
+                last_syntax = self.output.pop()
+                text = last_syntax + text
             linemarker = self.syntax.visit_block_quote()
             text = linemarker + text
             text = text.replace("\n", "\n{}".format(linemarker))
@@ -148,10 +158,6 @@ class MystTranslator(SphinxTranslator):
             raise nodes.SkipNode
         if self.math_block["in"]:
             text = text.strip()
-        # Code Blocks
-        # if self.literal_block:
-        # text = self.strip_whitespace(text)
-        # text = text.strip()
 
         self.text = text
 
@@ -660,8 +666,9 @@ class MystTranslator(SphinxTranslator):
     # https://www.sphinx-doc.org/en/master/extdev/nodes.html#sphinx.addnodes.highlightlang
 
     def visit_highlightlang(self, node):
-        msg = "[highlightang] typically handeled by transform/post-transform"
-        logger.info(msg)
+        if self.debug:
+            msg = "[highlightang] typically handeled by transform/post-transform"
+            logger.info(msg)
 
     def depart_highlightlang(self, node):
         pass
@@ -871,9 +878,9 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#literal
 
     def visit_literal(self, node):
+        self.literal = True
         if self.download_reference:
-            return  # TODO: can we just raise SkipNode?
-
+            return            #TODO: can we just raise SkipNode?
         if self.List:
             self.List.addto_list_item(self.syntax.visit_literal())
         else:
@@ -882,11 +889,11 @@ class MystTranslator(SphinxTranslator):
     def depart_literal(self, node):
         if self.download_reference:
             return
-
         if self.List:
             self.List.addto_list_item(self.syntax.depart_literal())
         else:
             self.output.append(self.syntax.depart_literal())
+        self.literal = False
 
     # docutils.element.literal_block
     # https://docutils.sourceforge.io/docs/ref/doctree.html#literal-block
@@ -896,10 +903,18 @@ class MystTranslator(SphinxTranslator):
         options = self.infer_literal_block_attrs(node)
         if node.hasattr("language"):
             self.nodelang = node.attributes["language"].strip()
-            syntax = self.syntax.visit_literal_block(self.nodelang)
+            if self.nodelang == "default":
+                self.nodelang = self.default_language
+            # A code-block that isn't the same as the kernel
+            if self.nodelang not in self.language_synonyms:
+                syntax = self.syntax.visit_literal_block(language=self.nodelang, \
+                    target_jupytext=False)
+            else:
+                syntax = self.syntax.visit_literal_block(language=self.nodelang, \
+                    target_jupytext=self.target_jupytext)
         else:
-            syntax = self.syntax.visit_literal_block()
-        # option block parsing
+            syntax = self.syntax.visit_literal_block(target_jupytext=self.target_jupytext)
+        #option block parsing
         if options != []:
             options = "\n".join(options)
             syntax = syntax + "\n" + options
@@ -1072,8 +1087,9 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#pending
 
     def visit_pending(self, node):
-        msg = "[pending] typically handeled by transform/post-transform"
-        logger.info(msg)
+        if self.debug:
+            msg = "[pending] typically handeled by transform/post-transform"
+            logger.info(msg)
 
     def depart_pending(self, node):
         pass
@@ -1128,8 +1144,8 @@ class MystTranslator(SphinxTranslator):
         self.add_newline()
 
     def infer_raw_attrs(self, node):
-        # options = {}
-        if node.hasattr("source"):
+        options = {}
+        if node.hasattr("source") and self.debug:
             fn = self.builder.current_docname
             line = node.line
             msg = "[{}:{}] raw directive specifies a source file. The contents of this \
@@ -1289,10 +1305,9 @@ file will be included in the myst directive".format(
     # https://docutils.sourceforge.io/docs/ref/doctree.html#system-message
 
     def visit_system_message(self, node):
-        msg = "[system_mesage] typically handeled by transform/post-transform\n\n{}".format(  # noqa:E501
-            node.astext()
-        )
-        logger.info(msg)
+        if self.debug:
+            msg = "[system_mesage] typically handeled by transform/post-transform\n\n{}".format(node.astext())
+            logger.info(msg)
         raise nodes.SkipNode
 
     def depart_system_message(self, node):

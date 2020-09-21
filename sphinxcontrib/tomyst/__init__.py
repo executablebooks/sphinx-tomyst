@@ -23,13 +23,18 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_builder(MystBuilder)
 
     app.add_transform(InterceptAST)
-    app.add_config_value("tomyst_static_file_path", ["_static"], "tomyst")
+    app.add_config_value("tomyst_static_file_path", ['_static'], "tomyst")
+    app.add_config_value("tomyst_debug", False, "tomyst")
 
-    # JupyText Compatibility
+    #JupyText Compatibility
     app.add_config_value("tomyst_jupytext", False, "tomyst")
     app.add_config_value(
         "tomyst_jupytext_header", DEFAULT_JUPYTEXT_HEADER, "tomyst"
     )  # noqa: E501
+
+    app.add_config_value("tomyst_default_language", "python", "tomyst")
+    app.add_config_value("tomyst_language_synonyms", \
+      ["ipython", "ipython3", "python2", "python3"], "tomyst")
 
     return {
         "version": "builtin",

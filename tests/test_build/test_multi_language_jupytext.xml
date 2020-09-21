@@ -1,0 +1,25 @@
+<document source="test.rst">
+    <section ids="testing-document" names="testing\ document">
+        <title>
+            Testing Document
+        <paragraph>
+            This is a document that contains various python code blocks in addition
+            to non-python code blocks
+        <section ids="python" names="python">
+            <title>
+                Python
+            <literal_block force="False" highlight_args="{}" language="default" xml:space="preserve">
+                import numpy as np
+            <literal_block force="False" highlight_args="{}" language="python" xml:space="preserve">
+                import numpy as np
+            <literal_block force="False" highlight_args="{}" language="python3" xml:space="preserve">
+                import numpy as np
+            <literal_block force="False" highlight_args="{}" language="ipython" xml:space="preserve">
+                import numpy as np
+        <section ids="non-python" names="non-python">
+            <title>
+                Non-Python
+            <literal_block force="False" highlight_args="{}" language="julia" xml:space="preserve">
+                Pkg.update()
+            <literal_block force="False" highlight_args="{}" language="none" xml:space="preserve">
+                Some Plain Text
