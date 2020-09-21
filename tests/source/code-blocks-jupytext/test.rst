@@ -33,3 +33,13 @@ Non-Python
 .. code-block:: none
 
    Some Plain Text
+
+Options
+-------
+
+Test no-execute passthrough to code-blocks
+
+.. code-block:: python
+   :class: no-execute
+
+   import numpy as np
