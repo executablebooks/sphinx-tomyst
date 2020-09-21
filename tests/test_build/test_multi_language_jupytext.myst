@@ -83,3 +83,12 @@ Test no-execute passthrough to code-blocks
 import numpy as np
 ```
 
+Test skip-test passthrough to code-cells
+
+```{code-cell} python
+---
+tags: [raises-exception]
+---
+print(thisfails)
+```
+

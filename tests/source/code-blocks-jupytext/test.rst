@@ -43,3 +43,10 @@ Test no-execute passthrough to code-blocks
    :class: no-execute
 
    import numpy as np
+
+Test skip-test passthrough to code-cells
+
+.. code-block:: python
+   :class: skip-test
+
+   print(thisfails)
