@@ -110,7 +110,7 @@ class MystTranslator(SphinxTranslator):
         """
         super().__init__(document, builder)
         self.syntax = MystSyntax()
-        self.syntax.target_jupytext = self.builder.config['tomyst_jupytext']
+        self.target_jupytext = self.builder.config['tomyst_jupytext']
         self.default_ext = ".myst"
         self.images = []
         self.section_level = 0
@@ -874,7 +874,6 @@ class MystTranslator(SphinxTranslator):
     def visit_literal(self, node):
         if self.download_reference:
             return            #TODO: can we just raise SkipNode?
-
         if self.List:
             self.List.addto_list_item(self.syntax.visit_literal())
         else:
@@ -897,9 +896,10 @@ class MystTranslator(SphinxTranslator):
         options = self.infer_literal_block_attrs(node)
         if node.hasattr("language"):
             self.nodelang = node.attributes["language"].strip()
-            syntax = self.syntax.visit_literal_block(self.nodelang)
+            syntax = self.syntax.visit_literal_block(language=self.nodelang, \
+                target_jupytext=self.target_jupytext)
         else:
-            syntax = self.syntax.visit_literal_block()
+            syntax = self.syntax.visit_literal_block(target_jupytext=self.target_jupytext)
         #option block parsing
         if options != []:
             options = "\n".join(options)
