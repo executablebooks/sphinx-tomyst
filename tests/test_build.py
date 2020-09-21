@@ -94,7 +94,7 @@ def test_jupytext(
     get_sphinx_app_output(app, files=["index.md", "content.md"], regress=True)
 
 @pytest.mark.sphinx(
-    buildername="myst", srcdir=os.path.join(SOURCE_DIR, "multi-lang"), freshenv=True
+    buildername="myst", srcdir=os.path.join(SOURCE_DIR, "code-blocks"), freshenv=True
 )
 def test_multi_language(
     app,
@@ -115,7 +115,7 @@ def test_multi_language(
     get_sphinx_app_output(app, files=["index.md", "test.md"], regress=True)
 
 @pytest.mark.sphinx(
-    buildername="myst", srcdir=os.path.join(SOURCE_DIR, "multi-lang-jupytext"), freshenv=True
+    buildername="myst", srcdir=os.path.join(SOURCE_DIR, "code-blocks-jupytext"), freshenv=True
 )
 def test_multi_language_jupytext(
     app,

@@ -75,3 +75,11 @@ Pkg.update()
 Some Plain Text
 ```
 
+## Options
+
+Test no-execute passthrough to code-blocks
+
+```{code-block} python
+import numpy as np
+```
+
