@@ -55,6 +55,7 @@ class MystTranslator(SphinxTranslator):
     footnote = False
     hint = False
     important = False
+    literal = False
     literal_block = False
     math = False
     note = False
@@ -152,6 +153,9 @@ class MystTranslator(SphinxTranslator):
 
         #Escape Special markdown chars except in code block
         if self.block_quote['in'] and self.block_quote['type'] == 'block_quote':
+            if self.literal and self.output[-1] == self.syntax.visit_literal():
+                last_syntax = self.output.pop()
+                text = last_syntax + text
             linemarker = self.syntax.visit_block_quote()
             text = linemarker + text
             text = text.replace("\n", "\n{}".format(linemarker))
@@ -159,10 +163,6 @@ class MystTranslator(SphinxTranslator):
             raise nodes.SkipNode
         if self.math_block["in"]:
             text = text.strip()
-        #Code Blocks
-        # if self.literal_block:
-            # text = self.strip_whitespace(text)
-            # text = text.strip()
 
         self.text = text
 
@@ -879,6 +879,7 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#literal
 
     def visit_literal(self, node):
+        self.literal = True
         if self.download_reference:
             return            #TODO: can we just raise SkipNode?
         if self.List:
@@ -893,6 +894,7 @@ class MystTranslator(SphinxTranslator):
             self.List.addto_list_item(self.syntax.depart_literal())
         else:
             self.output.append(self.syntax.depart_literal())
+        self.literal = False
 
     # docutils.element.literal_block
     # https://docutils.sourceforge.io/docs/ref/doctree.html#literal-block

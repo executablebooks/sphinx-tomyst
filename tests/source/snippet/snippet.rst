@@ -1,6 +1,6 @@
 Snippet
 =======
 
-The first line imports :doc:`NumPy <numpy>`, a favorite Python package for tasks like
+Some text with literal in block_quote
 
-and :ref:`discussed previously <numba-p_c_vectorization>` reference in another
+    ``import numpy as np``
