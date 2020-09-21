@@ -908,9 +908,15 @@ class MystTranslator(SphinxTranslator):
                 self.nodelang = self.default_language
             # A code-block that isn't the same as the kernel
             if self.nodelang not in self.language_synonyms:
+                # code-block (no execution via myst_nb)
+                syntax = self.syntax.visit_literal_block(language=self.nodelang, \
+                    target_jupytext=False)
+            elif 'no-execute' in node.attributes['classes']:
+                # code-block (no execution via myst_nb)
                 syntax = self.syntax.visit_literal_block(language=self.nodelang, \
                     target_jupytext=False)
             else:
+                # code-cell (execution code blocks)
                 syntax = self.syntax.visit_literal_block(language=self.nodelang, \
                     target_jupytext=self.target_jupytext)
         else:
