@@ -125,7 +125,9 @@ def test_multi_language(
 
 
 @pytest.mark.sphinx(
-    buildername="myst", srcdir=os.path.join(SOURCE_DIR, "code-blocks-jupytext"), freshenv=True
+    buildername="myst",
+    srcdir=os.path.join(SOURCE_DIR, "code-blocks-jupytext"),
+    freshenv=True,
 )
 def test_multi_language_jupytext(
     app,
