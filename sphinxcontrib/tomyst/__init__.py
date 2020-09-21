@@ -23,7 +23,8 @@ def setup(app: Sphinx) -> Dict[str, Any]:
 
     app.add_transform(InterceptAST)
     app.add_config_value("tomyst_static_file_path", ['_static'], "tomyst")
-    
+    app.add_config_value("tomyst_debug", False, "tomyst")
+
     #JupyText Compatibility
     app.add_config_value("tomyst_jupytext", False, "tomyst")
     app.add_config_value("tomyst_jupytext_header", DEFAULT_JUPYTEXT_HEADER, "tomyst")
