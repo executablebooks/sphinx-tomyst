@@ -2,6 +2,7 @@
 Contains Markdown Syntax and Object Accumulators
 """
 
+
 class MarkdownSyntax:
     """
     Provides Markdown Syntax
@@ -42,10 +43,10 @@ class MarkdownSyntax:
         return "```"
 
     def visit_definition(self):
-        return "<dd>"               #TODO: Is there a MD equivalent?
+        return "<dd>"  # TODO: Is there a MD equivalent?
 
     def depart_definition(self):
-        return "</dd>"              #TODO: Is there a MD equivalent?
+        return "</dd>"  # TODO: Is there a MD equivalent?
 
     def visit_definition_list(self):
         return "<dl style='margin: 20px 0;'>"
@@ -72,19 +73,19 @@ class MarkdownSyntax:
         return "*"
 
     def visit_heading(self, depth):
-        return "#"*depth
+        return "#" * depth
 
     def visit_label(self):
-        return "\["
+        return "["
 
     def depart_label(self):
-        return "\]"
+        return "]"
 
     def visit_link(self, text, link):
         return "[text](link)"
 
-    #List(Start)
-    #Note: Not required as implemented as an Accumulator Object List()
+    # List(Start)
+    # Note: Not required as implemented as an Accumulator Object List()
 
     def visit_literal(self):
         return "`"
@@ -124,4 +125,3 @@ class MarkdownSyntax:
 
     def visit_title(self, level):
         return "#" * level
-

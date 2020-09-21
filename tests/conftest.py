@@ -47,8 +47,7 @@ SOURCE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "source"))
 # @pytest.fixture(scope="session", autouse=True)
 @pytest.fixture()
 def remove_sphinx_builds():
-    """ remove all build directories from the test folder
-    """
+    """remove all build directories from the test folder"""
     yield
     srcdirs = pathlib.Path(SOURCE_DIR)
     for entry in srcdirs.iterdir():  # type: pathlib.Path
@@ -59,19 +58,17 @@ def remove_sphinx_builds():
 @pytest.fixture
 def get_sphinx_app_output(file_regression):
     def read(
-        app,
-        buildername="myst",
-        files=["index.myst"],
-        encoding="utf-8",
-        regress=False
+        app, buildername="myst", files=["index.myst"], encoding="utf-8", regress=False
     ):
         contents = []
 
         for filename in files:
-            outpath = path(os.path.join(str(app.srcdir), "_build", buildername, filename))
+            outpath = path(
+                os.path.join(str(app.srcdir), "_build", buildername, filename)
+            )
             if not outpath.exists():
                 raise IOError("no output file exists: {}".format(outpath))
-            header = "-"*len(filename) + "\n"
+            header = "-" * len(filename) + "\n"
             title = header + f"{filename}\n" + header + "\n"
             doc = title + outpath.read_text(encoding=encoding)
             contents.append(doc)

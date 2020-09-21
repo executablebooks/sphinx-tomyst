@@ -1,1 +1,1 @@
-from .myst import MystBuilder
+from .myst import MystBuilder  # noqa: F401

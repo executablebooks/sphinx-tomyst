@@ -8,7 +8,7 @@ A MyST Sphinx Builder
 :licences: see LICENSE for details
 """
 
-from typing import Any, Dict, Iterator, Set, Tuple
+from typing import Dict, Iterator, Set, Tuple
 from os import path
 from sphinx.util.fileutil import copy_asset
 
@@ -25,17 +25,18 @@ from ..writers import MystWriter, MystTranslator
 
 logger = logging.getLogger(__name__)
 
+
 class MystBuilder(Builder):
 
-    name = 'myst'
-    format = 'markdown(myst)'
+    name = "myst"
+    format = "markdown(myst)"
     out_suffix = ".md"
-    epilog = __('The myst files are in %(outdir)s.')
+    epilog = __("The myst files are in %(outdir)s.")
 
     allow_parallel = True
     default_translator_class = MystTranslator
 
-    current_docname = None # type: str
+    current_docname = None  # type: str
 
     def init(self) -> None:
         # import pdb; pdb.set_trace()
@@ -66,32 +67,33 @@ class MystBuilder(Builder):
 
     def write_doc(self, docname: str, doctree: Node) -> None:
         self.current_docname = docname
-        destination = StringOutput(encoding='utf-8')
+        destination = StringOutput(encoding="utf-8")
         self.writer.write(doctree, destination)
         src_folder = self.srcdir.split(self.confdir)[1][1:]
         outdir = path.join(self.outdir, src_folder)
         outfilename = path.join(outdir, os_path(docname) + self.out_suffix)
         ensuredir(path.dirname(outfilename))
         try:
-            with open(outfilename, 'w', encoding='utf-8') as f:
+            with open(outfilename, "w", encoding="utf-8") as f:
                 f.write(self.writer.output)
         except OSError as err:
             logger.warning(__("error writing file %s: %s"), outfilename, err)
-    
+
     def copy_build_files(self):
         """Copies Makefile and conf.py to _build/myst."""
         import io
-        makefile = path.join(self.confdir,"Makefile")
-        src_conf = path.join(self.confdir,"conf.py")
-        dest_conf = path.join(self.outdir,"conf.py")
+
+        # makefile = path.join(self.confdir, "Makefile")
+        src_conf = path.join(self.confdir, "conf.py")
+        dest_conf = path.join(self.outdir, "conf.py")
 
         copy_asset_file(self.confdir + "/Makefile", self.outdir)
-        with io.open(src_conf,"r") as inpf, io.open(dest_conf, "w") as outf:
+        with io.open(src_conf, "r") as inpf, io.open(dest_conf, "w") as outf:
             for line in inpf.readlines():
-                if "sphinxcontrib.tomyst" in line: 
-                    line = line.replace("sphinxcontrib.tomyst","myst_parser")
+                if "sphinxcontrib.tomyst" in line:
+                    line = line.replace("sphinxcontrib.tomyst", "myst_parser")
                 outf.write(line)
-    
+
     def copy_static_files(self):
         if "tomyst_static_file_path" in self.config:
             for static_path in self.config["tomyst_static_file_path"]:

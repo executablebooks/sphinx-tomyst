@@ -4,6 +4,7 @@ Myst Syntax
 
 from .markdown import MarkdownSyntax
 
+
 class MystSyntax(MarkdownSyntax):
 
     indentation = " " * 2
@@ -21,8 +22,8 @@ class MystSyntax(MarkdownSyntax):
         return "-- "
 
     def visit_bullet_list_item(self, listobj):
-        indent = self.indentation * listobj['level']
-        marker = listobj['marker']
+        indent = self.indentation * listobj["level"]
+        marker = listobj["marker"]
         return "{}{} ".format(indent, marker)
 
     def visit_epigraph(self):

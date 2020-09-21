@@ -1,8 +1,8 @@
-
 import os
 import pytest
 
 SOURCE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "source"))
+
 
 @pytest.mark.sphinx(
     buildername="myst", srcdir=os.path.join(SOURCE_DIR, "snippet"), freshenv=True

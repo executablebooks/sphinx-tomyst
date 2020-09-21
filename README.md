@@ -2,7 +2,7 @@
 A sphinx translator for producing myst syntax files
 
 [![Documentation Status](https://readthedocs.org/projects/sphinxcontrib-tomyst/badge/?version=latest)](https://sphinxcontrib-tomyst.readthedocs.io/en/latest/?badge=latest)
-  
+
 
 ## Installation
 

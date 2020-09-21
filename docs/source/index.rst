@@ -37,6 +37,7 @@ Installation
 
    issues
    config
+   contribute
 
 Indices and tables
 ==================

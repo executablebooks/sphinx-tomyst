@@ -7,4 +7,3 @@ Simple code example
 
     import numpy as np
     np.__version__
-

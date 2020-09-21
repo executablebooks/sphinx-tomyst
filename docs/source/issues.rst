@@ -1,7 +1,7 @@
 Conversion Issues
 =================
 
-There are some cases where conversion is not possible due to information 
+There are some cases where conversion is not possible due to information
 being lost during the initial parsing of the RST document.
 
 Roles
@@ -36,7 +36,7 @@ A ``warning`` is issued to identify the document and line number.
     Consider adding markup such as ``<index>`` to help identify within line
     placement
 
-It appears that the index role is inline for 
+It appears that the index role is inline for
 `deprecation in sphinx=4.0 <https://github.com/sphinx-doc/sphinx/blob/cbc16eb384a0fc6181a4543c34977e794cae231d/sphinx/roles.py#L578>`__
 
 
