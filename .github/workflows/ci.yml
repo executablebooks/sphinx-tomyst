@@ -1,4 +1,4 @@
-name: Example Project Build
+name: Example Project Build (Automatic Conversion)
 on: [pull_request]
 jobs:
   tests:
@@ -24,7 +24,7 @@ jobs:
       - name: Install Dependencies
         shell: bash -l {0}
         run: |
-          pip install sphinx-book-theme myst-parser
+          pip install sphinx-book-theme myst-nb
       - name: Display Conda Environment Versions
         shell: bash -l {0}
         run: conda list

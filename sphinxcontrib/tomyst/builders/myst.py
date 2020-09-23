@@ -8,6 +8,7 @@ A MyST Sphinx Builder
 :licences: see LICENSE for details
 """
 
+import re
 from typing import Dict, Iterator, Set, Tuple
 from os import path
 from sphinx.util.fileutil import copy_asset
@@ -39,7 +40,6 @@ class MystBuilder(Builder):
     current_docname = None  # type: str
 
     def init(self) -> None:
-        # import pdb; pdb.set_trace()
         self.secnumbers = {}  # type: Dict[str, Tuple[int, ...]]
 
     def get_outdated_docs(self) -> Iterator[str]:
@@ -88,11 +88,29 @@ class MystBuilder(Builder):
         dest_conf = path.join(self.outdir, "conf.py")
 
         copy_asset_file(self.confdir + "/Makefile", self.outdir)
+        # Update conf.py file with appropriate package import
+        if self.config["tomyst_parser"] == "myst_nb":
+            pkg = "myst_nb"
+        else:
+            pkg = "myst_parser"
+        # Update conf.py
+        drop_items = self.config["tomyst_conf_dropcontaining"]
+        block_remove = False
         with io.open(src_conf, "r") as inpf, io.open(dest_conf, "w") as outf:
             for line in inpf.readlines():
-                if "sphinxcontrib.tomyst" in line:
-                    line = line.replace("sphinxcontrib.tomyst", "myst_parser")
-                outf.write(line)
+                if self.config["tomyst_conf_removeblocks"]:
+                    if "tomyst-remove-start" in line:
+                        block_remove = True
+                    if "tomyst-remove-finish" in line:
+                        block_remove = False
+                        continue  # so this line doesn't get added
+                if not block_remove:
+                    if "sphinxcontrib.tomyst" in line:
+                        line = line.replace("sphinxcontrib.tomyst", pkg)
+                    for item in drop_items:
+                        if re.search(item, line):
+                            line = ""
+                    outf.write(line)
 
     def copy_static_files(self):
         if "tomyst_static_file_path" in self.config:

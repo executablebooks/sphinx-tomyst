@@ -107,7 +107,7 @@ class MystTranslator(SphinxTranslator):
         """
         super().__init__(document, builder)
         # Config
-        self.target_jupytext = self.builder.config["tomyst_jupytext"]
+        self.target_mystnb = self.builder.config["tomyst_target_mystnb"]
         self.default_ext = ".myst"
         self.default_language = self.builder.config["tomyst_default_language"]
         self.language_synonyms = self.builder.config["tomyst_language_synonyms"]
@@ -124,7 +124,7 @@ class MystTranslator(SphinxTranslator):
 
     def visit_document(self, node):
         self.output = []
-        if self.builder.config["tomyst_jupytext"]:
+        if self.target_mystnb:
             self.output.append(self.builder.config["tomyst_jupytext_header"].lstrip())
             self.add_newline()
 
@@ -909,22 +909,20 @@ class MystTranslator(SphinxTranslator):
             if self.nodelang not in self.language_synonyms:
                 # code-block (no execution via myst_nb)
                 syntax = self.syntax.visit_literal_block(
-                    language=self.nodelang, target_jupytext=False
+                    language=self.nodelang, target_mystnb=False
                 )
             elif "no-execute" in node.attributes["classes"]:
                 # code-block (no execution via myst_nb)
                 syntax = self.syntax.visit_literal_block(
-                    language=self.nodelang, target_jupytext=False
+                    language=self.nodelang, target_mystnb=False
                 )
             else:
                 # code-cell (execution code blocks)
                 syntax = self.syntax.visit_literal_block(
-                    language=self.nodelang, target_jupytext=self.target_jupytext
+                    language=self.nodelang, target_mystnb=self.target_mystnb
                 )
         else:
-            syntax = self.syntax.visit_literal_block(
-                target_jupytext=self.target_jupytext
-            )
+            syntax = self.syntax.visit_literal_block(target_mystnb=self.target_mystnb)
         # option block parsing
         if options != []:
             options = "\n".join(options)
@@ -971,7 +969,7 @@ class MystTranslator(SphinxTranslator):
         if node.hasattr("force") and attributes["force"]:
             options.append("force:")
         # Parse `code-cell` options
-        if self.target_jupytext:
+        if self.target_mystnb:
             tags = []
             if "skip-test" in node.attributes["classes"]:
                 tags.append("raises-exception")

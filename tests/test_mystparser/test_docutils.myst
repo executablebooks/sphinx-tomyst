@@ -2,6 +2,17 @@
 index.md
 --------
 
+---
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+---
+
 # Docutils Tests
 
 ```{toctree}
@@ -19,6 +30,17 @@ roles
 -----------
 elements.md
 -----------
+
+---
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+---
 
 # Elements
 
@@ -104,6 +126,17 @@ The enumerated list from docutils
 -------------
 directives.md
 -------------
+
+---
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+---
 
 # Directives
 
@@ -305,6 +338,17 @@ This is a warning admonition
 --------
 roles.md
 --------
+
+---
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+---
 
 # Roles
 
