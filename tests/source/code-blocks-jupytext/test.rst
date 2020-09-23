@@ -50,3 +50,26 @@ Test skip-test passthrough to code-cells
    :class: skip-test
 
    print(thisfails)
+
+Test hide-output passthrough to code-cells
+
+.. code-block:: python3
+    :class: hide-output
+
+    from random import uniform
+
+    samples = [uniform(0, 1) for i in range(10)]
+    F = ECDF(samples)
+    F(0.5)  # Evaluate ecdf at x = 0.5
+
+Combinations
+~~~~~~~~~~~~
+
+.. code-block:: python3
+    :class: skip-test, hide-output
+
+    from random import uniform
+
+    samples = [uniform(0, 1) for i in range(10)]
+    F = ECDF(samples)
+    F(0.5)  # Evaluate ecdf at x = 0.5

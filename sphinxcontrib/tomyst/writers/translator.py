@@ -970,8 +970,15 @@ class MystTranslator(SphinxTranslator):
                     options.append("caption: {}".format(caption))
         if node.hasattr("force") and attributes["force"]:
             options.append("force:")
-        if self.target_jupytext and "skip-test" in node.attributes["classes"]:
-            options.append("tags: [raises-exception]")
+        # Parse `code-cell` options
+        if self.target_jupytext:
+            tags = []
+            if "skip-test" in node.attributes["classes"]:
+                tags.append("raises-exception")
+            if "hide-output" in node.attributes["classes"]:
+                tags.append("hide-output")
+            if tags:
+                options.append("tags: [" + ", ".join(tags) + "]")
         options.append("---")
         if len(options) == 2:
             options = []

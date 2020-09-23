@@ -92,3 +92,29 @@ tags: [raises-exception]
 print(thisfails)
 ```
 
+Test hide-output passthrough to code-cells
+
+```{code-cell} python3
+---
+tags: [hide-output]
+---
+from random import uniform
+
+samples = [uniform(0, 1) for i in range(10)]
+F = ECDF(samples)
+F(0.5)  # Evaluate ecdf at x = 0.5
+```
+
+### Combinations
+
+```{code-cell} python3
+---
+tags: [raises-exception, hide-output]
+---
+from random import uniform
+
+samples = [uniform(0, 1) for i in range(10)]
+F = ECDF(samples)
+F(0.5)  # Evaluate ecdf at x = 0.5
+```
+
