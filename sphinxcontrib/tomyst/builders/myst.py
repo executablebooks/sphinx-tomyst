@@ -103,6 +103,7 @@ class MystBuilder(Builder):
                         block_remove = True
                     if "tomyst-remove-finish" in line:
                         block_remove = False
+                        continue  # so this line doesn't get added
                 if not block_remove:
                     outf.write(line)
 
