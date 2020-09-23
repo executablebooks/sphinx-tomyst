@@ -8,6 +8,7 @@ A MyST Sphinx Builder
 :licences: see LICENSE for details
 """
 
+import re
 from typing import Dict, Iterator, Set, Tuple
 from os import path
 from sphinx.util.fileutil import copy_asset
@@ -93,11 +94,10 @@ class MystBuilder(Builder):
         else:
             pkg = "myst_parser"
         # Update conf.py
+        drop_items = self.config["tomyst_conf_dropcontaining"]
         block_remove = False
         with io.open(src_conf, "r") as inpf, io.open(dest_conf, "w") as outf:
             for line in inpf.readlines():
-                if "sphinxcontrib.tomyst" in line:
-                    line = line.replace("sphinxcontrib.tomyst", pkg)
                 if self.config["tomyst_conf_removeblocks"]:
                     if "tomyst-remove-start" in line:
                         block_remove = True
@@ -105,6 +105,11 @@ class MystBuilder(Builder):
                         block_remove = False
                         continue  # so this line doesn't get added
                 if not block_remove:
+                    if "sphinxcontrib.tomyst" in line:
+                        line = line.replace("sphinxcontrib.tomyst", pkg)
+                    for item in drop_items:
+                        if re.search(item, line):
+                            line = ""
                     outf.write(line)
 
     def copy_static_files(self):

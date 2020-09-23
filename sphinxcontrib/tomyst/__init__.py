@@ -47,6 +47,7 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     # Adjust generated conf.py based on block tags {{ tomyst-remove-start }}
     # and {{tomyst-remove-finish}}
     app.add_config_value("tomyst_conf_removeblocks", False, "tomyst")
+    app.add_config_value("tomyst_conf_dropcontaining", [], "tomyst")
 
     return {
         "version": "builtin",
