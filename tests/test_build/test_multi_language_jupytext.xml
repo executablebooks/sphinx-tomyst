@@ -34,3 +34,20 @@
                 Test skip-test passthrough to code-cells
             <literal_block classes="skip-test" force="False" highlight_args="{}" language="python" xml:space="preserve">
                 print(thisfails)
+            <paragraph>
+                Test hide-output passthrough to code-cells
+            <literal_block classes="hide-output" force="False" highlight_args="{}" language="python3" xml:space="preserve">
+                from random import uniform
+                
+                samples = [uniform(0, 1) for i in range(10)]
+                F = ECDF(samples)
+                F(0.5)  # Evaluate ecdf at x = 0.5
+            <section ids="combinations" names="combinations">
+                <title>
+                    Combinations
+                <literal_block classes="skip-test hide-output" force="False" highlight_args="{}" language="python3" xml:space="preserve">
+                    from random import uniform
+                    
+                    samples = [uniform(0, 1) for i in range(10)]
+                    F = ECDF(samples)
+                    F(0.5)  # Evaluate ecdf at x = 0.5
