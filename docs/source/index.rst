@@ -6,7 +6,7 @@
 Welcome to sphinxcontrib-tomyst's documentation!
 ================================================
 
-`sphinxcontrib-tomyst <https://github.com/mmcky/sphinxcontrib-tomyst>`__ is
+`sphinxcontrib-tomyst <https://github.com/QuantEcon/sphinxcontrib-tomyst>`__ is
 a Sphinx extension that enables projects to be converted to `myst <https://myst-parser.readthedocs.io/en/latest/using/syntax.html>`__.
 
 .. image:: https://readthedocs.org/projects/sphinxcontrib-tomyst/badge/?version=latest
@@ -15,8 +15,9 @@ a Sphinx extension that enables projects to be converted to `myst <https://myst-
 
 Myst files can be compiled using:
 
+#. `myst_nb <https://myst-nb.readthedocs.io/en/latest/>`__, or
 #. `myst_parser <https://myst-parser.readthedocs.io/en/latest/>`__, or
-#. `Jupyter Book <https://jupyterbook.org/intro.html>`__
+#. `Jupyter Book <https://jupyterbook.org/intro.html>`__ (requires manual configuration)
 
 Installation
 ------------
@@ -35,9 +36,9 @@ Installation
    :maxdepth: 2
    :hidden:
 
-   issues
    config
    contribute
+   issues
 
 Indices and tables
 ==================
