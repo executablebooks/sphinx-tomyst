@@ -44,8 +44,9 @@ def setup(app: Sphinx) -> Dict[str, Any]:
         "tomyst",
     )
 
-    # Comment conf.py settings based on a pattern
-    app.add_config_value("tomyst_comment_conf", [], "tomyst")
+    # Adjust generated conf.py based on block tags {{ tomyst-remove-start }}
+    # and {{tomyst-remove-finish}}
+    app.add_config_value("tomyst_conf_removeblocks", False, "tomyst")
 
     return {
         "version": "builtin",
