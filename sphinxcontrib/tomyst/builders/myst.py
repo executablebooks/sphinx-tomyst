@@ -88,10 +88,15 @@ class MystBuilder(Builder):
         dest_conf = path.join(self.outdir, "conf.py")
 
         copy_asset_file(self.confdir + "/Makefile", self.outdir)
+        # Update conf.py file with appropriate package import
+        if self.config["tomyst_parser"] == "myst_nb":
+            pkg = "myst_nb"
+        else:
+            pkg = "myst_parser"
         with io.open(src_conf, "r") as inpf, io.open(dest_conf, "w") as outf:
             for line in inpf.readlines():
                 if "sphinxcontrib.tomyst" in line:
-                    line = line.replace("sphinxcontrib.tomyst", "myst_parser")
+                    line = line.replace("sphinxcontrib.tomyst", pkg)
                 outf.write(line)
 
     def copy_static_files(self):
