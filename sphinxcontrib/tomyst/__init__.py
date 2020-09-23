@@ -44,6 +44,9 @@ def setup(app: Sphinx) -> Dict[str, Any]:
         "tomyst",
     )
 
+    # Comment conf.py settings based on a pattern
+    app.add_config_value("tomyst_comment_conf", [], "tomyst")
+
     return {
         "version": "builtin",
         "parallel_read_safe": True,

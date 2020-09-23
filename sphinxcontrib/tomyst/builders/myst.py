@@ -8,6 +8,7 @@ A MyST Sphinx Builder
 :licences: see LICENSE for details
 """
 
+import re
 from typing import Dict, Iterator, Set, Tuple
 from os import path
 from sphinx.util.fileutil import copy_asset
@@ -39,7 +40,6 @@ class MystBuilder(Builder):
     current_docname = None  # type: str
 
     def init(self) -> None:
-        # import pdb; pdb.set_trace()
         self.secnumbers = {}  # type: Dict[str, Tuple[int, ...]]
 
     def get_outdated_docs(self) -> Iterator[str]:
@@ -93,10 +93,19 @@ class MystBuilder(Builder):
             pkg = "myst_nb"
         else:
             pkg = "myst_parser"
+        # tomyst_comment_conf
+        comment_patterns = self.config["tomyst_comment_conf"]
+        # Update conf.py
         with io.open(src_conf, "r") as inpf, io.open(dest_conf, "w") as outf:
             for line in inpf.readlines():
                 if "sphinxcontrib.tomyst" in line:
                     line = line.replace("sphinxcontrib.tomyst", pkg)
+                for pattern in comment_patterns:
+                    if re.search(pattern, line):
+                        line = "# " + line
+                        import pdb
+
+                        pdb.set_trace()
                 outf.write(line)
 
     def copy_static_files(self):
