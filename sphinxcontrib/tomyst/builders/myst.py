@@ -103,9 +103,6 @@ class MystBuilder(Builder):
                 for pattern in comment_patterns:
                     if re.search(pattern, line):
                         line = "# " + line
-                        import pdb
-
-                        pdb.set_trace()
                 outf.write(line)
 
     def copy_static_files(self):
