@@ -15,13 +15,26 @@ kernelspec:
 
 # Snippet
 
-```{only} html
-HTML
+Add a footnote
 
-```
+Lorem ipsum [^f1] dolor sit amet ... [^f2]
 
-```{only} latex
-LaTeX
+[^f1]: Text of the first footnote.
 
-```
+[^f2]: Text of the second footnote.
+
+Lorem ipsum [^autoid_0] dolor sit amet ... [^autoid_1]
+
+[^autoid_0]: Text of the first footnote.
+
+[^autoid_1]: Text of the second footnote.
+
+and example from lectures
+
+Just as [NumPy](http://www.numpy.org/) provides the basic array data type plus core array operations, pandas
+
+1. endows them with methods that facilitate operations such as
+    * sorting, grouping, re-ordering and general data munging [^mung]
+
+[^mung]: Wikipedia defines munging as cleaning data from one raw form into a structured, purged one.
 

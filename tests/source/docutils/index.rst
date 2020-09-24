@@ -8,3 +8,4 @@ Docutils Tests
    elements
    directives
    roles
+   footnotes

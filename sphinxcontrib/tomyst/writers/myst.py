@@ -58,6 +58,18 @@ class MystSyntax(MarkdownSyntax):
     def depart_figure(self):
         return "```"
 
+    def visit_footnote(self, refname):
+        return "[^{}]: ".format(refname)
+
+    def depart_footnote(self):
+        pass
+
+    def visit_footnote_reference(self, refname):
+        return "[^{}]".format(refname)
+
+    def depart_footnote_reference(self):
+        pass
+
     def visit_raw(self, rawformat):
         return "```{{raw}} {}".format(rawformat)
 

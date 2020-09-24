@@ -48,7 +48,6 @@ class MystTranslator(SphinxTranslator):
     danger = False
     download_reference = False
     error = False
-    footnote = False
     hint = False
     important = False
     literal = False
@@ -71,10 +70,12 @@ class MystTranslator(SphinxTranslator):
     figure = dict()
     figure["in"] = False
     figure["figure-options"] = None
-    # Footnote Reference
+    # Footnotes
+    footnote = {}
+    footnote["in"] = False
     footnote_reference = dict()
     footnote_reference["in"] = False
-    footnote_reference["link"] = None
+    footnote_reference["autoid"] = []
     # Bullet List
     bullet_list = dict()
     bullet_list["in"] = True
@@ -631,27 +632,35 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#footnote
 
     def visit_footnote(self, node):
-        self.footnote = True
+        self.footnote["in"] = True
+        try:
+            refname = node.attributes["names"][0]
+        except IndexError:
+            refname = self.footnote_reference["autoid"].pop(0)
+        self.output.append(self.syntax.visit_footnote(refname))
 
     def depart_footnote(self, node):
-        self.footnote = False
+        self.footnote["in"] = False
 
     # docutils.elements.footnote_reference
     # https://docutils.sourceforge.io/docs/ref/doctree.html#footnote-reference
 
     def visit_footnote_reference(self, node):
         self.footnote_reference["in"] = True
-        if node.hasattr("refid"):
-            refid = node.attributes["refid"]
-            ids = node.astext()
-            self.footnote_reference["link"] = "<sup>[{}](#{})</sup>".format(
-                ids, refid
-            )  # TODO: can this be harmonized with HTML
-            self.output.append(self.footnote_reference["link"])
-            raise nodes.SkipNode
+        if node.hasattr("refname"):
+            refname = node.attributes["refname"]
         else:
-            msg = "[footnote_reference] unable to find refid"
-            logger.warn(msg)
+            count = len(self.footnote_reference["autoid"])
+            autoid = "autoid_{}".format(count)
+            self.footnote_reference["autoid"].append(autoid)
+            refname = autoid
+        syntax = self.syntax.visit_footnote_reference(refname)
+        if self.List:
+            self.List.addto_list_item(syntax)
+        elif self.Table:
+            self.Table.add_item(syntax)
+        else:
+            self.output.append(syntax)
 
     def depart_footnote_reference(self, node):
         self.footnote_reference["in"] = False
@@ -819,22 +828,6 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#label
 
     def visit_label(self, node):
-        """
-        Notes: footnote requires `html` to create links within the
-        notebooks as there is no markdown equivalent
-        """
-        if self.footnote:
-            ids = node.parent.attributes["ids"]
-            id_text = ""
-            for id_ in ids:
-                id_text += "{} ".format(id_)
-            else:
-                id_text = id_text[:-1]
-            self.output.append(
-                "<a id='{}'></a>\n**[{}]** ".format(id_text, node.astext())
-            )  # TODO: can this be harmonized with HTML
-            raise nodes.SkipNode
-
         if self.citation:
             self.output.append(self.syntax.visit_label())
 
@@ -1275,10 +1268,7 @@ file will be included in the myst directive".format(
     # https://docutils.sourceforge.io/docs/ref/doctree.html#rubric
 
     def visit_rubric(self, node):
-        if len(node.children) == 1 and node.children[0].astext() in ["Footnotes"]:
-            self.output.append(
-                "**{}**\n\n".format(node.children[0].astext())
-            )  # TODO: add to MarkdownSyntax?
+        if len(node.children) != 0 and node.children[0].astext() in ["Footnotes"]:
             raise nodes.SkipNode
 
     def depart_rubric(self, node):
