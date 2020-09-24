@@ -1,0 +1,15 @@
+<document source="directives.rst">
+    <section ids="directives" names="directives">
+        <title>
+            Directives
+        <section ids="only" names="only">
+            <title>
+                only
+            <paragraph>
+                The only directive
+            <only expr="html">
+                <paragraph>
+                    HTML
+            <only expr="latex">
+                <paragraph>
+                    LaTeX

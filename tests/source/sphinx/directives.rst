@@ -1,5 +1,10 @@
-Snippet
-=======
+Directives
+==========
+
+only
+----
+
+The only directive
 
 .. only:: html
 

@@ -66,10 +66,10 @@ class MystSyntax(MarkdownSyntax):
 
     # - Syntax Methods - #
 
-    def visit_directive(self, type, title=None, options=None):
+    def visit_directive(self, type, argument=None, options=None):
         directive = "```{" + "{}".format(type) + "}"
-        if title:
-            directive += " {}".format(title)
+        if argument:
+            directive += " {}".format(argument)
         if options:
             directive += "\n{}".format("\n".join(options))
         return directive
