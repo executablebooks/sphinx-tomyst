@@ -19,6 +19,7 @@ Text
 
 This is some text
 
+.. _block_quote:
 
 block_quote
 -----------
@@ -109,3 +110,9 @@ The enumerated list from docutils
    (C) Item C.
 
 2. Item 2.
+
+
+target Links
+------------
+
+See :ref:`block quote section <block_quote>` above
