@@ -49,7 +49,7 @@ def test_docutils(
     get_sphinx_app_doctree(app, docname="elements", regress=True)
     get_sphinx_app_output(
         app,
-        files=["index.md", "elements.md", "directives.md", "roles.md"],
+        files=["index.md", "elements.md", "directives.md", "roles.md", "footnotes.md"],
         regress=True,
     )
 

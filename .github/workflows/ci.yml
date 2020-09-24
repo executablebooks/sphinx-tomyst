@@ -25,6 +25,7 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install sphinx-book-theme myst-nb
+          pip install -U jupyter-client
       - name: Display Conda Environment Versions
         shell: bash -l {0}
         run: conda list
@@ -34,14 +35,12 @@ jobs:
       - name: Build https://github.com/QuantEcon/lecture-python-programming
         shell: bash -l {0}
         run: |
-          pwd
           cd lecture-python-programming
           git checkout sphinxcontrib-tomyst
           make myst
       - name: Build Myst Version
         shell: bash -l {0}
         run: |
-          pwd
           cd lecture-python-programming/_build/myst/
           make html
       - name: Preview Deploy to Netlify

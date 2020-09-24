@@ -1,7 +1,10 @@
-Snippet
-=======
+Footnotes
+=========
 
-Add a footnote
+Footnotes use a mix of roles and directives
+
+First Footnotes
+---------------
 
 Lorem ipsum [#f1]_ dolor sit amet ... [#f2]_
 
@@ -10,6 +13,9 @@ Lorem ipsum [#f1]_ dolor sit amet ... [#f2]_
 .. [#f1] Text of the first footnote.
 .. [#f2] Text of the second footnote.
 
+Second Footnotes
+----------------
+
 Lorem ipsum [#]_ dolor sit amet ... [#]_
 
 .. rubric:: Footnotes
@@ -17,7 +23,10 @@ Lorem ipsum [#]_ dolor sit amet ... [#]_
 .. [#] Text of the first footnote.
 .. [#] Text of the second footnote.
 
-and example from lectures
+Third Footnotes
+---------------
+
+and example within a list
 
 Just as `NumPy <http://www.numpy.org/>`_ provides the basic array data type plus core array operations, pandas
 
