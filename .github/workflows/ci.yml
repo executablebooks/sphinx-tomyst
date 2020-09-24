@@ -24,7 +24,7 @@ jobs:
       - name: Install Dependencies
         shell: bash -l {0}
         run: |
-          pip install sphinx-book-theme myst-nb jupyter_client
+          pip install sphinx-book-theme myst-nb jupyter-client
       - name: Display Conda Environment Versions
         shell: bash -l {0}
         run: conda list
