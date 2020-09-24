@@ -15,44 +15,13 @@ kernelspec:
 
 # Snippet
 
-Another snippet test
+```{only} html
+HTML
 
-skip-test
-
-```{code-cell} python3
----
-tags: [raises-exception]
----
-from random import uniform
-
-samples = [uniform(0, 1) for i in range(10)]
-F = ECDF(samples)
-F(0.5)  # Evaluate ecdf at x = 0.5
 ```
 
-hide-output
+```{only} latex
+LaTeX
 
-```{code-cell} python3
----
-tags: [hide-output]
----
-from random import uniform
-
-samples = [uniform(0, 1) for i in range(10)]
-F = ECDF(samples)
-F(0.5)  # Evaluate ecdf at x = 0.5
-```
-
-both
-
-```{code-cell} python3
----
-tags: [raises-exception, hide-output]
----
-from random import uniform
-
-samples = [uniform(0, 1) for i in range(10)]
-F = ECDF(samples)
-F(0.5)  # Evaluate ecdf at x = 0.5
 ```
 

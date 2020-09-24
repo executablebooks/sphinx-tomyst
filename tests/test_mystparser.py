@@ -79,6 +79,32 @@ def test_extended(
 
 
 @pytest.mark.sphinx(
+    buildername="myst", srcdir=os.path.join(SOURCE_DIR, "sphinx"), freshenv=True
+)
+def test_sphinx(
+    app,
+    status,
+    warning,
+    get_sphinx_app_doctree,
+    get_sphinx_app_output,
+    remove_sphinx_builds,
+):
+    """basic test."""
+    app.build()
+
+    assert "build succeeded" in status.getvalue()  # Build succeeded
+
+    # Note: pytest needs to run twice to initialise fixtures
+
+    get_sphinx_app_doctree(app, docname="directives", regress=True)
+    get_sphinx_app_output(
+        app,
+        files=["index.md", "directives.md"],
+        regress=True,
+    )
+
+
+@pytest.mark.sphinx(
     buildername="myst", srcdir=os.path.join(SOURCE_DIR, "code-blocks"), freshenv=True
 )
 def test_multi_language(

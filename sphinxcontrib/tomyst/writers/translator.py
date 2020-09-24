@@ -1071,10 +1071,14 @@ class MystTranslator(SphinxTranslator):
     # https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-only
 
     def visit_only(self, node):
-        pass  # TODO: can this be removed in favour of default method
+        target = node.attributes["expr"]
+        self.output.append(self.syntax.visit_directive("only", argument=target))
+        self.add_newline()
 
     def depart_only(self, node):
-        pass
+        self.remove_newline()
+        self.output.append(self.syntax.depart_directive())
+        self.add_newparagraph()
 
     # docutils.elements.option
     # https://docutils.sourceforge.io/docs/ref/doctree.html#option
