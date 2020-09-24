@@ -64,7 +64,8 @@
                 Text
             <paragraph>
                 This is some text
-        <section ids="block-quote" names="block_quote">
+            <target refid="block-quote">
+        <section dupnames="block_quote" ids="block-quote id1" names="block_quote">
             <title>
                 block_quote
             <paragraph>
@@ -210,3 +211,12 @@
                 <list_item>
                     <paragraph>
                         Item 2.
+        <section ids="target-links" names="target\ links">
+            <title>
+                target Links
+            <paragraph>
+                See 
+                <pending_xref refdoc="elements" refdomain="std" refexplicit="True" reftarget="block_quote" reftype="ref" refwarn="True">
+                    <inline classes="xref std std-ref">
+                        block quote section
+                 above

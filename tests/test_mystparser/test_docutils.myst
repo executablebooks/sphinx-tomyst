@@ -52,6 +52,7 @@ are **not** directives.
 
 This is some text
 
+(block_quote)=
 ## block_quote
 
 This is the main document
@@ -122,6 +123,10 @@ The enumerated list from docutils
     1. Item B.
     1. Item C.
 1. Item 2.
+
+## target Links
+
+See {ref}`block quote section <block_quote>` above
 
 
 -------------
@@ -232,6 +237,7 @@ single: programming
 :name: reference-id
 ```
 
+(reference-id)=
 A point in the text you'd like to reference something
 about python
 

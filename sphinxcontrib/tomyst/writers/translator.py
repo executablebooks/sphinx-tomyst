@@ -89,7 +89,6 @@ class MystTranslator(SphinxTranslator):
     index = dict()
     index["in"] = False
     index["type"] = None
-    index["skip-target"] = False
     # Math
     math_block = dict()
     math_block["in"] = False
@@ -812,7 +811,6 @@ class MystTranslator(SphinxTranslator):
     def depart_index(self, node):
         self.index["in"] = False
         self.index["type"] = None
-        self.index["skip-target"] = True
 
     # docutils.elements.inline
     # uses: container?
@@ -1346,14 +1344,20 @@ file will be included in the myst directive".format(
     # https://docutils.sourceforge.io/docs/ref/doctree.html#target
 
     def visit_target(self, node):
-        if self.index["skip-target"]:
-            raise nodes.SkipNode
         if "refid" in node.attributes:
-            self.output.append(self.syntax.visit_target(node.attributes["refid"]))
-            self.add_newline()
+            targetname = node.attributes["refid"]
+        elif "refuri" in node.attributes:
+            # refuri handled in visit_reference
+            raise nodes.SkipNode
+        elif len(node.attributes["names"]) == 1:
+            targetname = node.attributes["names"][0]
+        else:
+            raise nodes.SkipNode
+        self.output.append(self.syntax.visit_target(targetname))
+        self.add_newline()
 
     def depart_target(self, node):
-        self.index["skip-target"] = False
+        pass
 
     # docutils.elements.tbody
     # uses: table
