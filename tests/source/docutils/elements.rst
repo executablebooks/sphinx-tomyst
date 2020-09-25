@@ -91,7 +91,7 @@ just underneath the first title.
 They don't appear to be transformed by sphinx/docutils
 to be `docinfo` elements.
 
-https://github.com/mmcky/sphinxcontrib-tomyst/issues/19
+https://github.com/mmcky/sphinx-tomyst/issues/19
 
 emphasis
 --------
