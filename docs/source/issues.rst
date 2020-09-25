@@ -1,5 +1,5 @@
-Conversion Issues
-=================
+Known Conversion Issues
+=======================
 
 There are some cases where conversion is not possible due to information
 being lost during the initial parsing of the RST document.

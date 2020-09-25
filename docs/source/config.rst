@@ -4,8 +4,6 @@ Configuration options
 The following sphinx configuration options which you can use in
 your ``conf.py`` file are:
 
-.. contents::
-
 General
 -------
 
