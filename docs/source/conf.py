@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = "sphinx-tomyst"
-copyright = "2020, QuantEcon Developers"
-author = "QuantEcon Developers"
+copyright = "2020, Executable Book Developers and QuantEcon"
+author = "Executable Book Developers"
 
 
 # -- General configuration ---------------------------------------------------
@@ -46,7 +46,6 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = "sphinx_book_theme"
-# html_theme = 'alabaster'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
