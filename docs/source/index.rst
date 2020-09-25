@@ -1,16 +1,16 @@
-.. sphinxcontrib-tomyst documentation master file, created by
+.. sphinx-tomyst documentation master file, created by
    sphinx-quickstart on Wed Jul  8 15:41:25 2020.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to sphinxcontrib-tomyst's documentation!
+Welcome to sphinx-tomyst's documentation!
 ================================================
 
-`sphinxcontrib-tomyst <https://github.com/QuantEcon/sphinxcontrib-tomyst>`__ is
+`sphinx-tomyst <https://github.com/QuantEcon/sphinx-tomyst>`__ is
 a Sphinx extension that enables projects to be converted to `myst <https://myst-parser.readthedocs.io/en/latest/using/syntax.html>`__.
 
-.. image:: https://readthedocs.org/projects/sphinxcontrib-tomyst/badge/?version=latest
-   :target: https://sphinxcontrib-tomyst.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/sphinx-tomyst/badge/?version=latest
+   :target: https://sphinx-tomyst.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
 Myst files can be compiled using:
@@ -28,7 +28,7 @@ Installation
 
    python setup.py install
 
-**Step 2:** Add ``sphinxcontrib.tomyst`` to your sphinx ``extensions`` in the ``conf.py``
+**Step 2:** Add ``sphinx_tomyst`` to your sphinx ``extensions`` in the ``conf.py``
 
 **Step 3:** Build using ``make myst``
 

@@ -1,5 +1,5 @@
 """
-sphinxcontrib-tomyst.builders.myst
+sphinx-tomyst.builders.myst
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A MyST Sphinx Builder
@@ -105,8 +105,8 @@ class MystBuilder(Builder):
                         block_remove = False
                         continue  # so this line doesn't get added
                 if not block_remove:
-                    if "sphinxcontrib.tomyst" in line:
-                        line = line.replace("sphinxcontrib.tomyst", pkg)
+                    if "sphinx_tomyst" in line:
+                        line = line.replace("sphinx_tomyst", pkg)
                     for item in drop_items:
                         if re.search(item, line):
                             line = ""

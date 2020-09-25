@@ -18,7 +18,7 @@ jobs:
           python-version: 3.7
           environment-file: lecture-python-programming/environment.yml
           activate-environment: qe-lectures
-      - name: Install sphinxcontrib-tomyst
+      - name: Install sphinx-tomyst
         shell: bash -l {0}
         run: python setup.py install
       - name: Install Dependencies
@@ -36,7 +36,7 @@ jobs:
         shell: bash -l {0}
         run: |
           cd lecture-python-programming
-          git checkout sphinxcontrib-tomyst
+          git checkout sphinx-tomyst
           make myst
       - name: Build Myst Version
         shell: bash -l {0}

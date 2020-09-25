@@ -15,22 +15,22 @@ Status
 
 |status-docs| |status-travis|
 
-.. |status-docs| image:: https://readthedocs.org/projects/sphinxcontrib-tomyst/badge/?version=latest # noqa: E501
-   :target: http://sphinxcontrib-tomyst.readthedocs.io/en/latest/?badge=latest
+.. |status-docs| image:: https://readthedocs.org/projects/sphinx-tomyst/badge/?version=latest # noqa: E501
+   :target: http://sphinx-tomyst.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. |status-travis| image:: https://travis-ci.org/mmcky/sphinxcontrib-tomyst.svg?branch=master # noqa: E501
-   :target: https://travis-ci.org/mmcky/sphinxcontrib-tomyst
+.. |status-travis| image:: https://travis-ci.org/mmcky/sphinx-tomyst.svg?branch=master # noqa: E501
+   :target: https://travis-ci.org/mmcky/sphinx-tomyst
 
 """
 
 requires = ["Sphinx>=0.6"]
 
 setup(
-    name="sphinxcontrib-tomyst",
+    name="sphinx-tomyst",
     version=VERSION,
-    url="https://github.com/mmcky/sphinxcontrib-tomyst",
-    download_url="https://github.com/mmcky/sphinxcontrib-tomyst/archive/{}.tar.gz".format(  # noqa: E501
+    url="https://github.com/mmcky/sphinx-tomyst",
+    download_url="https://github.com/mmcky/sphinx-tomyst/archive/{}.tar.gz".format(  # noqa: E501
         VERSION
     ),
     license="BSD",
@@ -59,5 +59,4 @@ setup(
             "pytest-regressions",
         ],
     },
-    namespace_packages=["sphinxcontrib"],
 )
