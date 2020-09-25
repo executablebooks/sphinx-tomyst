@@ -19,8 +19,20 @@ Myst files can be compiled using:
 #. `myst_parser <https://myst-parser.readthedocs.io/en/latest/>`__, or
 #. `Jupyter Book <https://jupyterbook.org/intro.html>`__ (requires manual configuration)
 
+.. note::
+
+   ``sphinx-tomyst`` is currently built to target `myst_nb <https://myst-nb.readthedocs.io/en/latest/`__
+   by **default** but for static projects you can also target
+   `myst_parser <https://myst-parser.readthedocs.io/en/latest/>`__.
+
+
 Installation
 ------------
+
+.. note::
+
+   A `pypi release <https://github.com/QuantEcon/sphinx-tomyst/issues/75>` is
+   coming once an `alpha` milestone is reached.
 
 **Step 1:** To install the extension you need to clone the repository then run:
 

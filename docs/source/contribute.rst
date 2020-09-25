@@ -1,5 +1,5 @@
 Contribute to sphinx-tomyst
-==================================
+===========================
 
 Welcome to the ``sphinx-tomyst`` repository!
 
