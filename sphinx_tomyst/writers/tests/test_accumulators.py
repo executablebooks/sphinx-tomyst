@@ -2,7 +2,7 @@
 Tests for writers.accumulators
 """
 
-from sphinxcontrib.tomyst.writers.accumulators import List
+from sphinx_tomyst.writers.accumulators import List
 
 
 def test_simple():
