@@ -122,6 +122,15 @@ hint
 
    This is a hint admonition
 
+images
+------
+
+.. image:: qs.png
+   :scale: 50 %
+
+.. image:: qs.png
+   :height: 100px
+
 important
 ---------
 
