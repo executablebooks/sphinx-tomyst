@@ -1,17 +1,9 @@
-.. sphinx-tomyst documentation master file, created by
-   sphinx-quickstart on Wed Jul  8 15:41:25 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to sphinx-tomyst's documentation!
-================================================
+=========================================
 
 `sphinx-tomyst <https://github.com/QuantEcon/sphinx-tomyst>`__ is
-a Sphinx extension that enables projects to be converted to `myst <https://myst-parser.readthedocs.io/en/latest/using/syntax.html>`__.
-
-.. image:: https://readthedocs.org/projects/sphinx-tomyst/badge/?version=latest
-   :target: https://sphinx-tomyst.readthedocs.io/en/latest/?badge=latest
-   :alt: Documentation Status
+a Sphinx extension that enables projects to be converted to a `myst <https://myst-parser.readthedocs.io/en/latest/using/syntax.html>`__
+project.
 
 Myst files can be compiled using:
 
@@ -21,18 +13,14 @@ Myst files can be compiled using:
 
 .. note::
 
-   ``sphinx-tomyst`` is currently built to target `myst_nb <https://myst-nb.readthedocs.io/en/latest/`__
+   ``sphinx-tomyst`` is currently built to target `myst_nb <https://myst-nb.readthedocs.io/en/latest/>`__
    by **default** but for static projects you can also target
-   `myst_parser <https://myst-parser.readthedocs.io/en/latest/>`__.
+   `myst_parser <https://myst-parser.readthedocs.io/en/latest/>`__ using the
+   :ref:`target_parser option <tomyst_parser>`.
 
 
 Installation
 ------------
-
-.. note::
-
-   A `pypi release <https://github.com/QuantEcon/sphinx-tomyst/issues/75>` is
-   coming once an `alpha` milestone is reached.
 
 **Step 1:** To install the extension you need to clone the repository then run:
 
@@ -44,6 +32,13 @@ Installation
 
 **Step 3:** Build using ``make myst``
 
+.. note::
+
+   A `pypi release<https://github.com/QuantEcon/sphinx-tomyst/issues/75>`__ is
+   coming once an `alpha` milestone is reached.
+
+
+
 .. toctree::
    :maxdepth: 2
    :hidden:
@@ -52,9 +47,3 @@ Installation
    contribute
    issues
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

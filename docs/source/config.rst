@@ -1,8 +1,8 @@
 Configuration options
 =====================
 
-The following sphinx configuration options which you can use in
-your ``conf.py`` file are:
+This page documents the sphinx configuration options that are available.
+All options are prepended with `tomyst`.
 
 General
 -------
@@ -10,7 +10,7 @@ General
 tomyst_static_file_path
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-An array which takes path of your static folders, relative to the project's ``confdir``.
+A list which takes the path of your static folders, relative to the project's ``confdir``.
 It creates the directory structure of the path, inside the output directory: ``_build/myst``;
 and then copies over the files inside the given path.
 
@@ -18,7 +18,9 @@ and then copies over the files inside the given path.
 
 For config variable:
 
-``tomyst_static_file_path: ["source/_static"]``,
+.. code-block:: python
+
+   tomyst_static_file_path = ["source/_static"]
 
 the contents of this folder will be copied over to ``_build/myst/source/_static``.
 
@@ -26,12 +28,14 @@ the contents of this folder will be copied over to ``_build/myst/source/_static`
 Target Parser Configuration
 ---------------------------
 
+.. _tomyst_parser:
+
 tomyst_parser
 ~~~~~~~~~~~~~
 
 Allows you to choose which parser to target for `myst`
 
-.. list-table:: Title
+.. list-table::
    :header-rows: 1
 
    * - Values
@@ -41,9 +45,9 @@ Allows you to choose which parser to target for `myst`
    * - ``myst_parser``
      -
 
-The main difference between the two options is how `code` is converted.
-When targeting `myst_nb` executable code is contained
-in ``code-cell`` directives to enable compatibility with `jupytext` conversion
+The main difference between the two parser options is how ``code`` is converted.
+When targeting ``myst_nb`` executable code is contained
+in ``code-cell`` directives to enable compatibility with ``jupytext`` conversion
 and code execution.
 
 .. note::
@@ -53,7 +57,7 @@ and code execution.
 
 **Usage:**
 
-.. code-block:: bash
+.. code-block:: python
 
    tomyst_parser = 'myst_parser'
 
@@ -63,7 +67,7 @@ tomyst_jupytext_header
 This option allows you to specify a custom `jupytext header <https://myst-nb.readthedocs.io/en/latest/use/markdown.html>`__
 to support jupytext compatibility and execution using `myst-nb <https://github.com/executablebooks/MyST-NB>`__
 
-This is prepended to the top of every file.
+The ``jupytext header`` is prepended to the top of every file.
 
 The `default values used by the extension <https://github.com/QuantEcon/sphinx-tomyst/blob/4bdcee8d1dca6d4c80147abc03aa617945495cd5/sphinx_tomyst/__init__.py#L8>`__
 
@@ -73,13 +77,15 @@ Code and Execution
 tomyst_default_language
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Allows you to specify the default programming language ["python" is the default otherwise].
+Allows you to specify the default programming language (**Default:** Python)
 
 This is used to determine if ``code-blocks`` should be included as executable ``code-cells`` or not.
 For a code-block that is different to the default programming language (or language synonym) then it
 will be added to the generated myst file as display code only.
 
 **Usage:**
+
+To set the default language to ``julia`` you would add the following to ``conf.py``
 
 .. code-block:: bash
 

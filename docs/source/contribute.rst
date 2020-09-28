@@ -1,8 +1,6 @@
 Contribute to sphinx-tomyst
 ===========================
 
-Welcome to the ``sphinx-tomyst`` repository!
-
 We're excited you're here and want to contribute. ✨
 
 Development guidelines
