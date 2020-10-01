@@ -793,17 +793,23 @@ class MystTranslator(SphinxTranslator):
 
     def parse_index_as_directive(self, node):
         self.index["type"] = "directive"
-        syntax = []
-        syntax.append(self.syntax.visit_directive("index"))
+        entries = []
         options = []
         for entry in node.attributes["entries"]:
             entrytype, entryname, target, ignored, key = entry
-            syntax.append("{}: {}".format(entrytype, entryname))
+            entries.append("{}: {}".format(entrytype, entryname))
             # Sphinx > 3.0
             if not re.match("index-", target) and target != "":
                 option = ":name: {}".format(target)
                 if option not in options:
                     options.append(option)
+        # -Construct Syntax
+        syntax = []
+        if len(entries) == 1:
+            syntax.append(self.syntax.visit_directive("index", argument=entries[0]))
+        else:
+            syntax.append(self.syntax.visit_directive("index"))
+            syntax += entries
         syntax += options
         syntax.append(self.syntax.depart_directive())
         return "\n".join(syntax)

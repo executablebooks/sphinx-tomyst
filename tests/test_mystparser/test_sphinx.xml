@@ -2,7 +2,20 @@
     <section ids="directives" names="directives">
         <title>
             Directives
-        <section ids="only" names="only">
+        <section ids="index" names="index">
+            <title>
+                index
+            <paragraph>
+                The index directives
+            <index entries="('single',\ 'Python',\ 'index-0',\ '',\ None)" inline="False">
+            <target ids="index-0">
+            <index entries="('single',\ 'Python',\ 'test1',\ '',\ None)" inline="False">
+            <target ids="test1" names="test1">
+            <index entries="('single',\ 'Python;\ Runtime',\ 'index-1',\ '',\ None) ('single',\ 'Julia',\ 'index-1',\ '',\ None)" inline="False">
+            <target ids="index-1">
+            <index entries="('single',\ 'Python;\ Runtime',\ 'test2',\ '',\ None) ('single',\ 'Julia',\ 'test2',\ '',\ None)" inline="False">
+            <target refid="test2">
+        <section ids="only test2" names="only test2">
             <title>
                 only
             <paragraph>

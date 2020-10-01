@@ -219,8 +219,7 @@ This is a highlights directive
 
 ## index
 
-```{index}
-single: python
+```{index} single: python
 ```
 
 ```{index}
@@ -241,8 +240,7 @@ single: programming
 A point in the text you'd like to reference something
 about python
 
-```{index}
-single: execution; context
+```{index} single: execution; context
 ```
 
 ## The execution context
