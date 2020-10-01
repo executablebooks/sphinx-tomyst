@@ -158,6 +158,12 @@ class MystTranslator(SphinxTranslator):
             raise nodes.SkipNode
         if self.math_block["in"]:
             text = text.strip()
+        if self.index["in"] and self.index["type"] == "role":
+            presyntax, postsyntax = self.index["role_syntax"]
+            text = presyntax + text + postsyntax
+            # Switch off index and role
+            self.index["in"] = False
+            self.index["type"] = None
 
         self.text = text
 
@@ -771,25 +777,32 @@ class MystTranslator(SphinxTranslator):
         if node.hasattr("inline"):
             inline = node.attributes["inline"]
         if inline:
-            syntax = self.parse_index_as_role(node)
+            self.parse_index_as_role(node)  # Syntax is parsed at Text Node
         else:
             syntax = self.parse_index_as_directive(node)
-        self.output.append(syntax)
-        self.add_newparagraph()
+            self.output.append(syntax)
+            self.add_newparagraph()
 
     def parse_index_as_role(self, node):
-        # TODO: this information should be recoverable from node.parent
-        # by iterating over the children
         self.index["type"] = "role"
-        docname = self.builder.current_docname
-        line = node.line
-        msg = """
-        [{}:{}] contains an inline :index: role that cannot be converted.
-        """.format(
-            docname, line
-        ).strip()
-        logger.warning(msg)
-        raise nodes.SkipNode
+        if len(node.attributes["entries"]) != 1:
+            # Issue Warning
+            docname = self.builder.current_docname
+            line = node.line
+            msg = """
+            [{}:{}] contains an inline :index: role that cannot be converted.
+            """.format(
+                docname, line
+            ).strip()
+            logger.warning(msg)
+            raise nodes.SkipNode
+        else:
+            entry = node.attributes["entries"][0]
+            entrytype, entryname, target, ignored, key = entry
+            presyntax = "{" + "index" + "}`"
+            postsyntax = "<{}: {}>`".format(entrytype, entryname)
+            # Save info for parsing at first Text node
+            self.index["role_syntax"] = (presyntax, postsyntax)
 
     def parse_index_as_directive(self, node):
         self.index["type"] = "directive"
@@ -815,8 +828,12 @@ class MystTranslator(SphinxTranslator):
         return "\n".join(syntax)
 
     def depart_index(self, node):
-        self.index["in"] = False
-        self.index["type"] = None
+        if self.index["type"] == "role":
+            # Delay state change until parsed by visit_Text
+            pass
+        else:
+            self.index["in"] = False
+            self.index["type"] = None
 
     # docutils.elements.inline
     # uses: container?
