@@ -46,4 +46,3 @@ Installation
    config
    contribute
    issues
-
