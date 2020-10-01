@@ -800,7 +800,7 @@ class MystTranslator(SphinxTranslator):
             entry = node.attributes["entries"][0]
             entrytype, entryname, target, ignored, key = entry
             presyntax = "{" + "index" + "}`"
-            postsyntax = "<{}: {}>`".format(entrytype, entryname)
+            postsyntax = " <{}: {}>`".format(entrytype, entryname)
             # Save info for parsing at first Text node
             self.index["role_syntax"] = (presyntax, postsyntax)
 
