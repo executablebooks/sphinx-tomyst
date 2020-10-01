@@ -6,3 +6,4 @@ Sphinx Tests
    :caption: Contents:
 
    directives
+   roles

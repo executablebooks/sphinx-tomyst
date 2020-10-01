@@ -373,11 +373,11 @@ Test cases for role syntax
 
 Note: this will raise warnings as markup cannot be fully converted
 
-This is a standard paragraph
+This is a standard {index}`paragraph <single: paragraph>`
 
-Is this the same with some text
+Is this the same {index}`with some text <single: paragraph>`
 
-This is pair of entries index entries
+This is pair of entries {index}`index entries <pair: index; entry>`
 
 ## math
 

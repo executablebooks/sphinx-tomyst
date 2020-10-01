@@ -99,7 +99,7 @@ def test_sphinx(
     get_sphinx_app_doctree(app, docname="directives", regress=True)
     get_sphinx_app_output(
         app,
-        files=["index.md", "directives.md"],
+        files=["index.md", "directives.md", "roles.md"],
         regress=True,
     )
 
