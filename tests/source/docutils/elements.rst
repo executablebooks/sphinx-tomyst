@@ -116,3 +116,10 @@ target Links
 ------------
 
 See :ref:`block quote section <block_quote>` above
+
+Other Links
+-----------
+
+Get the latest news at `CNN`_.
+
+.. _CNN: http://cnn.com/
