@@ -1,0 +1,13 @@
+<document source="test.rst">
+    <section ids="testing-sphinxcontrib-bibtex" names="testing\ sphinxcontrib-bibtex">
+        <title>
+            Testing 
+            <literal>
+                sphinxcontrib-bibtex
+        <paragraph>
+            In this lecture, we describe the structure of a class of models
+            that build on work by Truman Bewley 
+            <pending_xref classes="bibtex" ids="id1" refdomain="citation" reftarget="Bewley1977" reftype="ref" refwarn="True" support_smartquotes="False">
+                <inline>
+                    [Bewley1977]
+            .
