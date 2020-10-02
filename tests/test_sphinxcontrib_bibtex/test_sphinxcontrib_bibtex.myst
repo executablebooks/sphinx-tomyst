@@ -1,0 +1,87 @@
+--------
+index.md
+--------
+
+---
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+---
+
+# `sphinxcontrib-bibtex` Testing
+
+This is the index page
+
+```{toctree}
+---
+caption: Contents:
+maxdepth: 2
+---
+
+test
+references
+```
+
+
+-------
+test.md
+-------
+
+---
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+---
+
+# Testing `sphinxcontrib-bibtex`
+
+In this lecture, we describe the structure of a class of models
+that build on work by Truman Bewley {cite}`Bewley1977`.
+
+
+-------------
+references.md
+-------------
+
+---
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+---
+
+# References
+
+```{bibliography} _static/testing.bib
+```
+
+```{only} future
+```{bibliography} _static/testing.bib
+```
+
+```{bibliography} _static/testing.bib
+```
+```
+
+```{bibliography} _static/testing.bib
+:style: unsrt
+```
+
+```{bibliography} _static/testing.bib
+:encoding: latin
+```
+

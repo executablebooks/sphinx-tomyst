@@ -117,6 +117,9 @@ class MystTranslator(SphinxTranslator):
         self.syntax = MystSyntax()
         self.images = []
         self.section_level = 0
+        # Support for sphinxcontrib-bibtex data
+        if "sphinxcontrib.bibtex" in self.builder.config.extensions:
+            self.bibtex_cache = self.builder.env.bibtex_cache
 
     # ----------#
     # -Document-#
@@ -249,6 +252,45 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#author
     # https://docutils.sourceforge.io/docs/ref/doctree.html#authors
 
+    # sphinxcontrib-bibtex
+    # https://sphinxcontrib-bibtex.readthedocs.io/en/latest/index.html
+
+    def visit_bibliography(self, node):
+        """
+        TODO: add support for directive options :cited:, :notcited:, :all:
+        and :filter:
+        https://sphinxcontrib-bibtex.readthedocs.io/en/latest/usage.html#filtering
+        """
+        docname = self.builder.current_docname
+        bib_id = node.attributes["ids"][0]
+        bib_cache = self.bibtex_cache.get_bibliography_cache(docname, bib_id)
+        srcdir = self.builder.srcdir
+        # Extract Directive Info
+        files = [x.replace(srcdir + "/", "") for x in bib_cache.bibfiles]
+        options = {}
+        if bib_cache.style != "alpha":
+            options["style"] = bib_cache.style
+        if bib_cache.encoding != "utf-8-sig":
+            options["encoding"] = bib_cache.encoding
+        if bib_cache.enumtype != "arabic":
+            options["enumtype"] = bib_cache.enumtype
+        if bib_cache.start != 1:
+            options["start"] = bib_cache.start
+        if bib_cache.labelprefix != "":
+            options["labelprefix"] = bib_cache.labelprefix
+        if bib_cache.keyprefix != "":
+            options["keyprefix"] = bib_cache.keyprefix
+        options = self.myst_options(options)
+        directive = self.syntax.visit_directive(
+            "bibliography", argument=" ".join(files), options=options
+        )
+        self.output.append(directive)
+        self.add_newline()
+
+    def depart_bibliography(self, node):
+        self.output.append(self.syntax.depart_directive())
+        self.add_newparagraph()
+
     # docutils.element.block_quote
     # class types: epigraph
     # https://docutils.sourceforge.io/docs/ref/doctree.html#block-quote
@@ -349,6 +391,14 @@ class MystTranslator(SphinxTranslator):
 
     # docutils.elements.citation_reference
     # https://docutils.sourceforge.io/docs/ref/doctree.html#citation-reference
+
+    def visit_citation_reference(self, node):
+        citation = node.astext()
+        self.output.append(self.syntax.visit_role("cite", citation))
+        raise nodes.SkipChildren
+
+    def depart_citation_reference(self, node):
+        self.output.append(self.syntax.depart_role())
 
     # docutils.elements.classifier
     # https://docutils.sourceforge.io/docs/ref/doctree.html#classifier
@@ -1134,6 +1184,7 @@ class MystTranslator(SphinxTranslator):
 
     # sphinx.pending_xref
     # https://www.sphinx-doc.org/en/master/extdev/nodes.html#sphinx.addnodes.pending_xref
+    # TODO: should visit_citation_references be implemented here?
 
     def visit_pending_xref(self, node):
         reftype = node.attributes["reftype"]
@@ -1202,8 +1253,8 @@ file will be included in the myst directive".format(
     # docutils.elements.references
     # https://docutils.sourceforge.io/docs/ref/doctree.html#reference
 
-    # TODO: rework references
-    # TODO: add syntax too MarkdownSyntax, MystSyntax
+    # TODO: rework visit_reference, depart_reference
+    # TODO: update to include syntax from self.syntax
 
     def visit_reference(self, node):
         self.reference = True
