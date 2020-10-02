@@ -1253,8 +1253,8 @@ file will be included in the myst directive".format(
     # docutils.elements.references
     # https://docutils.sourceforge.io/docs/ref/doctree.html#reference
 
-    # TODO: rework references
-    # TODO: add syntax to MarkdownSyntax, MystSyntax
+    # TODO: rework visit_reference, depart_reference
+    # TODO: update to include syntax from self.syntax
 
     def visit_reference(self, node):
         self.reference = True
