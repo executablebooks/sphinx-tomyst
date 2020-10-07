@@ -66,6 +66,7 @@ class MystTranslator(SphinxTranslator):
     block_quote = dict()
     block_quote["in"] = False
     block_quote["type"] = None
+    block_quote["depart_math"] = False
     # Figure
     figure = dict()
     figure["in"] = False
@@ -149,18 +150,23 @@ class MystTranslator(SphinxTranslator):
     def visit_Text(self, node):
         text = node.astext()
 
-        # Escape Special markdown chars except in code block
         if self.block_quote["in"] and self.block_quote["type"] == "block_quote":
             if self.literal and self.output[-1] == self.syntax.visit_literal():
                 last_syntax = self.output.pop()
                 text = last_syntax + text
             linemarker = self.syntax.visit_block_quote()
-            text = linemarker + text
+            if self.block_quote["depart_math"]:
+                # No block_quote syntax for after nested math is added
+                self.block_quote["depart_math"] = False
+            else:
+                text = linemarker + text
             text = text.replace("\n", "\n{}".format(linemarker))
         if self.caption:
             raise nodes.SkipNode
-        if self.math_block["in"]:
-            text = text.strip()
+        if self.math or self.math_block["in"]:
+            # Remove block quote syntax from nested math
+            if self.block_quote["in"]:
+                text = text.lstrip("> ")
         if self.index["in"] and self.index["type"] == "role":
             presyntax, postsyntax = self.index["role_syntax"]
             text = presyntax + text + postsyntax
@@ -1079,6 +1085,9 @@ class MystTranslator(SphinxTranslator):
             self.Table.add_item(syntax)
         else:
             self.output.append(syntax)
+        # Inform Block Quote Departing Math
+        if self.block_quote["in"]:
+            self.block_quote["depart_math"] = True
         self.math = False
 
     # docutils.element.math_block

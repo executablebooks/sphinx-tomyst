@@ -29,6 +29,18 @@ This is the main document
    This is a block quote context
    with multiple lines
 
+A longer example with nested math
+
+Let's listen to Wald longer:
+
+   As a basis for choosing among critical regions the following
+   considerations have been advanced by Neyman and Pearson: In accepting
+   or rejecting :math:`H_0` we may commit errors of two kinds. We commit
+   an error of the first kind if we reject :math:`H_0` when it is true;
+   we commit an error of the second kind if we accept :math:`H_0` when
+   :math:`H_1` is true.
+
+
 bullet_list
 -----------
 
