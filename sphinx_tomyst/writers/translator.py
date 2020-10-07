@@ -168,7 +168,7 @@ class MystTranslator(SphinxTranslator):
             if self.block_quote["in"]:
                 text = text.lstrip("> ")
         if self.math_block["in"]:
-            text = text.rstrip()
+            text = text.strip()
         if self.index["in"] and self.index["type"] == "role":
             presyntax, postsyntax = self.index["role_syntax"]
             text = presyntax + text + postsyntax
