@@ -97,6 +97,24 @@
                     <math>
                         H_1
                      is true.
+            <paragraph>
+                and a block quote with math block
+            <block_quote>
+                <paragraph>
+                    This is a block quote with nested equation
+                <math_block docname="elements" label="True" nowrap="False" number="True" xml:space="preserve">
+                    f_x = 0
+                <paragraph>
+                    with some additional text after the equation
+            <paragraph>
+                and a block quote with math block and options
+            <block_quote>
+                <paragraph>
+                    This is a block quote with nested equation
+                <math_block classes="test" docname="elements" label="True" nowrap="False" number="True" xml:space="preserve">
+                    f_x = 0
+                <paragraph>
+                    with some additional text after the equation
         <section ids="bullet-list" names="bullet_list">
             <title>
                 bullet_list

@@ -156,15 +156,15 @@ class MystTranslator(SphinxTranslator):
                 text = last_syntax + text
             linemarker = self.syntax.visit_block_quote()
             if self.block_quote["depart_math"]:
-                # No block_quote syntax for after nested math is added
+                # No block_quote syntax after nested inline math is added
                 self.block_quote["depart_math"] = False
             else:
                 text = linemarker + text
             text = text.replace("\n", "\n{}".format(linemarker))
         if self.caption:
             raise nodes.SkipNode
-        if self.math or self.math_block["in"]:
-            # Remove block quote syntax from nested math
+        if self.math:
+            # Remove block quote syntax from nested inline math
             if self.block_quote["in"]:
                 text = text.lstrip("> ")
         if self.index["in"] and self.index["type"] == "role":
@@ -1096,14 +1096,20 @@ class MystTranslator(SphinxTranslator):
     def visit_math_block(self, node):
         self.math_block["in"] = True
         self.math_block["options"] = self.infer_math_block_attrs(node)
+        math_block = []
         if self.math_block["options"]:
-            self.output.append(self.syntax.visit_directive("math"))
-            self.add_newline()
-            self.output.append(self.math_block["options"])
-            self.add_newparagraph()
+            math_block.append(self.syntax.visit_directive("math") + "\n")
+            math_block.append(self.math_block["options"])
+            math_block.append("\n\n")
         else:
-            self.output.append(self.syntax.visit_math_block())
-            self.add_newline()
+            math_block.append(self.syntax.visit_math_block() + "\n")
+        if self.block_quote["in"]:
+            if self.output[-1] == "\n\n":
+                self.output[-1] = "\n>\n"
+            if math_block[-1] == "\n\n":
+                math_block[-1] = "\n>\n"
+            math_block = ["> {}".format(x) for x in math_block]
+        self.output += math_block
 
     def infer_math_block_attrs(self, node):
         options = []
@@ -1115,11 +1121,17 @@ class MystTranslator(SphinxTranslator):
         return "\n".join(options)
 
     def depart_math_block(self, node):
+        math_block = []
         if self.math_block["options"]:
-            self.output.append(self.syntax.depart_directive())
+            math_block.append(self.syntax.depart_directive())
         else:
-            self.output.append(self.syntax.depart_math_block())
-        self.add_newparagraph()
+            math_block.append(self.syntax.depart_math_block())
+        if self.block_quote["in"]:
+            math_block = ["> {}".format(x) for x in math_block]
+            math_block.append("\n>\n")
+        else:
+            math_block.append("\n\n")
+        self.output += math_block
         self.math_block["in"] = False
 
     # docutils.elements.paragraph

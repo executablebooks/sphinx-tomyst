@@ -40,6 +40,26 @@ Let's listen to Wald longer:
    we commit an error of the second kind if we accept :math:`H_0` when
    :math:`H_1` is true.
 
+and a block quote with math block
+
+   This is a block quote with nested equation
+
+   .. math::
+
+      f_x = 0
+
+   with some additional text after the equation
+
+and a block quote with math block and options
+
+   This is a block quote with nested equation
+
+   .. math::
+      :class: test
+
+      f_x = 0
+
+   with some additional text after the equation
 
 bullet_list
 -----------
