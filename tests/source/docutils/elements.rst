@@ -55,7 +55,7 @@ and a block quote with math block and options
    This is a block quote with nested equation
 
    .. math::
-      :class: test
+      :nowrap:
 
       f_x = 0
 

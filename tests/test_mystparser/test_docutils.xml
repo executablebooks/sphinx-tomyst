@@ -111,7 +111,7 @@
             <block_quote>
                 <paragraph>
                     This is a block quote with nested equation
-                <math_block classes="test" docname="elements" label="True" nowrap="False" number="True" xml:space="preserve">
+                <math_block docname="elements" label="True" nowrap="True" number="True" xml:space="preserve">
                     f_x = 0
                 <paragraph>
                     with some additional text after the equation

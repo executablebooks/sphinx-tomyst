@@ -1099,15 +1099,15 @@ class MystTranslator(SphinxTranslator):
         math_block = []
         if self.math_block["options"]:
             math_block.append(self.syntax.visit_directive("math") + "\n")
-            math_block.append(self.math_block["options"])
-            math_block.append("\n\n")
+            if self.block_quote["in"]:
+                math_block.append(self.math_block["options"] + "\n>\n")
+            else:
+                math_block.append(self.math_block["options"] + "\n\n")
         else:
             math_block.append(self.syntax.visit_math_block() + "\n")
         if self.block_quote["in"]:
             if self.output[-1] == "\n\n":
                 self.output[-1] = "\n>\n"
-            if math_block[-1] == "\n\n":
-                math_block[-1] = "\n>\n"
             math_block = ["> {}".format(x) for x in math_block]
         self.output += math_block
 
