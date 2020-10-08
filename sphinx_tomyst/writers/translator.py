@@ -322,7 +322,7 @@ class MystTranslator(SphinxTranslator):
             if self.block_quote["collect"][-1] == "\n\n":
                 self.block_quote["collect"].pop()
             block = "".join(self.block_quote["collect"])
-            block = block.replace("\n", "\n{} ".format(linemarker))
+            block = block.replace("\n", "\n{}".format(linemarker))
             self.output.append(block)
             self.add_newparagraph()
             self.block_quote["collect"] = []
