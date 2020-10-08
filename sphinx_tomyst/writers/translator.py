@@ -319,7 +319,10 @@ class MystTranslator(SphinxTranslator):
         else:
             # Add block_quote lines to output
             linemarker = self.syntax.visit_block_quote()
-            if self.block_quote["collect"][-1] == "\n\n":
+            if (
+                self.block_quote["collect"]
+                and self.block_quote["collect"][-1] == "\n\n"
+            ):
                 self.block_quote["collect"].pop()
             block = "".join(self.block_quote["collect"])
             block = block.replace("\n", "\n{}".format(linemarker))
@@ -1147,15 +1150,15 @@ class MystTranslator(SphinxTranslator):
             math_block.append(self.syntax.depart_directive())
         else:
             math_block.append(self.syntax.depart_math_block())
-        syntax = "".join(math_block) + "\n\n"
+        syntax = "".join(math_block)
         if self.List:
-            self.List.addto_list_item(syntax)
+            self.List.addto_list_item(syntax + "\n")
         elif self.Table:
-            self.Table.add_item(syntax)
+            self.Table.add_item(syntax + "\n\n")
         elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
-            self.block_quote["collect"].append(syntax)
+            self.block_quote["collect"].append(syntax + "\n\n")
         else:
-            self.output.append(syntax)
+            self.output.append(syntax + "\n\n")
         self.math_block["in"] = False
 
     # docutils.elements.paragraph
