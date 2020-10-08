@@ -66,7 +66,7 @@ class MystTranslator(SphinxTranslator):
     block_quote = dict()
     block_quote["in"] = False
     block_quote["type"] = None
-    block_quote["depart_math"] = False
+    block_quote["collect"] = []
     # Figure
     figure = dict()
     figure["in"] = False
@@ -150,23 +150,8 @@ class MystTranslator(SphinxTranslator):
     def visit_Text(self, node):
         text = node.astext()
 
-        if self.block_quote["in"] and self.block_quote["type"] == "block_quote":
-            if self.literal and self.output[-1] == self.syntax.visit_literal():
-                last_syntax = self.output.pop()
-                text = last_syntax + text
-            linemarker = self.syntax.visit_block_quote()
-            if self.block_quote["depart_math"]:
-                # No block_quote syntax after nested inline math is added
-                self.block_quote["depart_math"] = False
-            else:
-                text = linemarker + text
-            text = text.replace("\n", "\n{}".format(linemarker))
         if self.caption:
             raise nodes.SkipNode
-        if self.math:
-            # Remove block quote syntax from nested inline math
-            if self.block_quote["in"]:
-                text = text.lstrip("> ")
         if self.math_block["in"]:
             text = text.strip()
         if self.index["in"] and self.index["type"] == "role":
@@ -179,14 +164,19 @@ class MystTranslator(SphinxTranslator):
         self.text = text
 
     def depart_Text(self, node):
+        # Accumulators
         if self.List:
             self.List.addto_list_item(self.text)
             return
         if self.Table:
             self.Table.add_item(self.text)
             return
+        if self.block_quote["in"] and self.block_quote["type"] == "block_quote":
+            self.block_quote["collect"].append(self.text)
+            return
+        # Adjust Spacing
         if self.math_block["in"]:
-            self.text = self.text + "\n"
+            self.text = self.text
         if self.literal_block:
             self.text = self.text + "\n"
         if self.caption and self.toctree:  # TODO: Check this condition
@@ -305,10 +295,6 @@ class MystTranslator(SphinxTranslator):
 
     def visit_block_quote(self, node):
         self.block_quote["in"] = True
-        if self.List:  # TODO: can you have block quote in List?
-            pass
-            # self.add_newline()
-            # return
         # Determine class type
         if "epigraph" in node.attributes["classes"]:
             self.block_quote["type"] = "epigraph"
@@ -324,11 +310,22 @@ class MystTranslator(SphinxTranslator):
             self.add_newline()
         else:
             self.block_quote["type"] = "block_quote"
+            self.block_quote["collect"] = ["> "]
 
     def depart_block_quote(self, node):
         if self.block_quote["type"] != "block_quote":
             self.output.append(self.syntax.depart_directive())
             self.add_newparagraph()
+        else:
+            # Add block_quote lines to output
+            linemarker = self.syntax.visit_block_quote()
+            if self.block_quote["collect"][-1] == "\n\n":
+                self.block_quote["collect"].pop()
+            block = "".join(self.block_quote["collect"])
+            block = block.replace("\n", "\n{} ".format(linemarker))
+            self.output.append(block)
+            self.add_newparagraph()
+            self.block_quote["collect"] = []
         self.block_quote["in"] = False
 
     # docutils.elements.bullet_list
@@ -555,16 +552,26 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#emphasis
 
     def visit_emphasis(self, node):
+        syntax = self.syntax.visit_italic()
         if self.List:
-            self.List.addto_list_item(self.syntax.visit_italic())
+            self.List.addto_list_item(syntax)
+        elif self.Table:
+            self.Table.add_item(syntax)
+        elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
+            self.block_quote["collect"].append(syntax)
         else:
-            self.output.append(self.syntax.visit_italic())
+            self.output.append(syntax)
 
     def depart_emphasis(self, node):
+        syntax = self.syntax.depart_italic()
         if self.List:
-            self.List.addto_list_item(self.syntax.depart_italic())
+            self.List.addto_list_item(syntax)
+        elif self.Table:
+            self.Table.add_item(syntax)
+        elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
+            self.block_quote["collect"].append(syntax)
         else:
-            self.output.append(self.syntax.depart_italic())
+            self.output.append(syntax)
 
     # docutils.elements.entry
     # uses: table?
@@ -953,18 +960,28 @@ class MystTranslator(SphinxTranslator):
         self.literal = True
         if self.download_reference:
             return  # TODO: can we just raise SkipNode?
+        syntax = self.syntax.visit_literal()
         if self.List:
-            self.List.addto_list_item(self.syntax.visit_literal())
+            self.List.addto_list_item(syntax)
+        elif self.Table:
+            self.Table.add_item(syntax)
+        elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
+            self.block_quote["collect"].append(syntax)
         else:
-            self.output.append(self.syntax.visit_literal())
+            self.output.append(syntax)
 
     def depart_literal(self, node):
         if self.download_reference:
             return
+        syntax = self.syntax.depart_literal()
         if self.List:
-            self.List.addto_list_item(self.syntax.depart_literal())
+            self.List.addto_list_item(syntax)
+        elif self.Table:
+            self.Table.add_item(syntax)
+        elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
+            self.block_quote["collect"].append(syntax)
         else:
-            self.output.append(self.syntax.depart_literal())
+            self.output.append(syntax)
         self.literal = False
 
     # docutils.element.literal_block
@@ -1076,6 +1093,8 @@ class MystTranslator(SphinxTranslator):
             self.List.addto_list_item(syntax)
         elif self.Table:
             self.Table.add_item(syntax)
+        elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
+            self.block_quote["collect"].append(syntax)
         else:
             self.output.append(syntax)
 
@@ -1085,11 +1104,10 @@ class MystTranslator(SphinxTranslator):
             self.List.addto_list_item(syntax)
         elif self.Table:
             self.Table.add_item(syntax)
+        elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
+            self.block_quote["collect"].append(syntax)
         else:
             self.output.append(syntax)
-        # Inform Block Quote Departing Math
-        if self.block_quote["in"]:
-            self.block_quote["depart_math"] = True
         self.math = False
 
     # docutils.element.math_block
@@ -1100,18 +1118,19 @@ class MystTranslator(SphinxTranslator):
         self.math_block["options"] = self.infer_math_block_attrs(node)
         math_block = []
         if self.math_block["options"]:
-            math_block.append(self.syntax.visit_directive("math") + "\n")
-            if self.block_quote["in"]:
-                math_block.append(self.math_block["options"] + "\n>\n")
-            else:
-                math_block.append(self.math_block["options"] + "\n\n")
+            math_block.append(self.syntax.visit_directive("math"))
+            math_block.append(self.math_block["options"] + "\n")
         else:
-            math_block.append(self.syntax.visit_math_block() + "\n")
-        if self.block_quote["in"]:
-            if self.output[-1] == "\n\n":
-                self.output[-1] = "\n>\n"
-            math_block = ["> {}".format(x) for x in math_block]
-        self.output += math_block
+            math_block.append(self.syntax.visit_math_block())
+        syntax = "\n".join(math_block) + "\n"
+        if self.List:
+            self.List.addto_list_item(syntax)
+        elif self.Table:
+            self.Table.add_item(syntax)
+        elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
+            self.block_quote["collect"].append(syntax)
+        else:
+            self.output.append(syntax)
 
     def infer_math_block_attrs(self, node):
         options = []
@@ -1123,17 +1142,20 @@ class MystTranslator(SphinxTranslator):
         return "\n".join(options)
 
     def depart_math_block(self, node):
-        math_block = []
+        math_block = ["\n"]
         if self.math_block["options"]:
             math_block.append(self.syntax.depart_directive())
         else:
             math_block.append(self.syntax.depart_math_block())
-        if self.block_quote["in"]:
-            math_block = ["> {}".format(x) for x in math_block]
-            math_block.append("\n>\n")
+        syntax = "".join(math_block) + "\n\n"
+        if self.List:
+            self.List.addto_list_item(syntax)
+        elif self.Table:
+            self.Table.add_item(syntax)
+        elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
+            self.block_quote["collect"].append(syntax)
         else:
-            math_block.append("\n\n")
-        self.output += math_block
+            self.output.append(syntax)
         self.math_block["in"] = False
 
     # docutils.elements.paragraph
@@ -1191,6 +1213,9 @@ class MystTranslator(SphinxTranslator):
             return
         if self.block_quote["in"] and self.block_quote["type"] != "block_quote":
             self.add_newline()
+            return
+        if self.block_quote["in"] and self.block_quote["type"] == "block_quote":
+            self.block_quote["collect"].append("\n\n")
             return
         self.add_newparagraph()
 
@@ -1388,16 +1413,26 @@ file will be included in the myst directive".format(
     # https://docutils.sourceforge.io/docs/ref/doctree.html#strong
 
     def visit_strong(self, node):
+        syntax = self.syntax.visit_bold()
         if self.List:
-            self.List.addto_list_item(self.syntax.visit_bold())
+            self.List.addto_list_item(syntax)
+        elif self.Table:
+            self.Table.add_item(syntax)
+        elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
+            self.block_quote["collect"].append(syntax)
         else:
-            self.output.append(self.syntax.visit_bold())
+            self.output.append(syntax)
 
     def depart_strong(self, node):
+        syntax = self.syntax.depart_bold()
         if self.List:
-            self.List.addto_list_item(self.syntax.depart_bold())
+            self.List.addto_list_item(syntax)
+        elif self.Table:
+            self.Table.add_item(syntax)
+        elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
+            self.block_quote["collect"].append(syntax)
         else:
-            self.output.append(self.syntax.depart_bold())
+            self.output.append(syntax)
 
     # docutils.elements.subscript
     # https://docutils.sourceforge.io/docs/ref/doctree.html#subscript
