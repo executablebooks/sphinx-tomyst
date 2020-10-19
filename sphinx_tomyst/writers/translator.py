@@ -1673,6 +1673,19 @@ file will be included in the myst directive".format(
     # docutils.elements.transition
     # https://docutils.sourceforge.io/docs/ref/doctree.html#transition
 
+    def visit_transition(self, node):
+        docname = self.builder.current_docname
+        msg = """
+        SKIP {} [transition] objects are not supported by sphinx-tomyst
+        """.format(
+            docname
+        ).strip()
+        logger.warning(msg)
+        pass
+
+    def depart_transition(self, node):
+        pass
+
     # docutils.elements.version
     # https://docutils.sourceforge.io/docs/ref/doctree.html#version
 
