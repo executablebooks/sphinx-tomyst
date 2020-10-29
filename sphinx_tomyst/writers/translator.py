@@ -402,7 +402,15 @@ class MystTranslator(SphinxTranslator):
 
     def visit_citation_reference(self, node):
         citation = node.astext()
-        self.output.append(self.syntax.visit_role("cite", citation))
+        syntax = self.syntax.visit_role("cite", citation)
+        if self.List:
+            self.List.addto_list_item(syntax)
+        elif self.Table:
+            self.Table.add_item(syntax)
+        elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
+            self.block_quote["collect"].append(syntax)
+        else:
+            self.output.append(syntax)
         raise nodes.SkipChildren
 
     def depart_citation_reference(self, node):
