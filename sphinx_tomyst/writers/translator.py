@@ -1089,6 +1089,8 @@ class MystTranslator(SphinxTranslator):
             if tags:
                 options.append("tags: [" + ", ".join(tags) + "]")
         # Parse `literalinclude` options
+        # Note: Not all options are current supported
+        # https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html?highlight=literalinclude#directive-literalinclude
         if node.hasattr("source"):
             if node.hasattr("language"):
                 options.append("language: {}".format(node.attributes["language"]))
