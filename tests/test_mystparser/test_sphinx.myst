@@ -67,6 +67,24 @@ single: Julia
 ```
 
 (test2)=
+## literalinclude
+
+```{literalinclude} _static/test.txt
+```
+
+```{literalinclude} _static/test.txt
+---
+linenos:
+emphasize-lines: 2
+---
+```
+
+```{literalinclude} _static/test.py
+---
+language: python
+---
+```
+
 ## only
 
 The only directive
