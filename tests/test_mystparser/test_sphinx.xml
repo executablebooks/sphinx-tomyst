@@ -15,7 +15,22 @@
             <target ids="index-1">
             <index entries="('single',\ 'Python;\ Runtime',\ 'test2',\ '',\ None) ('single',\ 'Julia',\ 'test2',\ '',\ None)" inline="False">
             <target refid="test2">
-        <section ids="only test2" names="only test2">
+        <section ids="literalinclude test2" names="literalinclude test2">
+            <title>
+                literalinclude
+            <literal_block force="False" highlight_args="{'linenostart': 1}" source="test.txt" xml:space="preserve">
+                Some Test Text on Line 1
+                Some Line 2 Test Text
+                
+                And Line 4
+            <literal_block force="False" highlight_args="{'hl_lines': [2], 'linenostart': 1}" linenos="True" source="test.txt" xml:space="preserve">
+                Some Test Text on Line 1
+                Some Line 2 Test Text
+                
+                And Line 4
+            <literal_block force="False" highlight_args="{'linenostart': 1}" language="python" source="test.py" xml:space="preserve">
+                import numpy as np  # noqa: F401
+        <section ids="only" names="only">
             <title>
                 only
             <paragraph>

@@ -22,6 +22,18 @@ The index directives
    single: Julia
    :name: test2
 
+literalinclude
+--------------
+
+.. literalinclude:: _static/test.txt
+
+.. literalinclude:: _static/test.txt
+   :emphasize-lines: 2
+   :linenos:
+
+.. literalinclude:: _static/test.py
+   :language: python
+
 only
 ----
 

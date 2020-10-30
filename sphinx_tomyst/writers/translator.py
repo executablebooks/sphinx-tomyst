@@ -997,11 +997,19 @@ class MystTranslator(SphinxTranslator):
 
     # docutils.element.literal_block
     # https://docutils.sourceforge.io/docs/ref/doctree.html#literal-block
+    #
 
     def visit_literal_block(self, node):
         self.literal_block = True
         options = self.infer_literal_block_attrs(node)
-        if node.hasattr("language"):
+        # Check for literalinclude::
+        if node.hasattr("source"):
+            fl = node.attributes["source"]
+            srcdir = self.builder.srcdir + "/"
+            fl = fl.replace(srcdir, "")
+            syntax = self.syntax.visit_directive("literalinclude", argument=fl)
+        # Check for code-block::
+        elif node.hasattr("language"):
             self.nodelang = node.attributes["language"].strip()
             if self.nodelang == "default":
                 self.nodelang = self.default_language
@@ -1033,6 +1041,8 @@ class MystTranslator(SphinxTranslator):
         else:
             self.output.append(syntax)
             self.add_newline()
+        if node.hasattr("source"):
+            raise nodes.SkipChildren  # Skip contents for .. literalinclude::
 
     def infer_literal_block_attrs(self, node):
         """
@@ -1049,11 +1059,12 @@ class MystTranslator(SphinxTranslator):
             options.append("linenos:")
         if node.hasattr("highlight_args"):
             if "linenostart" in attributes["highlight_args"]:
-                options.append(
-                    "lineno-start: {}".format(
-                        attributes["highlight_args"]["linenostart"]
+                if attributes["highlight_args"]["linenostart"] > 1:
+                    options.append(
+                        "lineno-start: {}".format(
+                            attributes["highlight_args"]["linenostart"]
+                        )
                     )
-                )
             if "hl_lines" in attributes["highlight_args"]:
                 vals = str(attributes["highlight_args"]["hl_lines"]).strip("[]")
                 options.append("emphasize-lines: {}".format(vals))
@@ -1077,6 +1088,10 @@ class MystTranslator(SphinxTranslator):
                 tags.append("hide-output")
             if tags:
                 options.append("tags: [" + ", ".join(tags) + "]")
+        # Parse `literalinclude` options
+        if node.hasattr("source"):
+            if node.hasattr("language"):
+                options.append("language: {}".format(node.attributes["language"]))
         options.append("---")
         if len(options) == 2:
             options = []
@@ -1092,6 +1107,12 @@ class MystTranslator(SphinxTranslator):
             self.output.append(syntax)
             self.add_newparagraph()
         self.literal_block = False
+
+    # sphinx.literalinclude
+    def visit_literalinclude(self, node):
+        import pdb
+
+        pdb.set_trace()
 
     # docutils.element.math
     # https://docutils.sourceforge.io/docs/ref/doctree.html#math
