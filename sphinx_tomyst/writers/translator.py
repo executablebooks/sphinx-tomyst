@@ -67,6 +67,9 @@ class MystTranslator(SphinxTranslator):
     block_quote["in"] = False
     block_quote["type"] = None
     block_quote["collect"] = []
+    # Definition
+    definition = dict()
+    definition["in"] = False
     # Figure
     figure = dict()
     figure["in"] = False
@@ -114,6 +117,7 @@ class MystTranslator(SphinxTranslator):
         self.language_synonyms = self.builder.config["tomyst_language_synonyms"]
         self.language_synonyms.append(self.default_language)
         self.debug = self.builder.config["tomyst_debug"]
+        self.messages = set()
         # Document Settings
         self.syntax = MystSyntax()
         self.images = []
@@ -134,6 +138,9 @@ class MystTranslator(SphinxTranslator):
 
     def depart_document(self, node):
         self.body = "".join(self.output)
+        if self.messages:
+            for msg in self.messages:
+                logger.info(msg)
 
     def unknown_visit(self, node):
         raise NotImplementedError("Unknown node: " + node.__class__.__name__)
@@ -165,6 +172,9 @@ class MystTranslator(SphinxTranslator):
 
     def depart_Text(self, node):
         # Accumulators
+        if self.definition["in"]:
+            self.definition["text"] += self.text
+            return
         if self.List:
             self.List.addto_list_item(self.text)
             return
@@ -493,37 +503,28 @@ class MystTranslator(SphinxTranslator):
     # https://docutils.sourceforge.io/docs/ref/doctree.html#definition
 
     def visit_definition(self, node):
-        pass
-        # Current Syntax consists of HTML markers
-        # self.output.append(self.syntax.visit_definition()) #html markers!
-        # self.add_newline()
+        self.definition["in"] = True
+        self.definition["text"] = ""
 
     def depart_definition(self, node):
-        pass
-        # Current Syntax consists of HTML markers
-        # self.output.append(self.syntax.depart_definition())
-        # self.add_newline()
+        syntax = self.syntax.visit_definition(self.definition["text"].rstrip())
+        self.output.append(syntax)
+        self.definition["text"] = ""
+        self.definition["in"] = False
 
     # docutils.elements.definition_list
     # https://docutils.sourceforge.io/docs/ref/doctree.html#definition-list
 
     def visit_definition_list(self, node):
         msg = """
-        SKIP [definition_list] objects are not supported in commonmark
+        CONFIG [definition_list] support for definition list in myst requires:
+            myst_deflist_enable = True
+        to be specified in the conf.py
         """.strip()
-        logger.warning(msg)
-        raise nodes.SkipNode
-        # Current Syntax consists of HTML markers
-        # self.add_newline()
-        # self.output.append(self.syntax.visit_definition_list())
-        # self.add_newline()
+        self.messages.add(msg)
 
     def depart_definition_list(self, node):
         pass
-        # Current Syntax consists of HTML markers
-        # self.add_newline()
-        # self.output.append(self.syntax.depart_definition_list())
-        # self.add_newparagraph()
 
     # docutils.elements.definition_list_item
     # https://docutils.sourceforge.io/docs/ref/doctree.html#definition-list-item
@@ -532,7 +533,7 @@ class MystTranslator(SphinxTranslator):
         pass
 
     def depart_definition_list_item(self, node):
-        pass
+        self.add_newparagraph()
 
     # docutils.elements.description
     # https://docutils.sourceforge.io/docs/ref/doctree.html#description
@@ -570,6 +571,8 @@ class MystTranslator(SphinxTranslator):
             self.Table.add_item(syntax)
         elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
             self.block_quote["collect"].append(syntax)
+        elif self.definition["in"]:
+            self.definition["text"] += syntax
         else:
             self.output.append(syntax)
 
@@ -581,6 +584,8 @@ class MystTranslator(SphinxTranslator):
             self.Table.add_item(syntax)
         elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
             self.block_quote["collect"].append(syntax)
+        elif self.definition["in"]:
+            self.definition["text"] += syntax
         else:
             self.output.append(syntax)
 
@@ -639,40 +644,42 @@ class MystTranslator(SphinxTranslator):
     # docutils.elements.field
     # https://docutils.sourceforge.io/docs/ref/doctree.html#field
 
+    # TODO: Implement Support for Fields
+
     def visit_field(self, node):
         # for child in node.children:
         #     if type(child) is nodes.field_name:
         #         field_name = child.astext()
         #     elif type(child) is nodes.field_body:
         #         field_body = child.astext()
-        raise NotImplementedError
+        raise nodes.SkipChildren
 
     # docutils.elements.field_body
     # https://docutils.sourceforge.io/docs/ref/doctree.html#field-body
 
     def visit_field_body(self, node):
-        self.visit_definition(node)  # TODO: review if wrapper of definition
+        pass
 
     def depart_field_body(self, node):
-        self.depart_definition(node)
+        pass
 
     # docutils.elements.field_list
     # https://docutils.sourceforge.io/docs/ref/doctree.html#field-list
 
     def visit_field_list(self, node):
-        self.visit_definition_list(node)
+        pass
 
     def depart_field_list(self, node):
-        self.depart_definition_list(node)
+        pass
 
     # docutils.element.field_name
     # https://docutils.sourceforge.io/docs/ref/doctree.html#field-name
 
     def visit_field_name(self, node):
-        self.visit_term(node)
+        pass
 
     def depart_field_name(self, node):
-        self.depart_term(node)
+        pass
 
     # docutils.figure
     # https://docutils.sourceforge.io/docs/ref/rst/directives.html#figure
@@ -978,6 +985,8 @@ class MystTranslator(SphinxTranslator):
             self.Table.add_item(syntax)
         elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
             self.block_quote["collect"].append(syntax)
+        elif self.definition["in"]:
+            self.definition["text"] += syntax
         else:
             self.output.append(syntax)
 
@@ -991,6 +1000,8 @@ class MystTranslator(SphinxTranslator):
             self.Table.add_item(syntax)
         elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
             self.block_quote["collect"].append(syntax)
+        elif self.definition["in"]:
+            self.definition["text"] += syntax
         else:
             self.output.append(syntax)
         self.literal = False
@@ -1110,12 +1121,6 @@ class MystTranslator(SphinxTranslator):
             self.add_newparagraph()
         self.literal_block = False
 
-    # sphinx.literalinclude
-    def visit_literalinclude(self, node):
-        import pdb
-
-        pdb.set_trace()
-
     # docutils.element.math
     # https://docutils.sourceforge.io/docs/ref/doctree.html#math
 
@@ -1129,6 +1134,8 @@ class MystTranslator(SphinxTranslator):
             self.Table.add_item(syntax)
         elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
             self.block_quote["collect"].append(syntax)
+        elif self.definition["in"]:
+            self.definition["text"] += syntax
         else:
             self.output.append(syntax)
 
@@ -1140,6 +1147,8 @@ class MystTranslator(SphinxTranslator):
             self.Table.add_item(syntax)
         elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
             self.block_quote["collect"].append(syntax)
+        elif self.definition["in"]:
+            self.definition["text"] += syntax
         else:
             self.output.append(syntax)
         self.math = False
@@ -1163,6 +1172,8 @@ class MystTranslator(SphinxTranslator):
             self.Table.add_item(syntax)
         elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
             self.block_quote["collect"].append(syntax)
+        elif self.definition["in"]:
+            self.definition["text"] += syntax
         else:
             self.output.append(syntax)
 
@@ -1188,6 +1199,8 @@ class MystTranslator(SphinxTranslator):
             self.Table.add_item(syntax + "\n\n")
         elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
             self.block_quote["collect"].append(syntax + "\n\n")
+        elif self.definition["in"]:
+            self.definition["text"] += syntax + "\n\n"
         else:
             self.output.append(syntax + "\n\n")
         self.math_block["in"] = False
@@ -1250,6 +1263,9 @@ class MystTranslator(SphinxTranslator):
             return
         if self.block_quote["in"] and self.block_quote["type"] == "block_quote":
             self.block_quote["collect"].append("\n\n")
+            return
+        if self.definition["in"]:
+            self.definition["text"] += "\n\n"
             return
         self.add_newparagraph()
 
@@ -1454,6 +1470,8 @@ file will be included in the myst directive".format(
             self.Table.add_item(syntax)
         elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
             self.block_quote["collect"].append(syntax)
+        elif self.definition["in"]:
+            self.definition["text"] += syntax
         else:
             self.output.append(syntax)
 
@@ -1465,6 +1483,8 @@ file will be included in the myst directive".format(
             self.Table.add_item(syntax)
         elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
             self.block_quote["collect"].append(syntax)
+        elif self.definition["in"]:
+            self.definition["text"] += syntax
         else:
             self.output.append(syntax)
 
@@ -1539,10 +1559,12 @@ file will be included in the myst directive".format(
     # https://docutils.sourceforge.io/docs/ref/doctree.html#term
 
     def visit_term(self, node):
-        self.output.append("<dt>")
+        self.output.append(node.astext())
+        self.add_newline()
+        raise nodes.SkipChildren
 
     def depart_term(self, node):
-        self.output.append("</dt>\n")
+        pass
 
     # docutils.element.tgroup
     # uses: table

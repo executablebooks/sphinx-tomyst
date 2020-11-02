@@ -15,26 +15,29 @@ kernelspec:
 
 # Snippet
 
-Add a footnote
+## definition_list
 
-Lorem ipsum [^f1] dolor sit amet ... [^f2]
+This tests `definition`, `definition_list` and
+`definition_list_item`
 
-[^f1]: Text of the first footnote.
+Term1
+: Definition 1a
+  with **another part** of the paragraphs
 
-[^f2]: Text of the second footnote.
+  Definition 1b
 
-Lorem ipsum [^autoid_0] dolor sit amet ... [^autoid_1]
+Term2
+: Definition 2 with $f_x$
 
-[^autoid_0]: Text of the first footnote.
+  $$
+  f_x
+  $$
 
-[^autoid_1]: Text of the second footnote.
+Can `term` have formatting:
 
-and example from lectures
+Term3
+: Definition 3
 
-Just as [NumPy](http://www.numpy.org/) provides the basic array data type plus core array operations, pandas
-
-1. endows them with methods that facilitate operations such as
-    * sorting, grouping, re-ordering and general data munging [^mung]
-
-[^mung]: Wikipedia defines munging as cleaning data from one raw form into a structured, purged one.
+Currently this is **not** supported and only `term3` as text
+will be transferred
 

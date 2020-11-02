@@ -133,6 +133,27 @@ to the [list](list) test page.
 This tests `definition`, `definition_list` and
 `definition_list_item`
 
+Term1
+: Definition 1a
+  with **another part** of the paragraphs
+
+  Definition 1b
+
+Term2
+: Definition 2 with $f_x$
+
+  $$
+  f_x
+  $$
+
+Can `term` have formatting:
+
+Term3
+: Definition 3
+
+Currently this is **not** supported and only `term3` as text
+will be transferred
+
 ## docinfo
 
 See docinfo elements at the top of this document
@@ -298,11 +319,11 @@ This is a hint admonition
 
 ## images
 
-```{image} qs.png
+```{image} img/qs.png
 :scale: 50
 ```
 
-```{image} qs.png
+```{image} img/qs.png
 :height: 100px
 ```
 
