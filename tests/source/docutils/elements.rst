@@ -107,12 +107,26 @@ definition_list
 This tests ``definition``, ``definition_list`` and
 ``definition_list_item``
 
-Term
-  Definition.
+Term1
+  Definition 1a
+  with **another part** of the paragraphs
 
-Term : classifier
-    The ' : ' indicates a classifier in
-    definition list item terms only.
+  Definition 1b
+
+Term2
+  Definition 2 with :math:`f_x`
+
+  .. math::
+
+      f_x
+
+Can ``term`` have formatting:
+
+**Term3**
+  Definition 3
+
+Currently this is **not** supported and only ``term3`` as text
+will be transferred
 
 docinfo
 -------

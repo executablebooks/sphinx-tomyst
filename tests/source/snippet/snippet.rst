@@ -1,31 +1,29 @@
 Snippet
 =======
 
-Add a footnote
+definition_list
+---------------
 
-Lorem ipsum [#f1]_ dolor sit amet ... [#f2]_
+This tests ``definition``, ``definition_list`` and
+``definition_list_item``
 
-.. rubric:: Footnotes
+Term1
+  Definition 1a
+  with **another part** of the paragraphs
 
-.. [#f1] Text of the first footnote.
-.. [#f2] Text of the second footnote.
+  Definition 1b
 
-Lorem ipsum [#]_ dolor sit amet ... [#]_
+Term2
+  Definition 2 with :math:`f_x`
 
-.. rubric:: Footnotes
+  .. math::
 
-.. [#] Text of the first footnote.
-.. [#] Text of the second footnote.
+      f_x
 
-and example from lectures
+Can ``term`` have formatting:
 
-Just as `NumPy <http://www.numpy.org/>`_ provides the basic array data type plus core array operations, pandas
+**Term3**
+  Definition 3
 
-#. endows them with methods that facilitate operations such as
-
-   * sorting, grouping, re-ordering and general data munging [#mung]_
-
-
-.. rubric:: Footnotes
-
-.. [#mung] Wikipedia defines munging as cleaning data from one raw form into a structured, purged one.
+Currently this is **not** supported and only ``term3`` as text
+will be transferred

@@ -194,19 +194,48 @@
             <definition_list>
                 <definition_list_item>
                     <term>
-                        Term
+                        Term1
                     <definition>
                         <paragraph>
-                            Definition.
+                            Definition 1a
+                            with 
+                            <strong>
+                                another part
+                             of the paragraphs
+                        <paragraph>
+                            Definition 1b
                 <definition_list_item>
                     <term>
-                        Term
-                    <classifier>
-                        classifier
+                        Term2
                     <definition>
                         <paragraph>
-                            The ‘ : ‘ indicates a classifier in
-                            definition list item terms only.
+                            Definition 2 with 
+                            <math>
+                                f_x
+                        <math_block docname="elements" label="True" nowrap="False" number="True" xml:space="preserve">
+                            f_x
+            <paragraph>
+                Can 
+                <literal>
+                    term
+                 have formatting:
+            <definition_list>
+                <definition_list_item>
+                    <term>
+                        <strong>
+                            Term3
+                    <definition>
+                        <paragraph>
+                            Definition 3
+            <paragraph>
+                Currently this is 
+                <strong>
+                    not
+                 supported and only 
+                <literal>
+                    term3
+                 as text
+                will be transferred
         <section ids="docinfo" names="docinfo">
             <title>
                 docinfo

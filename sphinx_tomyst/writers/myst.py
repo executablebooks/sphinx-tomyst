@@ -26,6 +26,12 @@ class MystSyntax(MarkdownSyntax):
         marker = listobj["marker"]
         return "{}{} ".format(indent, marker)
 
+    def visit_definition(self, text):
+        # Adjust \n and \n\n with indentation
+        text = text.replace("\n", "\n  ")
+        text = text.replace("\n  \n  ", "\n\n  ")
+        return ": " + text
+
     def visit_epigraph(self):
         return "```{{epigraph}}"
 

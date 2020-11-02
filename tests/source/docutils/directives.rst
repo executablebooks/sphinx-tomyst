@@ -125,10 +125,10 @@ hint
 images
 ------
 
-.. image:: qs.png
+.. image:: img/qs.png
    :scale: 50 %
 
-.. image:: qs.png
+.. image:: img/qs.png
    :height: 100px
 
 important
