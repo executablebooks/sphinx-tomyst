@@ -62,6 +62,12 @@ Test hide-output passthrough to code-cells
     F = ECDF(samples)
     F(0.5)  # Evaluate ecdf at x = 0.5
 
+.. code-block:: python3
+    :class: collapse
+
+    for i in range(40):
+      print(i)
+
 Combinations
 ~~~~~~~~~~~~
 
