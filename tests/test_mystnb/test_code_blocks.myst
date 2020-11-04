@@ -105,6 +105,14 @@ F = ECDF(samples)
 F(0.5)  # Evaluate ecdf at x = 0.5
 ```
 
+```{code-cell} python3
+---
+tags: [output_scroll]
+---
+for i in range(40):
+  print(i)
+```
+
 ### Combinations
 
 ```{code-cell} python3

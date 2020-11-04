@@ -42,6 +42,9 @@
                 samples = [uniform(0, 1) for i in range(10)]
                 F = ECDF(samples)
                 F(0.5)  # Evaluate ecdf at x = 0.5
+            <literal_block classes="collapse" force="False" highlight_args="{}" language="python3" xml:space="preserve">
+                for i in range(40):
+                  print(i)
             <section ids="combinations" names="combinations">
                 <title>
                     Combinations
