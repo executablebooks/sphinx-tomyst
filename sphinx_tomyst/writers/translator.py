@@ -424,7 +424,15 @@ class MystTranslator(SphinxTranslator):
         raise nodes.SkipChildren
 
     def depart_citation_reference(self, node):
-        self.output.append(self.syntax.depart_role())
+        syntax = self.syntax.depart_role()
+        if self.List:
+            self.List.addto_list_item(syntax)
+        elif self.Table:
+            self.Table.add_item(syntax)
+        elif self.block_quote["in"] and self.block_quote["type"] == "block_quote":
+            self.block_quote["collect"].append(syntax)
+        else:
+            self.output.append(syntax)
 
     # docutils.elements.classifier
     # https://docutils.sourceforge.io/docs/ref/doctree.html#classifier
