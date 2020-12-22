@@ -57,7 +57,7 @@ setup(
             "pytest>=3.6,<4",
             "pytest-cov",
             "pytest-regressions",
-            "sphinxcontrib-bibtex",
+            "sphinxcontrib-bibtex~=1.0",
         ],
     },
 )
