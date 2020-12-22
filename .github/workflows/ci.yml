@@ -10,12 +10,12 @@ jobs:
         shell: bash -l {0}
         run: git clone https://github.com/QuantEcon/lecture-python-programming
       - name: Setup Anaconda
-        uses: goanpeca/setup-miniconda@v1
+        uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
           auto-activate-base: true
           miniconda-version: 'latest'
-          python-version: 3.7
+          python-version: 3.8
           environment-file: lecture-python-programming/environment.yml
           activate-environment: qe-lectures
       - name: Install sphinx-tomyst
