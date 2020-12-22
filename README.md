@@ -9,10 +9,10 @@ A sphinx translator for producing myst syntax files
 
 ## Installation
 
-**Step 1:** To install the extension you need to clone the repository then run:
+**Step 1:** Install this package from `PyPI`:
 
 ```bash
-python setup.py install
+pip install sphinx-tomyst
 ```
 
 **Step 2:** Add `sphinx_tomyst` to your sphinx `extensions` in the `conf.py`
