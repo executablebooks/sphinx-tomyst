@@ -305,6 +305,9 @@ class MystTranslator(SphinxTranslator):
 
     def visit_block_quote(self, node):
         self.block_quote["in"] = True
+        if self.List:
+            # Improve sensitivity to white space by skipping block_quotes when in a list
+            return
         # Determine class type
         if "epigraph" in node.attributes["classes"]:
             self.block_quote["type"] = "epigraph"
@@ -323,6 +326,9 @@ class MystTranslator(SphinxTranslator):
             self.block_quote["collect"] = ["> "]
 
     def depart_block_quote(self, node):
+        if self.List:
+            self.block_quote["in"] = False
+            return
         if self.block_quote["type"] != "block_quote":
             self.output.append(self.syntax.depart_directive())
             self.add_newparagraph()
