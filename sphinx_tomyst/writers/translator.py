@@ -649,6 +649,28 @@ class MystTranslator(SphinxTranslator):
         self.add_newparagraph()
         self.error = False
 
+    # sphinxcontrib-jupyter.exercise_node
+
+    def visit_exercise_node(self, node):
+        syntax = "````{" + "exercise" + "}"  # using 4 ` to support nested blocks
+        self.output.append(syntax)
+        self.add_newline()
+
+    def depart_exercise_node(self, node):
+        self.output.append(self.syntax.depart_directive())
+        self.add_newparagraph()
+
+    # sphinxcontrib-jupyter.exerciselist_node
+
+    def visit_exerciselist_node(self, node):
+        syntax = "````{" + "exerciselist" + "}"  # using 4 ` to support nested blocks
+        self.output.append(syntax)
+        self.add_newline()
+
+    def depart_exerciselist_node(self, node):
+        self.output.append(self.syntax.depart_directive())
+        self.add_newparagraph()
+
     # docutils.elements.field
     # https://docutils.sourceforge.io/docs/ref/doctree.html#field
 
