@@ -305,6 +305,9 @@ class MystTranslator(SphinxTranslator):
 
     def visit_block_quote(self, node):
         self.block_quote["in"] = True
+        if self.List:
+            # Improve sensitivity to white space by skipping block_quotes when in a list
+            return
         # Determine class type
         if "epigraph" in node.attributes["classes"]:
             self.block_quote["type"] = "epigraph"
@@ -323,6 +326,9 @@ class MystTranslator(SphinxTranslator):
             self.block_quote["collect"] = ["> "]
 
     def depart_block_quote(self, node):
+        if self.List:
+            self.block_quote["in"] = False
+            return
         if self.block_quote["type"] != "block_quote":
             self.output.append(self.syntax.depart_directive())
             self.add_newparagraph()
@@ -648,6 +654,28 @@ class MystTranslator(SphinxTranslator):
         self.output.append(self.syntax.depart_directive())
         self.add_newparagraph()
         self.error = False
+
+    # sphinxcontrib-jupyter.exercise_node
+
+    def visit_exercise_node(self, node):
+        syntax = "````{" + "exercise" + "}"  # using 4 ` to support nested blocks
+        self.output.append(syntax)
+        self.add_newline()
+
+    def depart_exercise_node(self, node):
+        self.output.append(self.syntax.depart_directive())
+        self.add_newparagraph()
+
+    # sphinxcontrib-jupyter.exerciselist_node
+
+    def visit_exerciselist_node(self, node):
+        syntax = "````{" + "exerciselist" + "}"  # using 4 ` to support nested blocks
+        self.output.append(syntax)
+        self.add_newline()
+
+    def depart_exerciselist_node(self, node):
+        self.output.append(self.syntax.depart_directive())
+        self.add_newparagraph()
 
     # docutils.elements.field
     # https://docutils.sourceforge.io/docs/ref/doctree.html#field
