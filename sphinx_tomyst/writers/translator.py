@@ -1329,8 +1329,10 @@ class MystTranslator(SphinxTranslator):
         if reftype == "eq":
             content = "{}".format(target)
         elif reftype == "doc":
-            docname = node["refdoc"]
-            linktext = self.builder.env.longtitles[docname].astext()
+            targetname = node["reftarget"]
+            if linktext == targetname:
+                # Update linktext to be the title of the target document
+                linktext = self.builder.env.longtitles[targetname].astext()
             content = "{} <{}>".format(linktext, target)
         else:
             # ref
