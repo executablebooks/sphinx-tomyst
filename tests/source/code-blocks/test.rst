@@ -37,9 +37,16 @@ Non-Python
 Options
 -------
 
-Test no-execute passthrough to code-blocks
+Test "no-execute" passthrough to code-blocks
 
 .. code-block:: python
    :class: no-execute
 
    import numpy as np
+
+Test "test" tags passthrough to code-blocks
+
+.. code-block:: python
+   :class: test
+
+   assert False
