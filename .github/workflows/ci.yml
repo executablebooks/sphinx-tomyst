@@ -15,9 +15,9 @@ jobs:
           auto-update-conda: true
           auto-activate-base: true
           miniconda-version: 'latest'
-          python-version: 3.8
+          python-version: 3.7
           environment-file: lecture-python-programming/environment.yml
-          activate-environment: quantecon
+          activate-environment: qe-lectures
       - name: Install sphinx-tomyst
         shell: bash -l {0}
         run: python setup.py install
