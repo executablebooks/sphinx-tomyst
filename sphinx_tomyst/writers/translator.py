@@ -1137,6 +1137,8 @@ class MystTranslator(SphinxTranslator):
                 tags.append("hide-output")
             if "collapse" in node.attributes["classes"]:
                 tags.append("output_scroll")
+            if "test" in node.attributes["classes"]:
+                tags.append("remove-cell")
             if tags:
                 options.append("tags: [" + ", ".join(tags) + "]")
         # Parse `literalinclude` options

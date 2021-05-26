@@ -27,6 +27,10 @@
             <title>
                 Options
             <paragraph>
-                Test no-execute passthrough to code-blocks
+                Test “no-execute” passthrough to code-blocks
             <literal_block classes="no-execute" force="False" highlight_args="{}" language="python" xml:space="preserve">
                 import numpy as np
+            <paragraph>
+                Test “test” tags passthrough to code-blocks
+            <literal_block classes="test" force="False" highlight_args="{}" language="python" xml:space="preserve">
+                assert False
