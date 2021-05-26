@@ -9,6 +9,8 @@ https://github.com/sphinx-doc/sphinx/blob/275d93b5068a4b6af4c912d5bebb2df9284160
 
 from __future__ import unicode_literals
 import re
+from pathlib import Path
+import os
 from docutils import nodes
 
 from sphinx.util import logging
@@ -1332,7 +1334,9 @@ class MystTranslator(SphinxTranslator):
             targetname = node["reftarget"]
             if linktext == targetname:
                 # Update linktext to be the title of the target document
-                linktext = self.builder.env.longtitles[targetname].astext()
+                directory = os.path.dirname(Path(node["refdoc"]))
+                target = os.path.join(directory, targetname)
+                linktext = self.builder.env.longtitles[target].astext()
             content = "{} <{}>".format(linktext, target)
         else:
             # ref
@@ -1442,9 +1446,16 @@ file will be included in the myst directive".format(
                     refid = refid.replace(")", "%29")
                     # markdown target
                     refuri = "#{}".format(refid)
-                # error
+                # warning
                 else:
-                    self.error("Invalid reference")
+                    docname = self.builder.current_docname
+                    line = node.line
+                    msg = """
+                    [{}:{}] contains a reference role that is not converted.
+                    """.format(
+                        docname, line
+                    ).strip()
+                    logger.warning(msg)
                     refuri = ""
 
             # TODO: review if both %28 replacements necessary in this function?
